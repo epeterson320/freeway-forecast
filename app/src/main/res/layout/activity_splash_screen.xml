@@ -2,72 +2,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".SplashScreen">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="I'm starting from"
-        android:id="@+id/textView"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/startTrip_begin_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
+        android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:id="@+id/editText"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp" />
+        android:layout_marginTop="34dp"
+        android:ems="10"
+        android:inputType="textPostalAddress" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="and driving to"
         android:id="@+id/textView2"
-        android:layout_marginTop="37dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:text="@string/startTrip_end_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
         android:id="@+id/editText2"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="date"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
         android:ems="10"
+        android:inputType="textPostalAddress" />
+
+    <EditText
         android:id="@+id/editText3"
-        android:layout_marginTop="83dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/editText2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="83dp"
+        android:ems="10"
+        android:inputType="date" />
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="On"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/editText2"
-        android:layout_marginTop="37dp"
-        android:layout_alignRight="@+id/textView2"
         android:layout_alignEnd="@+id/textView2"
         android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignStart="@+id/textView"
+        android:layout_below="@+id/editText2"
+        android:layout_marginTop="37dp"
+        android:text="@string/startTrip_date_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:clickable="false"
+        android:text="@string/startTrip_get_directions" />
 
 </RelativeLayout>
