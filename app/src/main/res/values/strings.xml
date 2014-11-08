@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">FreewayForecast</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Freeway Forecast</string>
     <string name="action_settings">Settings</string>
-    <string name="startTitleText">I\'m starting from</string>
+    <string name="title_activity_route_select">routeSelectActivity</string>
+
+    <string name="startTrip_begin_title">I\'m starting from</string>
+    <string name="startTrip_begin_prompt">Enter starting point</string>
+    <string name="startTrip_end_title">and driving to</string>
+    <string name="startTrip_end_prompt">Enter destination</string>
+    <string name="startTrip_date_title">on</string>
+    <string name="startTrip_time_title">at</string>
+    <string name="startTrip_get_directions">Get Directions</string>
+
+    <string name="selectRoute_activity_title">Select Route</string>
 
 </resources>
