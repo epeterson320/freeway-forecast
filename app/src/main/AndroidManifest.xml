@@ -20,6 +20,14 @@
             android:name=".routeSelectActivity"
             android:label="@string/title_activity_route_select" >
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".SplashScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bluesierralabs.freewayforecast.SplashScreen" />
+        </activity>
     </application>
 
 </manifest>

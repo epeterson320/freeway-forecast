@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 
 public class SplashScreen extends Activity {
@@ -32,5 +34,21 @@ public class SplashScreen extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void submitTimesAndPlaces(View view) {
+        // Get the starting address for the trip from the input box
+        EditText inputStartAddress = (EditText) findViewById(R.id.tripStartAddress);
+        String startAddress = inputStartAddress.getText().toString();
+
+        // Get the ending address for the trip from the input box
+        EditText inputEndAddress = (EditText) findViewById(R.id.tripEndAddress);
+        String endAddress = inputEndAddress.getText().toString();
+
+        // Get the date of the trip from the input box
+        EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
+        String date = inputDate.getText().toString();
+
+        // Now we want to send the trip info to the trip manager...
     }
 }

@@ -9,7 +9,7 @@
     tools:context=".SplashScreen">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tripStartTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -18,60 +18,60 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/tripStartAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
         android:ems="10"
-        android:inputType="textPostalAddress" />
+        android:inputType="textPostalAddress"
+        android:layout_below="@+id/tripStartTitle"
+        android:layout_alignLeft="@+id/tripEndAddress"
+        android:layout_alignStart="@+id/tripEndAddress" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tripEndTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/tripStartAddress"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp"
         android:text="@string/startTrip_end_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/tripEndAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/tripEndTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
         android:ems="10"
         android:inputType="textPostalAddress" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/tripStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/tripEndAddress"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="83dp"
         android:ems="10"
         android:inputType="date" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tripDateTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView2"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignStart="@+id/textView"
-        android:layout_below="@+id/editText2"
+        android:layout_alignEnd="@+id/tripEndTitle"
+        android:layout_alignLeft="@+id/tripStartTitle"
+        android:layout_alignRight="@+id/tripEndTitle"
+        android:layout_alignStart="@+id/tripStartTitle"
+        android:layout_below="@+id/tripEndAddress"
         android:layout_marginTop="37dp"
         android:text="@string/startTrip_date_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/submitTimesAndPlaces"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -79,7 +79,29 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:clickable="false"
+        android:clickable="true"
+        android:onClick="submitTimesAndPlaces"
         android:text="@string/startTrip_get_directions" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/startTrip_time_title"
+        android:id="@+id/timeTitle"
+        android:layout_below="@+id/tripStartDate"
+        android:layout_marginTop="32dp"
+        android:layout_alignLeft="@+id/tripEndTitle"
+        android:layout_alignStart="@+id/tripEndTitle" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/tripTime"
+        android:layout_above="@+id/submitTimesAndPlaces"
+        android:layout_alignLeft="@+id/tripStartDate"
+        android:layout_alignStart="@+id/tripStartDate" />
 
 </RelativeLayout>
