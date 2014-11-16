@@ -3,7 +3,7 @@
 
     <string name="app_name">Freeway Forecast</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_route_select">routeSelectActivity</string>
+    <string name="title_activity_route_select">Select Route</string>
 
     <string name="startTrip_begin_title">I\'m starting from</string>
     <string name="startTrip_begin_prompt">Enter starting point</string>
@@ -14,5 +14,8 @@
     <string name="startTrip_get_directions">Get Directions</string>
 
     <string name="selectRoute_activity_title">Select Route</string>
+    <string name="settings_temperature_scale_title">Temperature Scale</string>
+    <string name="title_activity_trip_forecast">Trip Forecast</string>
+    <string name="startTrip_select_route">Select Route</string>
 
 </resources>

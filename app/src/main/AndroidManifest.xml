@@ -17,12 +17,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".routeSelectActivity"
-            android:label="@string/title_activity_route_select" >
+            android:name=".RouteSelectActivity"
+            android:label="@string/title_activity_route_select"
+            android:parentActivityName=".SplashScreen" >
         </activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:parentActivityName=".SplashScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bluesierralabs.freewayforecast.SplashScreen" />
+        </activity>
+        <activity
+            android:name=".TripForecastActivity"
+            android:label="@string/title_activity_trip_forecast"
             android:parentActivityName=".SplashScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

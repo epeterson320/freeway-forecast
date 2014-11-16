@@ -1,6 +1,7 @@
 package com.bluesierralabs.freewayforecast;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,11 +30,15 @@ public class SplashScreen extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                openSettings();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public void submitTimesAndPlaces(View view) {
@@ -50,5 +55,18 @@ public class SplashScreen extends Activity {
         String date = inputDate.getText().toString();
 
         // Now we want to send the trip info to the trip manager...
+
+        // Go to the route select activity
+        Intent choseRoute = new Intent(this, RouteSelectActivity.class);
+        startActivity(choseRoute);
     }
+
+    // Open the settings activity
+    // TODO: Might consider moving this function to a class file so that other activities can access
+    public void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+
 }

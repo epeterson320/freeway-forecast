@@ -70,19 +70,6 @@
         android:text="@string/startTrip_date_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/submitTimesAndPlaces"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
-        android:onClick="submitTimesAndPlaces"
-        android:text="@string/startTrip_get_directions" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,5 +90,19 @@
         android:layout_above="@+id/submitTimesAndPlaces"
         android:layout_alignLeft="@+id/tripStartDate"
         android:layout_alignStart="@+id/tripStartDate" />
+
+    <Button
+        android:id="@+id/submitTimesAndPlaces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:clickable="true"
+        android:onClick="submitTimesAndPlaces"
+        android:text="@string/startTrip_get_directions" />
+
 
 </RelativeLayout>
