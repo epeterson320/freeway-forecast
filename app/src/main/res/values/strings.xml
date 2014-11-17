@@ -17,5 +17,8 @@
     <string name="settings_temperature_scale_title">Temperature Scale</string>
     <string name="title_activity_trip_forecast">Trip Forecast</string>
     <string name="startTrip_select_route">Select Route</string>
+    <string name="strWeather">Weather Condition Here</string>
+    <string name="strCity">City/Location Here</string>
+    <string name="rowTime">10:00</string>
 
 </resources>

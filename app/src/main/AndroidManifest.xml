@@ -7,6 +7,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <!-- Start screen - where the user selects a start and end location along with date and
+             time. This screen leads into a route selection. -->
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name" >
@@ -16,19 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Route selection screen - where the user selects a route that they wish to travel on.
+             This screen leads into a trip forecast-->
         <activity
             android:name=".RouteSelectActivity"
             android:label="@string/title_activity_route_select"
             android:parentActivityName=".SplashScreen" >
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".SplashScreen" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bluesierralabs.freewayforecast.SplashScreen" />
-        </activity>
+        <!-- Trip forecast screen - where a list view screen shows a forecast of the trip -->
         <activity
             android:name=".TripForecastActivity"
             android:label="@string/title_activity_trip_forecast"
@@ -37,6 +34,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bluesierralabs.freewayforecast.SplashScreen" />
         </activity>
+        <!-- Settings screen - select temperature scale and other cool things -->
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".SplashScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bluesierralabs.freewayforecast.SplashScreen" />
+        </activity>
+
     </application>
 
 </manifest>
