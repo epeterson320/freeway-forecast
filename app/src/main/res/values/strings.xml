@@ -17,8 +17,9 @@
     <string name="settings_temperature_scale_title">Temperature Scale</string>
     <string name="title_activity_trip_forecast">Trip Forecast</string>
     <string name="startTrip_select_route">Select Route</string>
-    <string name="strWeather">Weather Condition Here</string>
-    <string name="strCity">City/Location Here</string>
+    <string name="hourTimeAndDetail">More weather info here AND TIME</string>
+    <string name="hourQuickForecast">Cloudy in Boston</string>
     <string name="rowTime">10:00</string>
+    <string name="hourTemp">10</string>
 
 </resources>

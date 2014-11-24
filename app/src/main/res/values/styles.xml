@@ -5,4 +5,14 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="BaseText" parent="android:TextAppearance.Holo.Large">
+        <item name="android:textColor">@color/text</item>
+        <!--<item name="android:fontFamily">sans-serif</item>-->
+
+    </style>
+
+    <style name="WeatherDescriptionText" parent="BaseText">
+        <item name="android:textSize">@dimen/weather_description_text</item>
+    </style>
+
 </resources>
