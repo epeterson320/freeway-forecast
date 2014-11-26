@@ -1,23 +1,14 @@
 package com.bluesierralabs.freewayforecast;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 
-
+/**
+ * Trip forecast
+ */
 public class TripForecastActivity extends Activity {
 
     private ListView weatherListing;
@@ -27,14 +18,14 @@ public class TripForecastActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_forecast);
 
-        Weather weather_data[] = new Weather[]
-                {
-                        new Weather(R.drawable.clouds, "Cloudy", "10:am will be cold", 10),
-                        new Weather(R.drawable.clouds, "Showers", "11:00am will be warmer", 14),
-                        new Weather(R.drawable.clouds, "Snow", "12 noon something", 15),
-                        new Weather(R.drawable.clouds, "Storm", "1 pm windshield wipers", 23),
-                        new Weather(R.drawable.clouds, "Sunny", "2pm ahh thats better", 22)
-                };
+        WeatherItem weather_data[] = new WeatherItem[]
+        {
+            new WeatherItem(R.drawable.clouds, "Cloudy", "10:am will be cold", 10),
+            new WeatherItem(R.drawable.clouds, "Showers", "11:00am will be warmer", 14),
+            new WeatherItem(R.drawable.clouds, "Snow", "12 noon something", 15),
+            new WeatherItem(R.drawable.clouds, "Storm", "1 pm windshield wipers", 23),
+            new WeatherItem(R.drawable.clouds, "Sunny", "2pm ahh thats better", 22)
+        };
 
         WeatherAdapter adapter = new WeatherAdapter(this,
                 R.layout.weather_item, weather_data);
