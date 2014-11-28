@@ -13,15 +13,16 @@
         android:text="@string/startTrip_begin_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <AutoCompleteTextView
+    <com.bluesierralabs.freewayforecast.Helpers.enterLocation
         android:id="@+id/tripStartAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPostalAddress"
         android:layout_below="@+id/tripStartTitle"
         android:layout_alignLeft="@+id/tripEndAddress"
-        android:layout_alignStart="@+id/tripEndAddress" />
+        android:layout_alignStart="@+id/tripEndAddress"
+        android:inputType="textPostalAddress|textCapWords"
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/tripEndTitle"
@@ -33,7 +34,7 @@
         android:text="@string/startTrip_end_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <AutoCompleteTextView
+    <com.bluesierralabs.freewayforecast.Helpers.enterLocation
         android:id="@+id/tripEndAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +42,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
         android:ems="10"
-        android:inputType="textPostalAddress" />
+        android:inputType="textPostalAddress|textCapWords"
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/tripStartDate"
