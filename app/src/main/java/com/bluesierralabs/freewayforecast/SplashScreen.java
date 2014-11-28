@@ -1,6 +1,5 @@
 package com.bluesierralabs.freewayforecast;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,9 +8,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 
+import com.bluesierralabs.freewayforecast.Helpers.DateSelectFragment;
+import com.bluesierralabs.freewayforecast.Helpers.TimeSelectFragment;
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends FragmentActivity {
 
     private AutoCompleteTextView startAutoComplete;
     private AutoCompleteTextView endAutoComplete;
@@ -58,6 +61,17 @@ public class SplashScreen extends Activity {
         }
     }
 
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DateSelectFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimeSelectFragment();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+
+    }
+
     public void submitTimesAndPlaces(View view) {
         // Get the starting address for the trip from the input box
         EditText inputStartAddress = (EditText) findViewById(R.id.tripStartAddress);
@@ -84,6 +98,4 @@ public class SplashScreen extends Activity {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
-
-
 }

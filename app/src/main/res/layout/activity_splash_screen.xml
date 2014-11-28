@@ -55,6 +55,15 @@
         android:ems="10"
         android:inputType="date" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_date"
+        android:onClick="showDatePickerDialog"
+        android:layout_alignBottom="@+id/tripStartDate"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button" />
+
     <TextView
         android:id="@+id/tripDateTitle"
         android:layout_width="wrap_content"
@@ -85,9 +94,17 @@
         android:inputType="time"
         android:ems="10"
         android:id="@+id/tripTime"
-        android:layout_above="@+id/submitTimesAndPlaces"
-        android:layout_alignLeft="@+id/tripStartDate"
-        android:layout_alignStart="@+id/tripStartDate" />
+        android:layout_alignBottom="@+id/button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_time"
+        android:layout_below="@+id/timeTitle"
+        android:layout_toRightOf="@id/tripTime"
+        android:onClick="showTimePickerDialog"
+        android:id="@+id/button" />
 
     <Button
         android:id="@+id/submitTimesAndPlaces"
