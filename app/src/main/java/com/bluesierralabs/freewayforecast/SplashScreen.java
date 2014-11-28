@@ -6,15 +6,32 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 
 public class SplashScreen extends Activity {
 
+    private AutoCompleteTextView startAutoComplete;
+    private AutoCompleteTextView endAutoComplete;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        // Auto complete example from
+        // http://www.tutorialspoint.com/android/android_auto_complete.htm
+        startAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripStartAddress);
+        endAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripEndAddress);
+
+        String[] countries = getResources().getStringArray(R.array.cities_usa);
+        ArrayAdapter adapter = new ArrayAdapter (this,android.R.layout.simple_list_item_1,countries);
+
+        // Set the adapter for the start and end trip fields
+        startAutoComplete.setAdapter(adapter);
+        endAutoComplete.setAdapter(adapter);
     }
 
 

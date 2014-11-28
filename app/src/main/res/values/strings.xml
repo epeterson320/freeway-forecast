@@ -22,4 +22,563 @@
     <string name="rowTime">10:00</string>
     <string name="hourTemp">10°</string>
 
+    <string-array name="cities_usa">
+        <item>New York, NY</item>
+        <item>Los Angeles, CA</item>
+        <item>Chicago, IL</item>
+        <item>Houston, TX</item>
+        <item>Philadelphia, PA</item>
+        <item>Phoenix, AZ</item>
+        <item>San Antonio, TX</item>
+        <item>San Diego, CA</item>
+        <item>Dallas, TX</item>
+        <item>San Jose, CA</item>
+        <item>Austin, TX</item>
+        <item>Indianapolis, IN</item>
+        <item>Jacksonville, FL</item>
+        <item>San Francisco, CA</item>
+        <item>Columbus, OH</item>
+        <item>Charlotte, NC</item>
+        <item>Fort Worth, TX</item>
+        <item>Detroit, MI</item>
+        <item>El Paso, TX</item>
+        <item>Memphis, TN</item>
+        <item>Seattle, WA</item>
+        <item>Denver, CO</item>
+        <item>Washington, DC</item>
+        <item>Boston, MA</item>
+        <item>Nashville-Davidson, TN</item>
+        <item>Baltimore, MD</item>
+        <item>Oklahoma City, OK</item>
+        <item>Louisville, KY</item>
+        <item>Jefferson County, KY</item>
+        <item>Portland, OR</item>
+        <item>Las Vegas, NV</item>
+        <item>Milwaukee, WI</item>
+        <item>Albuquerque, NM</item>
+        <item>Tucson, AZ</item>
+        <item>Fresno, CA</item>
+        <item>Sacramento, CA</item>
+        <item>Long Beach, CA</item>
+        <item>Kansas City, MO</item>
+        <item>Mesa, AZ</item>
+        <item>Virginia Beach, VA</item>
+        <item>Atlanta, GA</item>
+        <item>Colorado Springs, CO</item>
+        <item>Omaha, NE</item>
+        <item>Raleigh, NC</item>
+        <item>Miami, FL</item>
+        <item>Oakland, CA</item>
+        <item>Minneapolis, MN</item>
+        <item>Tulsa, OK</item>
+        <item>Cleveland, OH</item>
+        <item>Wichita, KS</item>
+        <item>Arlington, TX</item>
+        <item>New Orleans, LA</item>
+        <item>Bakersfield, CA</item>
+        <item>Tampa, FL</item>
+        <item>Honolulu, HI</item>
+        <item>Aurora, CO</item>
+        <item>Anaheim, CA</item>
+        <item>Santa Ana, CA</item>
+        <item>St. Louis, MO</item>
+        <item>Riverside, CA</item>
+        <item>Corpus Christi, TX</item>
+        <item>Lexington-Fayette, KY</item>
+        <item>Pittsburgh, PA</item>
+        <item>Anchorage, AK</item>
+        <item>Stockton, CA</item>
+        <item>Cincinnati, OH</item>
+        <item>St. Paul, MN</item>
+        <item>Toledo, OH</item>
+        <item>Greensboro, NC</item>
+        <item>Newark, NJ</item>
+        <item>Plano, TX</item>
+        <item>Henderson, NV</item>
+        <item>Lincoln, NE</item>
+        <item>Buffalo, NY</item>
+        <item>Jersey City, NJ</item>
+        <item>Chula Vista, CA</item>
+        <item>Fort Wayne, IN</item>
+        <item>Orlando, FL</item>
+        <item>St. Petersburg, FL</item>
+        <item>Chandler, AZ</item>
+        <item>Laredo, TX</item>
+        <item>Norfolk, VA</item>
+        <item>Durham, NC</item>
+        <item>Madison, WI</item>
+        <item>Lubbock, TX</item>
+        <item>Irvine, CA</item>
+        <item>Winston-Salem, NC</item>
+        <item>Glendale, AZ</item>
+        <item>Garland, TX</item>
+        <item>Hialeah, FL</item>
+        <item>Reno, NV</item>
+        <item>Chesapeake, VA</item>
+        <item>Gilbert, AZ</item>
+        <item>Baton Rouge, LA</item>
+        <item>Irving, TX</item>
+        <item>Scottsdale, AZ</item>
+        <item>North Las Vegas, NV</item>
+        <item>Fremont, CA</item>
+        <item>Boise City, ID</item>
+        <item>Richmond, VA</item>
+        <item>San Bernardino, CA</item>
+        <item>Birmingham, AL</item>
+        <item>Spokane, WA</item>
+        <item>Rochester, NY</item>
+        <item>Des Moines, IA</item>
+        <item>Modesto, CA</item>
+        <item>Fayetteville, NC</item>
+        <item>Tacoma, WA</item>
+        <item>Oxnard, CA</item>
+        <item>Fontana, CA</item>
+        <item>Columbus, GA</item>
+        <item>Montgomery, AL</item>
+        <item>Moreno Valley, CA</item>
+        <item>Shreveport, LA</item>
+        <item>Aurora, IL</item>
+        <item>Yonkers, NY</item>
+        <item>Akron, OH</item>
+        <item>Huntington Beach, CA</item>
+        <item>Little Rock, AR</item>
+        <item>Augusta-Richmond County, GA</item>
+        <item>Amarillo, TX</item>
+        <item>Glendale, CA</item>
+        <item>Mobile, AL</item>
+        <item>Grand Rapids, MI</item>
+        <item>Salt Lake City, UT</item>
+        <item>Tallahassee, FL</item>
+        <item>Huntsville, AL</item>
+        <item>Grand Prairie, TX</item>
+        <item>Knoxville, TN</item>
+        <item>Worcester, MA</item>
+        <item>Newport News, VA</item>
+        <item>Brownsville, TX</item>
+        <item>Overland Park, KS</item>
+        <item>Santa Clarita, CA</item>
+        <item>Providence, RI</item>
+        <item>Garden Grove, CA</item>
+        <item>Chattanooga, TN</item>
+        <item>Oceanside, CA</item>
+        <item>Jackson, MS</item>
+        <item>Fort Lauderdale, FL</item>
+        <item>Santa Rosa, CA</item>
+        <item>Rancho Cucamonga, CA</item>
+        <item>Port St. Lucie, FL</item>
+        <item>Tempe, AZ</item>
+        <item>Ontario, CA</item>
+        <item>Vancouver, WA</item>
+        <item>Cape Coral, FL</item>
+        <item>Sioux Falls, SD</item>
+        <item>Springfield, MO</item>
+        <item>Peoria, AZ</item>
+        <item>Pembroke Pines, FL</item>
+        <item>Elk Grove, CA</item>
+        <item>Salem, OR</item>
+        <item>Lancaster, CA</item>
+        <item>Corona, CA</item>
+        <item>Eugene, OR</item>
+        <item>Palmdale, CA</item>
+        <item>Salinas, CA</item>
+        <item>Springfield, MA</item>
+        <item>Pasadena, TX</item>
+        <item>Fort Collins, CO</item>
+        <item>Hayward, CA</item>
+        <item>Pomona, CA</item>
+        <item>Cary, NC</item>
+        <item>Rockford, IL</item>
+        <item>Alexandria, VA</item>
+        <item>Escondido, CA</item>
+        <item>McKinney, TX</item>
+        <item>Kansas City, KS</item>
+        <item>Joliet, IL</item>
+        <item>Sunnyvale, CA</item>
+        <item>Torrance, CA</item>
+        <item>Bridgeport, CT</item>
+        <item>Lakewood, CO</item>
+        <item>Hollywood, FL</item>
+        <item>Paterson, NJ</item>
+        <item>Naperville, IL</item>
+        <item>Syracuse, NY</item>
+        <item>Mesquite, TX</item>
+        <item>Dayton, OH</item>
+        <item>Savannah, GA</item>
+        <item>Clarksville, TN</item>
+        <item>Orange, CA</item>
+        <item>Pasadena, CA</item>
+        <item>Fullerton, CA</item>
+        <item>Killeen, TX</item>
+        <item>Frisco, TX</item>
+        <item>Hampton, VA</item>
+        <item>McAllen, TX</item>
+        <item>Warren, MI</item>
+        <item>Bellevue, WA</item>
+        <item>West Valley City, UT</item>
+        <item>Columbia, SC</item>
+        <item>Olathe, KS</item>
+        <item>Sterling Heights, MI</item>
+        <item>New Haven, CT</item>
+        <item>Miramar, FL</item>
+        <item>Waco, TX</item>
+        <item>Thousand Oaks, CA</item>
+        <item>Cedar Rapids, IA</item>
+        <item>Charleston, SC</item>
+        <item>Visalia, CA</item>
+        <item>Topeka, KS</item>
+        <item>Elizabeth, NJ</item>
+        <item>Gainesville, FL</item>
+        <item>Thornton, CO</item>
+        <item>Roseville, CA</item>
+        <item>Carrollton, TX</item>
+        <item>Coral Springs, FL</item>
+        <item>Stamford, CT</item>
+        <item>Simi Valley, CA</item>
+        <item>Concord, CA</item>
+        <item>Hartford, CT</item>
+        <item>Kent, WA</item>
+        <item>Lafayette, LA</item>
+        <item>Midland, TX</item>
+        <item>Surprise, AZ</item>
+        <item>Denton, TX</item>
+        <item>Victorville, CA</item>
+        <item>Evansville, IN</item>
+        <item>Santa Clara, CA</item>
+        <item>Abilene, TX</item>
+        <item>Athens, GA</item>
+        <item>Clarke County, GA</item>
+        <item>Vallejo, CA</item>
+        <item>Allentown, PA</item>
+        <item>Norman, OK</item>
+        <item>Beaumont, TX</item>
+        <item>Independence, MO</item>
+        <item>Murfreesboro, TN</item>
+        <item>Ann Arbor, MI</item>
+        <item>Springfield, IL</item>
+        <item>Berkeley, CA</item>
+        <item>Peoria, IL</item>
+        <item>Provo, UT</item>
+        <item>El Monte, CA</item>
+        <item>Columbia, MO</item>
+        <item>Lansing, MI</item>
+        <item>Fargo, ND</item>
+        <item>Downey, CA</item>
+        <item>Costa Mesa, CA</item>
+        <item>Wilmington, NC</item>
+        <item>Arvada, CO</item>
+        <item>Inglewood, CA</item>
+        <item>Miami Gardens, FL</item>
+        <item>Carlsbad, CA</item>
+        <item>Westminster, CO</item>
+        <item>Rochester, MN</item>
+        <item>Odessa, TX</item>
+        <item>Manchester, NH</item>
+        <item>Elgin, IL</item>
+        <item>West Jordan, UT</item>
+        <item>Round Rock, TX</item>
+        <item>Clearwater, FL</item>
+        <item>Waterbury, CT</item>
+        <item>Gresham, OR</item>
+        <item>Fairfield, CA</item>
+        <item>Billings, MT</item>
+        <item>Lowell, MA</item>
+        <item>San Buenaventura, CA</item>
+        <item>Ventura, CA</item>
+        <item>Pueblo, CO</item>
+        <item>High Point, NC</item>
+        <item>West Covina, CA</item>
+        <item>Richmond, CA</item>
+        <item>Murrieta, CA</item>
+        <item>Cambridge, MA</item>
+        <item>Antioch, CA</item>
+        <item>Temecula, CA</item>
+        <item>Norwalk, CA</item>
+        <item>Centennial, CO</item>
+        <item>Everett, WA</item>
+        <item>Palm Bay, FL</item>
+        <item>Wichita Falls, TX</item>
+        <item>Green Bay, WI</item>
+        <item>Daly City, CA</item>
+        <item>Burbank, CA</item>
+        <item>Richardson, TX</item>
+        <item>Pompano Beach, FL</item>
+        <item>North Charleston, SC</item>
+        <item>Broken Arrow, OK</item>
+        <item>Boulder, CO</item>
+        <item>West Palm Beach, FL</item>
+        <item>Santa Maria, CA</item>
+        <item>El Cajon, CA</item>
+        <item>Davenport, IA</item>
+        <item>Rialto, CA</item>
+        <item>Las Cruces, NM</item>
+        <item>San Mateo, CA</item>
+        <item>Lewisville, TX</item>
+        <item>South Bend, IN</item>
+        <item>Lakeland, FL</item>
+        <item>Erie, PA</item>
+        <item>Tyler, TX</item>
+        <item>Pearland, TX</item>
+        <item>College Station, TX</item>
+        <item>Kenosha, WI</item>
+        <item>Sandy Springs, GA</item>
+        <item>Clovis, CA</item>
+        <item>Flint, MI</item>
+        <item>Roanoke, VA</item>
+        <item>Albany, NY</item>
+        <item>Jurupa Valley, CA</item>
+        <item>Compton, CA</item>
+        <item>San Angelo, TX</item>
+        <item>Hillsboro, OR</item>
+        <item>Lawton, OK</item>
+        <item>Renton, WA</item>
+        <item>Vista, CA</item>
+        <item>Davie, FL</item>
+        <item>Greeley, CO</item>
+        <item>Mission Viejo, CA</item>
+        <item>Portsmouth, VA</item>
+        <item>Dearborn, MI</item>
+        <item>South Gate, CA</item>
+        <item>Tuscaloosa, AL</item>
+        <item>Livonia, MI</item>
+        <item>New Bedford, MA</item>
+        <item>Vacaville, CA</item>
+        <item>Brockton, MA</item>
+        <item>Roswell, GA</item>
+        <item>Beaverton, OR</item>
+        <item>Quincy, MA</item>
+        <item>Sparks, NV</item>
+        <item>Yakima, WA</item>
+        <item>Lee’s Summit, MO</item>
+        <item>Federal Way, WA</item>
+        <item>Carson, CA</item>
+        <item>Santa Monica, CA</item>
+        <item>Hesperia, CA</item>
+        <item>Allen, TX</item>
+        <item>Rio Rancho, NM</item>
+        <item>Yuma, AZ</item>
+        <item>Westminster, CA</item>
+        <item>Orem, UT</item>
+        <item>Lynn, MA</item>
+        <item>Redding, CA</item>
+        <item>Spokane Valley, WA</item>
+        <item>Miami Beach, FL</item>
+        <item>League City, TX</item>
+        <item>Lawrence, KS</item>
+        <item>Santa Barbara, CA</item>
+        <item>Plantation, FL</item>
+        <item>Sandy, UT</item>
+        <item>Sunrise, FL</item>
+        <item>Macon, GA</item>
+        <item>Longmont, CO</item>
+        <item>Boca Raton, FL</item>
+        <item>San Marcos, CA</item>
+        <item>Greenville, NC</item>
+        <item>Waukegan, IL</item>
+        <item>Fall River, MA</item>
+        <item>Chico, CA</item>
+        <item>Newton, MA</item>
+        <item>San Leandro, CA</item>
+        <item>Reading, PA</item>
+        <item>Norwalk, CT</item>
+        <item>Fort Smith, AR</item>
+        <item>Newport Beach, CA</item>
+        <item>Asheville, NC</item>
+        <item>Nashua, NH</item>
+        <item>Edmond, OK</item>
+        <item>Whittier, CA</item>
+        <item>Nampa, ID</item>
+        <item>Bloomington, MN</item>
+        <item>Deltona, FL</item>
+        <item>Hawthorne, CA</item>
+        <item>Duluth, MN</item>
+        <item>Carmel, IN</item>
+        <item>Suffolk, VA</item>
+        <item>Clifton, NJ</item>
+        <item>Citrus Heights, CA</item>
+        <item>Livermore, CA</item>
+        <item>Tracy, CA</item>
+        <item>Alhambra, CA</item>
+        <item>Kirkland, WA</item>
+        <item>Trenton, NJ</item>
+        <item>Ogden, UT</item>
+        <item>Hoover, AL</item>
+        <item>Cicero, IL</item>
+        <item>Fishers, IN</item>
+        <item>Sugar Land, TX</item>
+        <item>Danbury, CT</item>
+        <item>Meridian, ID</item>
+        <item>Indio, CA</item>
+        <item>Concord, NC</item>
+        <item>Menifee, CA</item>
+        <item>Champaign, IL</item>
+        <item>Buena Park, CA</item>
+        <item>Troy, MI</item>
+        <item>O’Fallon, MO</item>
+        <item>Johns Creek, GA</item>
+        <item>Bellingham, WA</item>
+        <item>Westland, MI</item>
+        <item>Bloomington, IN</item>
+        <item>Sioux City, IA</item>
+        <item>Warwick, RI</item>
+        <item>Hemet, CA</item>
+        <item>Longview, TX</item>
+        <item>Farmington Hills, MI</item>
+        <item>Bend, OR</item>
+        <item>Lakewood, CA</item>
+        <item>Merced, CA</item>
+        <item>Mission, TX</item>
+        <item>Chino, CA</item>
+        <item>Redwood City, CA</item>
+        <item>Edinburg, TX</item>
+        <item>Cranston, RI</item>
+        <item>Parma, OH</item>
+        <item>New Rochelle, NY</item>
+        <item>Lake Forest, CA</item>
+        <item>Napa, CA</item>
+        <item>Hammond, IN</item>
+        <item>Fayetteville, AR</item>
+        <item>Bloomington, IL</item>
+        <item>Avondale, AZ</item>
+        <item>Somerville, MA</item>
+        <item>Palm Coast, FL</item>
+        <item>Bryan, TX</item>
+        <item>Gary, IN</item>
+        <item>Largo, FL</item>
+        <item>Brooklyn Park, MN</item>
+        <item>Tustin, CA</item>
+        <item>Racine, WI</item>
+        <item>Deerfield Beach, FL</item>
+        <item>Lynchburg, VA</item>
+        <item>Mountain View, CA</item>
+        <item>Medford, OR</item>
+        <item>Lawrence, MA</item>
+        <item>Bellflower, CA</item>
+        <item>Melbourne, FL</item>
+        <item>St. Joseph, MO</item>
+        <item>Camden, NJ</item>
+        <item>St. George, UT</item>
+        <item>Kennewick, WA</item>
+        <item>Baldwin Park, CA</item>
+        <item>Chino Hills, CA</item>
+        <item>Alameda, CA</item>
+        <item>Albany, GA</item>
+        <item>Arlington Heights, IL</item>
+        <item>Scranton, PA</item>
+        <item>Evanston, IL</item>
+        <item>Kalamazoo, MI</item>
+        <item>Baytown, TX</item>
+        <item>Upland, CA</item>
+        <item>Springdale, AR</item>
+        <item>Bethlehem, PA</item>
+        <item>Schaumburg, IL</item>
+        <item>Mount Pleasant, SC</item>
+        <item>Auburn, WA</item>
+        <item>Decatur, IL</item>
+        <item>San Ramon, CA</item>
+        <item>Pleasanton, CA</item>
+        <item>Wyoming, MI</item>
+        <item>Lake Charles, LA</item>
+        <item>Plymouth, MN</item>
+        <item>Bolingbrook, IL</item>
+        <item>Pharr, TX</item>
+        <item>Appleton, WI</item>
+        <item>Gastonia, NC</item>
+        <item>Folsom, CA</item>
+        <item>Southfield, MI</item>
+        <item>Rochester Hills, MI</item>
+        <item>New Britain, CT</item>
+        <item>Goodyear, AZ</item>
+        <item>Canton, OH</item>
+        <item>Warner Robins, GA</item>
+        <item>Union City, CA</item>
+        <item>Perris, CA</item>
+        <item>Manteca, CA</item>
+        <item>Iowa City, IA</item>
+        <item>Jonesboro, AR</item>
+        <item>Wilmington, DE</item>
+        <item>Lynwood, CA</item>
+        <item>Loveland, CO</item>
+        <item>Pawtucket, RI</item>
+        <item>Boynton Beach, FL</item>
+        <item>Waukesha, WI</item>
+        <item>Gulfport, MS</item>
+        <item>Apple Valley, CA</item>
+        <item>Passaic, NJ</item>
+        <item>Rapid City, SD</item>
+        <item>Layton, UT</item>
+        <item>Lafayette, IN</item>
+        <item>Turlock, CA</item>
+        <item>Muncie, IN</item>
+        <item>Temple, TX</item>
+        <item>Missouri City, TX</item>
+        <item>Redlands, CA</item>
+        <item>Santa Fe, NM</item>
+        <item>Lauderhill, FL</item>
+        <item>Milpitas, CA</item>
+        <item>Palatine, IL</item>
+        <item>Missoula, MT</item>
+        <item>Rock Hill, SC</item>
+        <item>Jacksonville, NC</item>
+        <item>Franklin, TN</item>
+        <item>Flagstaff, AZ</item>
+        <item>Flower Mound, TX</item>
+        <item>Weston, FL</item>
+        <item>Waterloo, IA</item>
+        <item>Union City, NJ</item>
+        <item>Mount Vernon, NY</item>
+        <item>Fort Myers, FL</item>
+        <item>Dothan, AL</item>
+        <item>Rancho Cordova, CA</item>
+        <item>Redondo Beach, CA</item>
+        <item>Jackson, TN</item>
+        <item>Pasco, WA</item>
+        <item>St. Charles, MO</item>
+        <item>Eau Claire, WI</item>
+        <item>North Richland Hills, TX</item>
+        <item>Bismarck, ND</item>
+        <item>Yorba Linda, CA</item>
+        <item>Kenner, LA</item>
+        <item>Walnut Creek, CA</item>
+        <item>Frederick, MD</item>
+        <item>Oshkosh, WI</item>
+        <item>Pittsburg, CA</item>
+        <item>Palo Alto, CA</item>
+        <item>Bossier City, LA</item>
+        <item>Portland, ME</item>
+        <item>St. Cloud, MN</item>
+        <item>Davis, CA</item>
+        <item>South San Francisco, CA</item>
+        <item>Camarillo, CA</item>
+        <item>North Little Rock, AR</item>
+        <item>Schenectady, NY</item>
+        <item>Gaithersburg, MD</item>
+        <item>Harlingen, TX</item>
+        <item>Woodbury, MN</item>
+        <item>Eagan, MN</item>
+        <item>Yuba City, CA</item>
+        <item>Maple Grove, MN</item>
+        <item>Youngstown, OH</item>
+        <item>Skokie, IL</item>
+        <item>Kissimmee, FL</item>
+        <item>Johnson City, TN</item>
+        <item>Victoria, TX</item>
+        <item>San Clemente, CA</item>
+        <item>Bayonne, NJ</item>
+        <item>Laguna Niguel, CA</item>
+        <item>East Orange, NJ</item>
+        <item>Shawnee, KS</item>
+        <item>Homestead, FL</item>
+        <item>Rockville, MD</item>
+        <item>Delray Beach, FL</item>
+        <item>Janesville, WI</item>
+        <item>Conway, AR</item>
+        <item>Pico Rivera, CA</item>
+        <item>Lorain, OH</item>
+        <item>Montebello, CA</item>
+        <item>Lodi, CA</item>
+        <item>New Braunfels, TX</item>
+        <item>Marysville, WA</item>
+        <item>Tamarac, FL</item>
+    </string-array>
+
 </resources>

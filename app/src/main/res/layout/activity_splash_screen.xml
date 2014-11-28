@@ -13,7 +13,7 @@
         android:text="@string/startTrip_begin_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/tripStartAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         android:text="@string/startTrip_end_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/tripEndAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
