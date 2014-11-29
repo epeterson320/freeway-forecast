@@ -1,7 +1,15 @@
 package com.bluesierralabs.freewayforecast;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,14 +18,39 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bluesierralabs.freewayforecast.Helpers.DateSelectFragment;
 import com.bluesierralabs.freewayforecast.Helpers.TimeSelectFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 
-public class SplashScreen extends FragmentActivity {
+import java.util.List;
+import java.util.Locale;
+
+//public class SplashScreen extends FragmentActivity implements
+//            GooglePlayServicesClient.ConnectionCallbacks,
+//            GooglePlayServicesClient.OnConnectionFailedListener,
+//            LocationListener {
+
+public class SplashScreen extends FragmentActivity implements
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener,
+        LocationListener {
 
     private AutoCompleteTextView startAutoComplete;
     private AutoCompleteTextView endAutoComplete;
+
+    // locations objects
+    LocationClient mLocationClient;
+    Location mCurrentLocation;
+    LocationRequest mLocationRequest;
+
+    TextView txtLong,txtLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +68,39 @@ public class SplashScreen extends FragmentActivity {
         // Set the adapter for the start and end trip fields
         startAutoComplete.setAdapter(adapter);
         endAutoComplete.setAdapter(adapter);
+
+        // 2. get reference to TextView
+        txtLong = (TextView) findViewById(R.id.txtLong);
+        txtLat = (TextView) findViewById(R.id.txtLat);
+
+        // 3. create LocationClient
+        mLocationClient = new LocationClient(this, this, this);
+
+        // 4. create & set LocationRequest for Location update
+        mLocationRequest = LocationRequest.create();
+
+        // Only poll the current location once
+        mLocationRequest.setNumUpdates(1);
+        // considered to be about 100 meter accuracy
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        // Set the update interval to 5 seconds
+        mLocationRequest.setInterval(1000 * 10);
+        // Set the fastest update interval to 1 second
+        mLocationRequest.setFastestInterval(1000 * 1);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // 1. connect the client.
+        mLocationClient.connect();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // 1. disconnecting the client invalidates it.
+        mLocationClient.disconnect();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,5 +161,69 @@ public class SplashScreen extends FragmentActivity {
     public void openSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    // From: http://hmkcode.com/android-get-current-location-location-updates-location-services-api-tutorial/
+    @Override
+    public void onConnected(Bundle bundle) {
+        if(mLocationClient != null)
+            mLocationClient.requestLocationUpdates(mLocationRequest,  this);
+
+        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+
+        if(mLocationClient != null){
+            // get location
+            mCurrentLocation = mLocationClient.getLastLocation();
+            try{
+
+                // set TextView(s)
+                txtLat.setText(mCurrentLocation.getLatitude()+"");
+                txtLong.setText(mCurrentLocation.getLongitude()+"");
+
+                String city = "";
+                String state = "";
+
+                try{
+                    Geocoder gcd = new Geocoder(this, Locale.getDefault());
+                    List<Address> addresses = gcd.getFromLocation(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude(), 1);
+                    if (addresses.size() > 0)
+                        city = String.valueOf(addresses.get(0).getLocality());
+                    state = String.valueOf(addresses.get(0).getAdminArea());
+//            Toast.makeText(this, (city + ", " + state), Toast.LENGTH_SHORT).show();
+
+                    EditText tripStartLocation = (EditText) findViewById(R.id.tripStartAddress);
+                    tripStartLocation.setText((city + ", " + state));
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+
+            }catch(NullPointerException npe){
+
+                Toast.makeText(this, "Failed to Connect", Toast.LENGTH_SHORT).show();
+
+                // switch on location service intent
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        }
+    }
+
+    // From: http://hmkcode.com/android-get-current-location-location-updates-location-services-api-tutorial/
+    @Override
+    public void onDisconnected() {
+        Toast.makeText(this, "Disconnected.", Toast.LENGTH_SHORT).show();
+    }
+
+    // From: http://hmkcode.com/android-get-current-location-location-updates-location-services-api-tutorial/
+    @Override
+    public void onLocationChanged(Location location) {
+        // For now there is no need to do anything different on location change
+    }
+
+    // From: http://hmkcode.com/android-get-current-location-location-updates-location-services-api-tutorial/
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT).show();
     }
 }

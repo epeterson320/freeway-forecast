@@ -26,16 +26,6 @@ public class enterLocation extends AutoCompleteTextView {
             this.setBackgroundResource(android.R.drawable.edit_text);
         }
 
-//        setOnEditorActionListener(new OnEditorActionListener() {
-//            @Override
-//            public synchronized boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-
         String value = "";
         final String viewMode = "editing";
         final String viewSide = "right";
@@ -57,7 +47,7 @@ public class enterLocation extends AutoCompleteTextView {
         final Drawable searchIcon = getResources().getDrawable(android.R.drawable.ic_search_category_default);
         searchIcon.setBounds(0, 0, x.getIntrinsicWidth(),x.getIntrinsicHeight());
 
-//        setCompoundDrawables(searchIcon, null, viewSide.equals("right") ? x2 : null, null);
+        setCompoundDrawables(null, null, viewSide.equals("right") ? x2 : null, null);
 
         setOnTouchListener(new OnTouchListener() {
             @Override
