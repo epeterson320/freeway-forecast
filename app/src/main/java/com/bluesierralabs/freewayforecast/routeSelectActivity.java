@@ -1,9 +1,13 @@
 package com.bluesierralabs.freewayforecast;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.bluesierralabs.freewayforecast.Helpers.GMapV2Direction;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,5 +62,31 @@ public class RouteSelectActivity extends FragmentActivity {
         }
 
         mMap.addPolyline(rectLine);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.route_select, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void submitRoute(View view) {
+
+        // Go the the trip forecast activity
+        Intent choseRoute = new Intent(this, TripForecastActivity.class);
+        startActivity(choseRoute);
     }
 }
