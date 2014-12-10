@@ -1,15 +1,11 @@
 package com.bluesierralabs.freewayforecast;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,11 +27,6 @@ import com.google.android.gms.location.LocationRequest;
 
 import java.util.List;
 import java.util.Locale;
-
-//public class SplashScreen extends FragmentActivity implements
-//            GooglePlayServicesClient.ConnectionCallbacks,
-//            GooglePlayServicesClient.OnConnectionFailedListener,
-//            LocationListener {
 
 public class SplashScreen extends FragmentActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
@@ -148,6 +139,9 @@ public class SplashScreen extends FragmentActivity implements
         // Get the date of the trip from the input box
         EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
         String date = inputDate.getText().toString();
+
+        // Get the time of the trop from the input box
+        EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
 
         // Now we want to send the trip info to the trip manager...
 

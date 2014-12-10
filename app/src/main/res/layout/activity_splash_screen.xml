@@ -56,14 +56,14 @@
         android:layout_alignStart="@+id/tripEndAddress" />
 
     <Button
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pick_date"
         android:onClick="showDatePickerDialog"
         android:layout_alignBottom="@+id/tripStartDate"
         android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button"
-        android:id="@+id/button2" />
+        android:layout_alignEnd="@+id/button" />
 
     <TextView
         android:id="@+id/tripDateTitle"
@@ -78,35 +78,35 @@
         android:layout_marginLeft="40dp" />
 
     <TextView
+        android:id="@+id/timeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/startTrip_time_title"
-        android:id="@+id/timeTitle"
         android:layout_marginTop="80dp"
         android:layout_below="@+id/tripStartDate"
         android:layout_alignLeft="@+id/tripDateTitle"
         android:layout_alignStart="@+id/tripDateTitle" />
 
     <EditText
+        android:id="@+id/tripStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="time"
         android:ems="10"
-        android:id="@+id/tripTime"
         android:layout_alignTop="@+id/timeTitle"
         android:layout_alignLeft="@+id/tripStartDate"
         android:layout_alignStart="@+id/tripStartDate" />
 
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pick_time"
         android:onClick="showTimePickerDialog"
-        android:id="@+id/button"
         android:layout_alignBottom="@+id/timeTitle"
-        android:layout_toRightOf="@+id/tripTime"
-        android:layout_toEndOf="@+id/tripTime" />
+        android:layout_toRightOf="@+id/tripStartTime"
+        android:layout_toEndOf="@+id/tripStartTime" />
 
     <Button
         android:id="@+id/submitTimesAndPlaces"
@@ -125,7 +125,7 @@
         android:id="@+id/txtLong"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tripTime"
+        android:layout_below="@+id/tripStartTime"
         android:text="Long"
         android:textSize="24dp"
         android:layout_alignParentRight="true"
