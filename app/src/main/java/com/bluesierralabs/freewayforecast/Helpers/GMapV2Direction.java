@@ -35,8 +35,10 @@ public class GMapV2Direction {
 
         String url = "http://maps.googleapis.com/maps/api/directions/xml?"
                 + "origin=" + start.latitude + "," + start.longitude
-                + "&destination=" + end.latitude + "," + end.longitude
-                + "&sensor=false&units=metric&mode="+mode;
+                + "&destination=" + end.latitude + "," + end.longitude;//+"&alternatives=true";
+//                + "&sensor=false&units=metric&mode="+mode+"&alternatives=true";
+
+        Log.e("GMapV2Direction", "url: " + url);
 
         try {
             HttpClient httpClient = new DefaultHttpClient();
@@ -54,8 +56,8 @@ public class GMapV2Direction {
     }
 
     public String getDurationText (Document doc) {
-        NodeList nl1 = doc.getElementsByTagName("duration");
-        Node node1 = nl1.item(nl1.getLength() - 1);
+        NodeList durationsList = doc.getElementsByTagName("duration");
+        Node node1 = durationsList.item(durationsList.getLength() - 1);
         NodeList nl2 = node1.getChildNodes();
         Node node2 = nl2.item(getNodeIndex(nl2, "text"));
         Log.i("DurationText", node2.getTextContent());
@@ -110,13 +112,106 @@ public class GMapV2Direction {
         return node1.getTextContent();
     }
 
-    public ArrayList<LatLng> getDirection (Document doc) {
-        NodeList nl1, nl2, nl3;
+    public ArrayList<String> getSummaries (Document doc) {
+        // Create a String array
+        ArrayList<String> summaries = new ArrayList<String>();
+
+        // Get all the nodes with the ID summary
+        NodeList nl1 = doc.getElementsByTagName("summary");
+        for(int i=0; i<nl1.getLength(); i++) {
+            summaries.add(nl1.item(i).getTextContent());
+        }
+
+        // Return all the summaries
+        return summaries;
+    }
+
+//    public ArrayList<LatLng> getDirection (Document doc) {
+//        NodeList nl1, nl2, nl3;
+//        ArrayList<LatLng> listGeopoints = new ArrayList<LatLng>();
+//        nl1 = doc.getElementsByTagName("step");
+//        if (nl1.getLength() > 0) {
+//            for (int i = 0; i < nl1.getLength(); i++) {
+//                Node node1 = nl1.item(i);
+//                nl2 = node1.getChildNodes();
+//
+//                Node locationNode = nl2.item(getNodeIndex(nl2, "start_location"));
+//                nl3 = locationNode.getChildNodes();
+//                Node latNode = nl3.item(getNodeIndex(nl3, "lat"));
+//                double lat = Double.parseDouble(latNode.getTextContent());
+//                Node lngNode = nl3.item(getNodeIndex(nl3, "lng"));
+//                double lng = Double.parseDouble(lngNode.getTextContent());
+//                listGeopoints.add(new LatLng(lat, lng));
+//
+//                locationNode = nl2.item(getNodeIndex(nl2, "polyline"));
+//                nl3 = locationNode.getChildNodes();
+//                latNode = nl3.item(getNodeIndex(nl3, "points"));
+//                ArrayList<LatLng> arr = decodePoly(latNode.getTextContent());
+//                for(int j = 0 ; j < arr.size() ; j++) {
+//                    listGeopoints.add(new LatLng(arr.get(j).latitude, arr.get(j).longitude));
+//                }
+//
+//                locationNode = nl2.item(getNodeIndex(nl2, "end_location"));
+//                nl3 = locationNode.getChildNodes();
+//                latNode = nl3.item(getNodeIndex(nl3, "lat"));
+//                lat = Double.parseDouble(latNode.getTextContent());
+//                lngNode = nl3.item(getNodeIndex(nl3, "lng"));
+//                lng = Double.parseDouble(lngNode.getTextContent());
+//                listGeopoints.add(new LatLng(lat, lng));
+//            }
+//        }
+//
+//        return listGeopoints;
+//    }
+
+//    public ArrayList<LatLng> getDirection (Document doc) {
+    public ArrayList<ArrayList> getDirection (Document doc) {
+        // Create some NodeList variables
+        NodeList nl1, nl2, nl3, routes;
+
+        // Create list of ListGeopoints for first route option
         ArrayList<LatLng> listGeopoints = new ArrayList<LatLng>();
+
+        // Create an array of ArrayLists to be returned when everything is finished
+        ArrayList<ArrayList> RouteDirections = new ArrayList<ArrayList>();
+
+        // Get all the elements of the returned xml that have "step" as their ID
         nl1 = doc.getElementsByTagName("step");
+
+        // Get a node list for the different routes
+        routes = doc.getElementsByTagName("route");
+
+        // TODO: Remove these when I'm done debugging
+        Log.e("GMapV2Direction", "Total # of routes = " + routes.getLength());
+        Log.e("GMapV2Direction", "Total # of steps  = " + nl1.getLength());
+
         if (nl1.getLength() > 0) {
+            // Loop through all the nodes that are 'steps'
+
+            // Prime the for loop real quick
+            String lastRouteDescription = nl1.item(0).getParentNode().getParentNode().getChildNodes().item(1).getTextContent();
+
             for (int i = 0; i < nl1.getLength(); i++) {
                 Node node1 = nl1.item(i);
+
+                String summary = node1.getParentNode().getParentNode().getChildNodes().item(1).getTextContent();
+
+                // Check what route we are adding directions to
+                if (!summary.equals(lastRouteDescription)) {
+
+                    Log.e("GMapV2Direction", "last = " + lastRouteDescription + " current = " + summary);
+
+                    // New route to add direction steps to
+                    lastRouteDescription = summary;
+
+                    // Add the previously finished route to array of directions
+                    RouteDirections.add(listGeopoints);
+
+                    // Clear out the list of geo points
+                    listGeopoints.clear();
+                }
+
+                // Get the step's child nodes
                 nl2 = node1.getChildNodes();
 
                 Node locationNode = nl2.item(getNodeIndex(nl2, "start_location"));
@@ -143,9 +238,13 @@ public class GMapV2Direction {
                 lng = Double.parseDouble(lngNode.getTextContent());
                 listGeopoints.add(new LatLng(lat, lng));
             }
+
+            // Once finished looping through the steps, add this last route to the array
+            RouteDirections.add(listGeopoints);
         }
 
-        return listGeopoints;
+//        return listGeopoints;
+        return RouteDirections;
     }
 
     private int getNodeIndex(NodeList nl, String nodename) {
