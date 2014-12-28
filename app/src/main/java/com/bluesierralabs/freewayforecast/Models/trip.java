@@ -1,9 +1,16 @@
-package com.bluesierralabs.freewayforecast;
+package com.bluesierralabs.freewayforecast.Models;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 /**
  * Created by timothy on 11/13/14.
  */
-public class trip {
+public class Trip {
+    /** Object of the trip class */
+    private static Trip tripObject = null;
+
     /** Starting location for the trip */
     private String tripStartAddress;
 
@@ -15,6 +22,23 @@ public class trip {
 
     /** Time of day that the user is going to start driving */
     private String tripStartTime;
+
+    /** List of latitude and longitude points where the trip hours markers will occur */
+    private List<LatLng> hourMarkers;
+
+    // Class constructor
+    private Trip() {
+        // TODO: Determine if there should be any construction in the class initialization.
+        hourMarkers.clear();
+    }
+
+    // Return the instance of the singleton class or create an instance if one does not exist.
+    public static Trip getInstance() {
+        if (tripObject == null) {
+            tripObject = new Trip();
+        }
+        return tripObject;
+    }
 
     // Set the address for the start of the trip
     public void setTripStartAddress(String address) {
@@ -62,5 +86,13 @@ public class trip {
     // Get the start time of the trip
     public String getTripStartTime() {
         return tripStartTime;
+    }
+
+    public void addHourMarker(LatLng marker) {
+        hourMarkers.add(marker);
+    }
+
+    public List<LatLng> getHourMarkers() {
+        return hourMarkers;
     }
 }

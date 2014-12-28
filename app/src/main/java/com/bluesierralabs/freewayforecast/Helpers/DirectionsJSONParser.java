@@ -3,6 +3,7 @@ package com.bluesierralabs.freewayforecast.Helpers;
 
 import android.util.Log;
 
+import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -19,6 +20,8 @@ import java.util.List;
 
 public class DirectionsJSONParser
 {
+    private Trip tripInstance = Trip.getInstance();
+
     private List<LatLng> hourPoints;
 
     public List<LatLng> getHourPoints() {
@@ -213,6 +216,7 @@ public class DirectionsJSONParser
 //                                    Log.e("Left over", "" + tempDuration);
                                 }
 
+                                tripInstance.addHourMarker(marker);
                                 hourPoints.add(marker);
                                 additionalMarkers++;
                             }

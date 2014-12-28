@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.bluesierralabs.freewayforecast.Helpers.DateSelectFragment;
 import com.bluesierralabs.freewayforecast.Helpers.TimeSelectFragment;
+import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -32,6 +33,9 @@ public class SplashScreen extends FragmentActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener,
         LocationListener {
+
+    // Object of the trip class.
+    private Trip usersTrip = Trip.getInstance();
 
     private AutoCompleteTextView startAutoComplete;
     private AutoCompleteTextView endAutoComplete;
@@ -131,19 +135,22 @@ public class SplashScreen extends FragmentActivity implements
         // Get the starting address for the trip from the input box
         EditText inputStartAddress = (EditText) findViewById(R.id.tripStartAddress);
         String startAddress = inputStartAddress.getText().toString();
+        usersTrip.setTripStartAddress(startAddress);
 
         // Get the ending address for the trip from the input box
         EditText inputEndAddress = (EditText) findViewById(R.id.tripEndAddress);
         String endAddress = inputEndAddress.getText().toString();
+        usersTrip.setTripEndAddress(endAddress);
 
         // Get the date of the trip from the input box
         EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
         String date = inputDate.getText().toString();
+        usersTrip.setTripStartDate(date);
 
-        // Get the time of the trop from the input box
+        // Get the time of the trip from the input box
         EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
-
-        // Now we want to send the trip info to the trip manager...
+        String time = inputTime.getText().toString();
+        usersTrip.setTripStartTime(time);
 
         // Go to the route select activity
         Intent choseRoute = new Intent(this, RouteSelectActivity.class);

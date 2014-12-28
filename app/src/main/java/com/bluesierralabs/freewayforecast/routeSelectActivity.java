@@ -13,11 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
-import com.bluesierralabs.freewayforecast.Helpers.GMapV2Direction;
+import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -35,22 +34,19 @@ import java.util.List;
 
 
 public class RouteSelectActivity extends FragmentActivity {
-    GoogleMap mMap;
-    GMapV2Direction md;
+    Trip usersTrip = Trip.getInstance();
 
     GoogleMap map;
     ArrayList<LatLng> markerPoints;
     List<LatLng> hourPoints;
-    TextView tvDistanceDuration;
 
-    LatLng fromPosition = new LatLng(42.3584865, -71.05985749999999);
-    LatLng toPosition = new LatLng(33.7488397, -84.39293219999999);
+    LatLng fromPosition = new LatLng(42.3584865, -71.05985749999999);   // Boston
+    LatLng toPosition = new LatLng(37.7833, -122.4167); // San Francisco
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_select);
 
-        //this.tvDistanceDuration = (TextView) this.findViewById(R.id.tv_distance_time);
         // Initializing
         this.markerPoints = new ArrayList<LatLng>();
 
@@ -64,49 +60,13 @@ public class RouteSelectActivity extends FragmentActivity {
         map.addMarker(new MarkerOptions().position(fromPosition).title("Start"));
         map.addMarker(new MarkerOptions().position(toPosition).title("End"));
 
-        // Enable MyLocation Button in the Map
-//        this.map.setMyLocationEnabled(true);
+        // Getting URL to the Google Directions API
+        String url = RouteSelectActivity.this.getDirectionsUrl(fromPosition, toPosition);
 
-//        // Adding new item to the ArrayList
-//        RouteSelectActivity.this.markerPoints.add(fromPosition);
-//
-//        RouteSelectActivity.this.markerPoints.add(toPosition);
-//
-//        // Creating MarkerOptions
-//        MarkerOptions options = new MarkerOptions();
-//
-//        // Setting the position of the marker
-////        options.position(point);
-//
-//        /**
-//         * For the start location, the color of marker is GREEN and
-//         * for the end location, the color of marker is RED.
-//         */
-//        if (RouteSelectActivity.this.markerPoints.size() == 1)
-//        {
-//            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-//        } else if (RouteSelectActivity.this.markerPoints.size() == 2)
-//        {
-//            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-//        }
-//
-//        // Add new marker to the Google Map Android API V2
-//        RouteSelectActivity.this.map.addMarker(options);
-//
-//        // Checks, whether start and end locations are captured
-//        if (RouteSelectActivity.this.markerPoints.size() >= 2)
-//        {
-            LatLng origin = fromPosition;   // RouteSelectActivity.this.markerPoints.get(0);
-            LatLng dest = toPosition; //RouteSelectActivity.this.markerPoints.get(1);
+        DownloadTask downloadTask = new DownloadTask();
 
-            // Getting URL to the Google Directions API
-            String url = RouteSelectActivity.this.getDirectionsUrl(origin, dest);
-
-            DownloadTask downloadTask = new DownloadTask();
-
-            // Start downloading json data from Google Directions API
-            downloadTask.execute(url);
-//        }
+        // Start downloading json data from Google Directions API
+        downloadTask.execute(url);
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest)
@@ -198,8 +158,7 @@ public class RouteSelectActivity extends FragmentActivity {
             return data;
         }
 
-        // Executes in UI thread, after the execution of
-        // doInBackground()
+        // Executes in UI thread, after the execution of doInBackground()
         @Override
         protected void onPostExecute(String result)
         {
@@ -224,6 +183,9 @@ public class RouteSelectActivity extends FragmentActivity {
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
 
+            // Add the starting location marker to the trip
+            usersTrip.addHourMarker(fromPosition);
+
             try
             {
                 jObject = new JSONObject(jsonData[0]);
@@ -237,6 +199,10 @@ public class RouteSelectActivity extends FragmentActivity {
             {
                 e.printStackTrace();
             }
+
+            // Add the destination marker to the list
+            usersTrip.addHourMarker(toPosition);
+
             return routes;
         }
 
@@ -291,11 +257,12 @@ public class RouteSelectActivity extends FragmentActivity {
                 lineOptions.color(Color.RED);
             }
 
-            //RouteSelectActivity.this.tvDistanceDuration.setText("Distance:" + distance + ", Duration:" + duration);
-
-            Log.e("Trying to add hour markers", "" + hourPoints.size());
-            for (int i = 0; i < hourPoints.size(); i++) {
-                map.addMarker(new MarkerOptions().position(hourPoints.get(i)));
+//            Log.e("Trying to add hour markers", "" + hourPoints.size());
+            Log.e("Trying to add hour markers", "" + usersTrip.getHourMarkers().size());
+//            for (int i = 0; i < hourPoints.size(); i++) {
+            for (int i = 0; i < usersTrip.getHourMarkers().size(); i++) {
+//                map.addMarker(new MarkerOptions().position(hourPoints.get(i)));
+                map.addMarker(new MarkerOptions().position(usersTrip.getHourMarkers().get(i)));
             }
 
             // Drawing polyline in the Google Map for the i-th route
@@ -313,9 +280,8 @@ public class RouteSelectActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle action bar item clicks here. The action bar will automatically handle clicks on
+        // the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
