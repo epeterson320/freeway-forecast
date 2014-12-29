@@ -40,7 +40,7 @@ public class WeatherService {
 //
 //        mWebService = restAdapter.create(OpenWeatherMapWebService.class);
 //    }
-
+//
 //    private interface OpenWeatherMapWebService {
 //        @GET("/weather?units=metric")
 //        Observable<CurrentWeatherDataEnvelope> fetchCurrentWeather(@Query("lon") double longitude,
@@ -50,7 +50,7 @@ public class WeatherService {
 //        Observable<WeatherForecastListDataEnvelope> fetchWeatherForecasts(
 //                @Query("lon") double longitude, @Query("lat") double latitude);
 //    }
-
+//
 //    public Observable<CurrentWeather> fetchCurrentWeather(final double longitude,
 //                                                          final double latitude) {
 //        return mWebService.fetchCurrentWeather(longitude, latitude)
@@ -75,7 +75,7 @@ public class WeatherService {
 //                    }
 //                });
 //    }
-
+//
 //    public Observable<List<WeatherForecast>> fetchWeatherForecasts(final double longitude,
 //                                                                   final double latitude) {
 //        return mWebService.fetchWeatherForecasts(longitude, latitude)
@@ -108,7 +108,7 @@ public class WeatherService {
 //                    }
 //                });
 //    }
-
+//
 //    /**
 //     * Base class for results returned by the weather web service.
 //     */
@@ -132,7 +132,7 @@ public class WeatherService {
 //            }
 //        }
 //    }
-
+//
 //    /**
 //     * Data structure for current weather results returned by the web service.
 //     */
@@ -148,7 +148,7 @@ public class WeatherService {
 //            public float temp_max;
 //        }
 //    }
-
+//
 //    /**
 //     * Data structure for weather forecast results returned by the web service.
 //     */

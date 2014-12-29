@@ -35,7 +35,7 @@ public class SplashScreen extends FragmentActivity implements
         LocationListener {
 
     // Object of the trip class.
-    private Trip usersTrip = Trip.getInstance();
+    private Trip tripInstance = Trip.getInstance();
 
     private AutoCompleteTextView startAutoComplete;
     private AutoCompleteTextView endAutoComplete;
@@ -44,8 +44,6 @@ public class SplashScreen extends FragmentActivity implements
     LocationClient mLocationClient;
     Location mCurrentLocation;
     LocationRequest mLocationRequest;
-
-    TextView txtLong,txtLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +62,10 @@ public class SplashScreen extends FragmentActivity implements
         startAutoComplete.setAdapter(adapter);
         endAutoComplete.setAdapter(adapter);
 
-        // 2. get reference to TextView
-        txtLong = (TextView) findViewById(R.id.txtLong);
-        txtLat = (TextView) findViewById(R.id.txtLat);
-
-        // 3. create LocationClient
+        // 2. create LocationClient
         mLocationClient = new LocationClient(this, this, this);
 
-        // 4. create & set LocationRequest for Location update
+        // 3. create & set LocationRequest for Location update
         mLocationRequest = LocationRequest.create();
 
         // Only poll the current location once
@@ -135,22 +129,26 @@ public class SplashScreen extends FragmentActivity implements
         // Get the starting address for the trip from the input box
         EditText inputStartAddress = (EditText) findViewById(R.id.tripStartAddress);
         String startAddress = inputStartAddress.getText().toString();
-        usersTrip.setTripStartAddress(startAddress);
+
+        // Pass the context as well.
+        tripInstance.setTripStartAddress(startAddress, this);
 
         // Get the ending address for the trip from the input box
         EditText inputEndAddress = (EditText) findViewById(R.id.tripEndAddress);
         String endAddress = inputEndAddress.getText().toString();
-        usersTrip.setTripEndAddress(endAddress);
+
+        // Pass the context as well
+        tripInstance.setTripEndAddress(endAddress, this);
 
         // Get the date of the trip from the input box
         EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
         String date = inputDate.getText().toString();
-        usersTrip.setTripStartDate(date);
+        tripInstance.setTripStartDate(date);
 
         // Get the time of the trip from the input box
         EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
         String time = inputTime.getText().toString();
-        usersTrip.setTripStartTime(time);
+        tripInstance.setTripStartTime(time);
 
         // Go to the route select activity
         Intent choseRoute = new Intent(this, RouteSelectActivity.class);
@@ -176,11 +174,6 @@ public class SplashScreen extends FragmentActivity implements
             // get location
             mCurrentLocation = mLocationClient.getLastLocation();
             try{
-
-                // set TextView(s)
-                txtLat.setText(mCurrentLocation.getLatitude()+"");
-                txtLong.setText(mCurrentLocation.getLongitude()+"");
-
                 String city = "";
                 String state = "";
 
