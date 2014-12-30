@@ -19,6 +19,17 @@
         <item>3</item>
     </string-array>
 
+    <!-- Distance metrics - list under general settings -->
+    <string name="pref_distance_units_settings">Distance Metrics</string>
+    <string-array name="pref_distance_unit_titles">
+        <item>Miles</item>
+        <item>Kilometers</item>
+    </string-array>
+    <string-array name="pref_distance_unit_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message history</string>
 

@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 
+import com.bluesierralabs.freewayforecast.Models.Settings;
+
 import java.util.List;
 
 /**
@@ -41,6 +43,8 @@ public class SettingsActivity extends PreferenceActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+
+    private Settings settingsInstance = Settings.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
