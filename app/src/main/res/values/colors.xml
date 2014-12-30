@@ -2,4 +2,5 @@
 <resources>
     <color name="text">#333333</color>
     <color name="background">#FFFFFF</color>
+    <color name="light">#EEEEEE</color>
 </resources>

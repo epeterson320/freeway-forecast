@@ -30,7 +30,8 @@ public class enterLocation extends AutoCompleteTextView {
         final String viewSide = "right";
 
         // TODO: Get an icon 'x' for the delete button
-        final Drawable x = getResources().getDrawable(R.drawable.ic_action_delete);
+//        final Drawable x = getResources().getDrawable(R.drawable.ic_action_delete);
+        final Drawable x = getResources().getDrawable(R.drawable.ic_action_cancel);
 
         // The height will be set the same with [X] icon
         setHeight(x.getBounds().height());
