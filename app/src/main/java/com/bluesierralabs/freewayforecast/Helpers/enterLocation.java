@@ -17,7 +17,6 @@ import com.bluesierralabs.freewayforecast.R;
  */
 public class enterLocation extends AutoCompleteTextView {
     // TODO: Clean up this code and make it more my own
-//    private static final int MAX_LENGTH = 10;
 
     public enterLocation(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -73,6 +72,7 @@ public class enterLocation extends AutoCompleteTextView {
                 return false;
             }
         });
+
         addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
 
+import com.bluesierralabs.freewayforecast.Models.Trip;
+
 import java.util.Calendar;
 
 /**
@@ -14,8 +16,9 @@ import java.util.Calendar;
  *
  * Starter code from: http://developer.android.com/guide/topics/ui/controls/pickers.html
  */
-public class TimeSelectFragment extends DialogFragment
-        implements TimePickerDialog.OnTimeSetListener {
+public class TimeSelectFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+
+    private Trip tripInstance = Trip.getInstance();
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class TimeSelectFragment extends DialogFragment
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        // Do something with the time chosen by the user
+        // Set the trip with the hours and minutes.
+        tripInstance.setTripStartWithTimeSelect(hourOfDay, minute);
     }
 }

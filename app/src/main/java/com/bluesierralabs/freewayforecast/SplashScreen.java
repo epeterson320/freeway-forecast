@@ -1,5 +1,6 @@
 package com.bluesierralabs.freewayforecast;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -9,6 +10,8 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -26,8 +29,11 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import static android.widget.AdapterView.*;
 
 public class SplashScreen extends FragmentActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
@@ -52,9 +58,45 @@ public class SplashScreen extends FragmentActivity implements
 
         // Auto complete example from
         // http://www.tutorialspoint.com/android/android_auto_complete.htm
-        startAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripStartAddress);
-        endAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripEndAddress);
 
+        // Setup the listeners and handlers for the trip start location edit text box
+        startAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripStartAddress);
+        startAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Hide the virtual keyboard if an item is selected
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(startAutoComplete.getWindowToken(), 0);
+            }
+        });
+
+        // Setup the listeners and handlers for the trip end location edit text box
+        endAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripEndAddress);
+        endAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Hide the virtual keyboard if an item is selected
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(endAutoComplete.getWindowToken(), 0);
+            }
+        });
+
+        Calendar fillerCal = Calendar.getInstance();
+        fillerCal.setTime(tripInstance.getTripStart());
+
+        // Set up the date (Day, Month) for the splash screen
+        EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
+        String inputDateString = "" + tripInstance.getTripStartDayName() + ", "
+                + tripInstance.getTripStartMonthName() + " " + tripInstance.getTripStartDayNumber();
+        inputDate.setText(inputDateString);
+
+        // Set up the time (Hours and Minutes) for the splash screen
+        EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
+        inputTime.setText(tripInstance.getTripStartTimeReadable());
+
+        // Setup the auto complete of cities based on the user's location.
         String[] countries = getResources().getStringArray(R.array.cities_usa);
         ArrayAdapter adapter = new ArrayAdapter (this,android.R.layout.simple_list_item_1,countries);
 

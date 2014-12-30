@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
+import com.bluesierralabs.freewayforecast.Models.Trip;
+
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by timothy on 11/28/14.
  *
  * Example code from: http://developer.android.com/guide/topics/ui/controls/pickers.html
  */
-public class DateSelectFragment extends DialogFragment
-        implements DatePickerDialog.OnDateSetListener {
+public class DateSelectFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+    private Trip tripInstance = Trip.getInstance();
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -26,10 +30,9 @@ public class DateSelectFragment extends DialogFragment
 
         // Create a new instance of DatePickerDialog and return it
         return new DatePickerDialog(getActivity(), this, year, month, day);
-//        return new DatePickerDialog(getActivity(), this, month, day);
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Do something with the date chosen by the user
+        tripInstance.setTripStartWithDateSelect(year, month, day);
     }
 }

@@ -1,16 +1,22 @@
 package com.bluesierralabs.freewayforecast.Models;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
+import com.bluesierralabs.freewayforecast.Helpers.App;
+import com.bluesierralabs.freewayforecast.R;
 import com.bluesierralabs.freewayforecast.Tasks.GetCoordinatesTask;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,6 +24,7 @@ import java.util.Locale;
  * Created by timothy on 11/13/14.
  */
 public class Trip {
+
     /** Object of the trip class */
     private static Trip tripObject = null;
 
@@ -39,8 +46,14 @@ public class Trip {
     /** Time of day that the user is going to start driving */
     private String tripStartTime;
 
+    private Date tripStart;
+
+    private Resources resources = App.getContext().getResources();
+
     /** List of latitude and longitude points where the trip hours markers will occur */
     private List<LatLng> hourMarkers;
+
+//    private Resources resources = App.getContext().getResources();
 
     // Class constructor
     private Trip() {
@@ -49,6 +62,12 @@ public class Trip {
         Log.e("Creating trip instance", "Okay");
 
 //        this.hourMarkers.clear();
+
+        // Set the trip start date to the current time
+        Calendar cal = Calendar.getInstance();
+        Date currentTime = new Date();  // Initializes this Date instance to the current time.
+        cal.setTime(currentTime);
+        this.tripStart = cal.getTime();
     }
 
     // Return the instance of the singleton class or create an instance if one does not exist.
@@ -157,5 +176,140 @@ public class Trip {
 
     public List<LatLng> getHourMarkers() {
         return hourMarkers;
+    }
+
+    public Date getTripStart() {
+        return tripStart;
+    }
+
+    /**
+     * Set the trip's start time with year, month, and day
+     *
+     * @param year
+     * @param month
+     * @param day
+     */
+    public void setTripStartWithDateSelect(int year, int month, int day) {
+        // First convert the date object to a calendar object
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(tripStart);
+
+        // Now change the year, month, and date
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DATE, day);
+
+        // Finally convert the calendar back to a date, and save it for the trip
+        this.tripStart = cal.getTime();
+    }
+
+    /**
+     * Set the trip's start time with hours and minutes
+     *
+     * @param hour
+     * @param minute
+     */
+    public void setTripStartWithTimeSelect(int hour, int minute) {
+        // First convert the date object to a calendar object
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(tripStart);
+
+        // Now change the hour and minutes
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        // Finally convert the calendar back to a date, and save it for the trip
+        this.tripStart = cal.getTime();
+    }
+
+    public String getTripStartDayName() {
+        // First convert the date object to a calendar object
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(tripStart);
+
+        switch (cal.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.SUNDAY:
+                return resources.getString(R.string.sunday);
+            case Calendar.MONDAY:
+                return resources.getString(R.string.monday);
+            case Calendar.TUESDAY:
+                return resources.getString(R.string.tuesday);
+            case Calendar.WEDNESDAY:
+                return resources.getString(R.string.wednesday);
+            case Calendar.THURSDAY:
+                return resources.getString(R.string.thursday);
+            case Calendar.FRIDAY:
+                return resources.getString(R.string.friday);
+            case Calendar.SATURDAY:
+                return resources.getString(R.string.saturday);
+            default:
+                return null;
+        }
+    }
+
+    public String getTripStartDayNumber() {
+        // First convert the date object to a calendar object
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(tripStart);
+        int number = cal.get(Calendar.DAY_OF_MONTH);
+        String numberString = "" + number;
+
+        if (number == 1) {
+            numberString = numberString + "st";
+        } else if (number == 2) {
+            numberString = numberString + "nd";
+        } else if (number == 3) {
+            numberString = numberString + "rd";
+        } else  {
+            numberString = numberString + "th";
+        }
+
+        return numberString;
+    }
+
+    public String getTripStartMonthName() {
+        // First convert the date object to a calendar object
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(tripStart);
+        int monthNumber = cal.get(Calendar.MONTH);
+        switch (monthNumber) {
+            case Calendar.JANUARY:
+                return "January";
+            case Calendar.FEBRUARY:
+                return "February";
+            case Calendar.MARCH:
+                return "March";
+            case Calendar.APRIL:
+                return "April";
+            case Calendar.MAY:
+                return "May";
+            case Calendar.JUNE:
+                return "June";
+            case Calendar.JULY:
+                return "July";
+            case Calendar.AUGUST:
+                return "August";
+            case Calendar.SEPTEMBER:
+                return "September";
+            case Calendar.OCTOBER:
+                return "October";
+            case Calendar.NOVEMBER:
+                return "November";
+            case Calendar.DECEMBER:
+                return "December";
+            default:
+                return null;
+        }
+    }
+
+    public String getTripStartTimeReadable() {
+        // First convert the date object to a calendar object
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(tripStart);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+
+        return "" + hour + ":" + minute;
     }
 }
