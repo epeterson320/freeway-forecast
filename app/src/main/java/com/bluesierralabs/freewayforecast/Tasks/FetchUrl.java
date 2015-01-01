@@ -24,6 +24,8 @@ public class FetchUrl extends AsyncTask<String, Void, String>
         // For storing data from web service
         String data = "";
 
+        Log.e("FetchUrl","starting doInBackground");
+
         try
         {
             // Fetching the data from web service
@@ -32,6 +34,8 @@ public class FetchUrl extends AsyncTask<String, Void, String>
         {
             Log.d("Background Task", e.toString());
         }
+
+        Log.e("FetchUrl","finished doInBackground");
         return data;
     }
 
@@ -41,11 +45,15 @@ public class FetchUrl extends AsyncTask<String, Void, String>
     {
         super.onPostExecute(result);
 
+        Log.e("FetchUrl","starting onPostExecute");
+
 //        ParserTask parserTask = new ParserTask();
         FetchRoutesTask routesTask = new FetchRoutesTask();
 
         // Invokes the thread for parsing the JSON data
 //        parserTask.execute(result);
+
+        Log.e("FetchUrl","starting the routes task");
         routesTask.execute(result);
     }
 

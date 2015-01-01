@@ -309,7 +309,20 @@ public class Trip {
         cal.setTime(tripStart);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
+        String readableTime = "";
 
-        return "" + hour + ":" + minute;
+        String minuteString = "" + minute;
+        if (minute < 10) {
+            minuteString = "0" + minuteString;
+        }
+
+        readableTime = "" + hour + ":" + minuteString;
+        if (hour < 12) {
+            readableTime = readableTime + " AM";
+        } else {
+            readableTime = readableTime + " PM";
+        }
+
+        return readableTime;
     }
 }

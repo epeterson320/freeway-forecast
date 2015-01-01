@@ -6,7 +6,9 @@ import android.util.Log;
 
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
 import com.bluesierralabs.freewayforecast.Models.Trip;
+import com.bluesierralabs.freewayforecast.Models.mapModel;
 import com.bluesierralabs.freewayforecast.RouteSelectActivity;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -26,12 +28,16 @@ public class FetchRoutesTask extends AsyncTask<String, Integer, List<List<HashMa
 {
     Trip tripInstance = Trip.getInstance();
 
+    mapModel mapInstance = mapModel.getInstance();
+
     // Parsing the data in non-ui thread
     @Override
     protected List<List<HashMap<String, String>>> doInBackground(String... jsonData)
     {
         JSONObject jObject;
         List<List<HashMap<String, String>>> routes = null;
+
+        Log.e(FetchRoutesTask.class.getName(), "starting doInBackground");
 
         // Add the starting location marker to the trip
 //        tripInstance.addHourMarker(fromPosition);
@@ -53,6 +59,7 @@ public class FetchRoutesTask extends AsyncTask<String, Integer, List<List<HashMa
         // Add the destination marker to the list
 //        usersTrip.addHourMarker(toPosition);
 
+        Log.e(FetchRoutesTask.class.getName(), "finishing doInBackground");
         return routes;
     }
 
@@ -66,9 +73,12 @@ public class FetchRoutesTask extends AsyncTask<String, Integer, List<List<HashMa
         String distance = "";
         String duration = "";
 
+        Log.e(FetchRoutesTask.class.getName(), "starting onPostExecute");
+
         if (result.size() < 1)
         {
 //            Toast.makeText(RouteSelectActivity.this.getBaseContext(), "No Points", Toast.LENGTH_SHORT).show();
+            Log.e(FetchRoutesTask.class.getName(), "No Points");
             return;
         }
 
@@ -110,10 +120,22 @@ public class FetchRoutesTask extends AsyncTask<String, Integer, List<List<HashMa
 //            Log.e("Trying to add hour markers", "" + hourPoints.size());
         Log.e("Trying to add hour markers", "" + tripInstance.getHourMarkers().size());
 //            for (int i = 0; i < hourPoints.size(); i++) {
+
+        // Get the map instance and add a bunch of markers to it...
+        GoogleMap map = mapModel.getInstance().getMap();
+
         for (int i = 0; i < tripInstance.getHourMarkers().size(); i++) {
 //                map.addMarker(new MarkerOptions().position(hourPoints.get(i)));
-//            map.addMarker(new MarkerOptions().position(tripInstance.getHourMarkers().get(i)));
+            map.addMarker(new MarkerOptions().position(tripInstance.getHourMarkers().get(i)));
         }
+
+        // Add the trip polyline to the map
+        map.addPolyline(lineOptions);
+
+        // Give the updated map to the map holder...
+        mapInstance.setMap(map);
+
+        Log.e(FetchRoutesTask.class.getName(), "finishing onPostExecute");
 
         // Drawing polyline in the Google Map for the i-th route
 //        RouteSelectActivity.this.map.addPolyline(lineOptions);

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class DirectionsJSONParser
 {
-    private Trip tripInstance = Trip.getInstance();
+//    private Trip tripInstance = Trip.getInstance();
 
     private List<LatLng> hourPoints;
 
@@ -216,7 +216,8 @@ public class DirectionsJSONParser
 //                                    Log.e("Left over", "" + tempDuration);
                                 }
 
-                                tripInstance.addHourMarker(marker);
+                                Log.e(DirectionsJSONParser.class.getName(), "Adding hour marker");
+//                                tripInstance.addHourMarker(marker);
                                 hourPoints.add(marker);
                                 additionalMarkers++;
                             }
