@@ -51,7 +51,7 @@ public class Trip {
     private Resources resources = App.getContext().getResources();
 
     /** List of latitude and longitude points where the trip hours markers will occur */
-    private List<LatLng> hourMarkers;
+    private ArrayList<LatLng> hourMarkers;
 
 //    private Resources resources = App.getContext().getResources();
 
@@ -61,7 +61,7 @@ public class Trip {
 
         Log.e("Creating trip instance", "Okay");
 
-//        this.hourMarkers.clear();
+        this.hourMarkers = new ArrayList<LatLng>();
 
         // Set the trip start date to the current time
         Calendar cal = Calendar.getInstance();
@@ -171,7 +171,7 @@ public class Trip {
     }
 
     public void addHourMarker(LatLng marker) {
-        hourMarkers.add(marker);
+        this.hourMarkers.add(marker);
     }
 
     public List<LatLng> getHourMarkers() {

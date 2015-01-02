@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 
+import java.util.ArrayList;
+
 /**
  * Custom ArrayAdapter for the trip's hour-by-hour weather forecast
  *
@@ -19,9 +21,11 @@ import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
     Context context;
     int layoutResourceId;
-    WeatherItem data[] = null;
+//    WeatherItem data[] = null;
+    ArrayList<WeatherItem> data = null;
 
-    public WeatherAdapter(Context context, int layoutResourceId, WeatherItem[] data) {
+//    public WeatherAdapter(Context context, int layoutResourceId, WeatherItem[] data) {
+    public WeatherAdapter(Context context, int layoutResourceId, ArrayList data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -51,7 +55,8 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
             holder = (WeatherHolder)row.getTag();
         }
 
-        WeatherItem weather = data[position];
+//        WeatherItem weather = data[position];
+        WeatherItem weather = data.get(position);
         holder.hourQuickForecast.setText(weather.title);
         holder.imgIcon.setImageResource(weather.getIcon());
         holder.hourTimeAndDetail.setText(weather.detail);

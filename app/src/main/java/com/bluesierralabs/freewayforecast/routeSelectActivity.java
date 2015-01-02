@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
+import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -43,6 +44,7 @@ public class RouteSelectActivity extends FragmentActivity {
     ArrayList<LatLng> markerPoints;
     List<LatLng> hourPoints;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_select);
@@ -69,13 +71,39 @@ public class RouteSelectActivity extends FragmentActivity {
         downloadTask.execute(url);
     }
 
-    private String getDirectionsUrl(LatLng origin, LatLng dest)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.route_select, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will automatically handle clicks on
+        // the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Compose the request url string to get the directions between two longitude and latitude
+     * points
+     *
+     * @param origin LatLng object of the trip's starting location
+     * @param destination LatLng object of the trip's ending loction
+     * @return String of the url to download
+     */
+    private String getDirectionsUrl(LatLng origin, LatLng destination)
     {
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
         // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String str_dest = "destination=" + destination.latitude + "," + destination.longitude;
 
         // Sensor enabled
         String sensor = "sensor=false";
@@ -92,51 +120,7 @@ public class RouteSelectActivity extends FragmentActivity {
         return url;
     }
 
-    /** A method to download json data from url */
-    private String downloadUrl(String strUrl) throws IOException
-    {
-        String data = "";
-        InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
-        try
-        {
-            URL url = new URL(strUrl);
-
-            // Creating an http connection to communicate with url
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            // Connecting to url
-            urlConnection.connect();
-
-            // Reading data from url
-            iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-            StringBuffer sb = new StringBuffer();
-
-            String line = "";
-            while ((line = br.readLine()) != null)
-            {
-                sb.append(line);
-            }
-
-            data = sb.toString();
-
-            br.close();
-
-        } catch (Exception e)
-        {
-            Log.d("Exception while downloading url", e.toString());
-        } finally
-        {
-            iStream.close();
-            urlConnection.disconnect();
-        }
-        return data;
-    }
-
-    // Fetches data from url passed
+    /** Fetches data from url passed which then calls the ParserTask */
     private class DownloadTask extends AsyncTask<String, Void, String>
     {
         // Downloading data in non-ui thread
@@ -150,7 +134,8 @@ public class RouteSelectActivity extends FragmentActivity {
             try
             {
                 // Fetching the data from web service
-                data = RouteSelectActivity.this.downloadUrl(url[0]);
+//                data = RouteSelectActivity.this.downloadUrl(url[0]);
+                data = InternetHelpers.downloadUrl(url[0]);
             } catch (Exception e)
             {
                 Log.d("Background Task", e.toString());
@@ -164,6 +149,7 @@ public class RouteSelectActivity extends FragmentActivity {
         {
             super.onPostExecute(result);
 
+            // Create an instance of the parser task to operate on the json data received.
             ParserTask parserTask = new ParserTask();
 
             // Invokes the thread for parsing the JSON data
@@ -172,10 +158,17 @@ public class RouteSelectActivity extends FragmentActivity {
         }
     }
 
+    /** Respond to the "Select route" button being pressed */
+    public void submitRoute(View view) {
+
+        // Go the the trip forecast activity
+        Intent choseRoute = new Intent(this, TripForecastActivity.class);
+        startActivity(choseRoute);
+    }
+
     /** A class to parse the Google Places in JSON format */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>>
     {
-
         // Parsing the data in non-ui thread
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData)
@@ -185,6 +178,7 @@ public class RouteSelectActivity extends FragmentActivity {
 
             // Add the starting location marker to the trip
 //            usersTrip.addHourMarker(fromPosition);
+            tripInstance.addHourMarker(tripInstance.getTripStartCoordinates());
 
             try
             {
@@ -202,6 +196,7 @@ public class RouteSelectActivity extends FragmentActivity {
 
             // Add the destination marker to the list
 //            usersTrip.addHourMarker(toPosition);
+            tripInstance.addHourMarker(tripInstance.getTripEndCoordinates());
 
             return routes;
         }
@@ -268,31 +263,5 @@ public class RouteSelectActivity extends FragmentActivity {
             // Drawing polyline in the Google Map for the i-th route
             RouteSelectActivity.this.map.addPolyline(lineOptions);
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.route_select, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will automatically handle clicks on
-        // the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void submitRoute(View view) {
-
-        // Go the the trip forecast activity
-        Intent choseRoute = new Intent(this, TripForecastActivity.class);
-        startActivity(choseRoute);
     }
 }
