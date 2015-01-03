@@ -16,6 +16,9 @@ import java.util.List;
 
 /**
  * Created by timothy on 11/29/14.
+ *
+ * Source from http://jigarlikes.wordpress.com/2013/04/26/driving-distance-and-travel-time-
+ * duration-between-two-locations-in-google-map-android-api-v2/
  */
 
 public class DirectionsJSONParser

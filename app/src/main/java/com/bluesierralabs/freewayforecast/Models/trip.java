@@ -275,29 +275,29 @@ public class Trip {
         int monthNumber = cal.get(Calendar.MONTH);
         switch (monthNumber) {
             case Calendar.JANUARY:
-                return "January";
+                return resources.getString(R.string.january);
             case Calendar.FEBRUARY:
-                return "February";
+                return resources.getString(R.string.february);
             case Calendar.MARCH:
-                return "March";
+                return resources.getString(R.string.march);
             case Calendar.APRIL:
-                return "April";
+                return resources.getString(R.string.april);
             case Calendar.MAY:
-                return "May";
+                return resources.getString(R.string.may);
             case Calendar.JUNE:
-                return "June";
+                return resources.getString(R.string.june);
             case Calendar.JULY:
-                return "July";
+                return resources.getString(R.string.july);
             case Calendar.AUGUST:
-                return "August";
+                return resources.getString(R.string.august);
             case Calendar.SEPTEMBER:
-                return "September";
+                return resources.getString(R.string.september);
             case Calendar.OCTOBER:
-                return "October";
+                return resources.getString(R.string.october);
             case Calendar.NOVEMBER:
-                return "November";
+                return resources.getString(R.string.november);
             case Calendar.DECEMBER:
-                return "December";
+                return resources.getString(R.string.december);
             default:
                 return null;
         }

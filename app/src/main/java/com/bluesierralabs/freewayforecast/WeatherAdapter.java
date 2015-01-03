@@ -32,6 +32,10 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
         this.data = data;
     }
 
+    public void setData(ArrayList data) {
+        this.data = data;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
@@ -58,9 +62,9 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
 //        WeatherItem weather = data[position];
         WeatherItem weather = data.get(position);
         holder.hourQuickForecast.setText(weather.title);
-        holder.imgIcon.setImageResource(weather.getIcon());
+        holder.imgIcon.setImageDrawable(weather.getIcon());
         holder.hourTimeAndDetail.setText(weather.detail);
-        holder.hourTemp.setText(weather.temp);
+        holder.hourTemp.setText(weather.getTemp());
 
         return row;
     }
