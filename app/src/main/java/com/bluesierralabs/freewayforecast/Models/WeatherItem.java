@@ -1,6 +1,12 @@
 package com.bluesierralabs.freewayforecast.Models;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
+
+import com.bluesierralabs.freewayforecast.Helpers.App;
+import com.bluesierralabs.freewayforecast.SettingsActivity;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -9,6 +15,7 @@ import java.math.RoundingMode;
  * Created by timothy on 11/24/14.
  */
 public class WeatherItem {
+//    private Context mContext;
     private Drawable icon;
     public String title;
     public String detail;
@@ -49,6 +56,9 @@ public class WeatherItem {
 
     public String getTemp() {
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+//        String syncConnPref = sharedPref.getString(SettingsActivity.KEY_PREF_SYNC_CONN, "");
+
         int type = 0; // 0 = F, 1 = C, 2 = K
 
         Double temperatureConverted = temp;
@@ -74,6 +84,13 @@ public class WeatherItem {
         return this.maxTemp;
     }
 
+    /**
+     * Round a double to a specified number of decimal places. Based on answer on stackoverflow
+     * http://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+     * @param value
+     * @param places
+     * @return
+     */
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 

@@ -32,9 +32,9 @@
         android:positiveButtonText="@null" />
 
     <ListPreference
-        android:key="example_list"
+        android:key="pref_temperature"
         android:title="@string/settings_temperature_scale_title"
-        android:defaultValue="1"
+        android:defaultValue="@string/temp_fahrenheit"
         android:entries="@array/pref_temperature_unit_titles"
         android:entryValues="@array/pref_temperature_unit_values"
         android:negativeButtonText="@null"

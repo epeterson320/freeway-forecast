@@ -28,6 +28,9 @@ public class Trip {
     /** Object of the trip class */
     private static Trip tripObject = null;
 
+    /** Application resources */
+    private Resources resources = App.getContext().getResources();
+
     /** Starting location for the trip */
     private String tripStartAddress;
 
@@ -40,28 +43,21 @@ public class Trip {
     /** Destination coordinates of the road trip */
     private LatLng tripEndCoordinates;
 
-    /** Date that the user is going to start driving on their trip */
-    private String tripStartDate;
-
-    /** Time of day that the user is going to start driving */
-    private String tripStartTime;
-
+    /** Date Object for the trip start time */
     private Date tripStart;
-
-    private Resources resources = App.getContext().getResources();
 
     /** List of latitude and longitude points where the trip hours markers will occur */
     private ArrayList<LatLng> hourMarkers;
 
-//    private Resources resources = App.getContext().getResources();
+    /** Weather items associated with the hour markers **/
+    private ArrayList<WeatherItem> weatherItems;
 
     // Class constructor
     private Trip() {
-        // TODO: Determine if there should be any construction in the class initialization.
 
-        Log.e("Creating trip instance", "Okay");
-
+        // Initialize the array lists
         this.hourMarkers = new ArrayList<LatLng>();
+        this.weatherItems = new ArrayList<WeatherItem>();
 
         // Set the trip start date to the current time
         Calendar cal = Calendar.getInstance();
@@ -76,6 +72,13 @@ public class Trip {
             tripObject = new Trip();
         }
         return tripObject;
+    }
+
+    public void clear() {
+
+        // Clear the hour and weather array lists
+        this.hourMarkers.clear();
+        this.weatherItems.clear();
     }
 
     // Set the address for the start of the trip
@@ -144,30 +147,6 @@ public class Trip {
 
     public LatLng getTripEndCoordinates() {
         return this.tripEndCoordinates;
-    }
-
-    // Set the start date of the trip
-    public void setTripStartDate(String tripStartDate) {
-        // TODO: Add checking for past dates, too much in the future, etc.
-        // TODO: Consider the use of another data type other than a string
-        this.tripStartDate = tripStartDate;
-    }
-
-    // Get the start date of the trip
-    public String getTripStartDate() {
-        return tripStartDate;
-    }
-
-    // Set the start time of the trip
-    public void setTripStartTime(String tripStartTime) {
-        // TODO: Add checking here for bad times and other problematic things
-        // TODO: Consider using another data type instead of this string.
-        this.tripStartTime = tripStartTime;
-    }
-
-    // Get the start time of the trip
-    public String getTripStartTime() {
-        return tripStartTime;
     }
 
     public void addHourMarker(LatLng marker) {
@@ -325,4 +304,13 @@ public class Trip {
 
         return readableTime;
     }
+
+    public void addTripWeatherItem(WeatherItem weather) {
+        this.weatherItems.add(weather);
+    }
+
+    public ArrayList<WeatherItem> getWeatherItems() {
+        return weatherItems;
+    }
+
 }

@@ -1,8 +1,10 @@
 package com.bluesierralabs.freewayforecast.Helpers;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.preference.Preference;
 import android.util.Log;
 
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
@@ -18,10 +20,13 @@ import java.util.Map;
 /**
  * Created by timothy on 1/1/15.
  * Parser class for getting weather information returned from the Open Weather Map API
+ * http://openweathermap.org/weather-data#current
  */
 public class OpenWeatherParser {
 
     private Resources resources = App.getContext().getResources();
+
+//    private Context context = App.getContext();
 
     private WeatherItem newMarker = null;
 
@@ -47,9 +52,6 @@ public class OpenWeatherParser {
                 apiCode = weatherObject.getInt("id");
                 description = weatherObject.getString("main");
                 descriptionExplain = weatherObject.getString("description");
-
-//                Log.e("description", descriptionExplain);
-//                Log.e("main", description);
             }
 
             // Get information from the 'main' section of Open Weather Map's return
@@ -59,8 +61,6 @@ public class OpenWeatherParser {
             temp = mainItems.getDouble("temp");
             temp_min = mainItems.getDouble("temp_min");
             temp_max = mainItems.getDouble("temp_max");
-
-//            Log.e("temp", "" + temp + " " + temp_min + " " + temp_max);
 
             // Determine the weather type based on http://openweathermap.org/weather-conditions
             Drawable icon;

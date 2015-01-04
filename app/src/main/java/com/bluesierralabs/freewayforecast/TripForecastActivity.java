@@ -33,15 +33,16 @@ public class TripForecastActivity extends Activity {
     /** List view to populate with forecast items */
     private ListView weatherListing;
 
-    // Create an array list of weather items to set with trip forecast information
-    ArrayList<WeatherItem> hourInfoList = new ArrayList<WeatherItem>();
+    /** Adapter for the weather object */
+    private WeatherAdapter adapter;
 
-    WeatherAdapter adapter;
-
+    /** Array list for the json results from the weather api calls */
     private ArrayList<String> jsonResults = new ArrayList<String>();
 
+    /** Array list for the weather items */
     private ArrayList<WeatherItem> weatherResults = new ArrayList<WeatherItem>();
 
+    /** Total number of hour markers */
     private int totalHourMarkers;
 
     @Override
@@ -50,11 +51,10 @@ public class TripForecastActivity extends Activity {
         setContentView(R.layout.activity_trip_forecast);
 
         // Clear out the array of weather and json results
-        weatherResults.clear();
         jsonResults.clear();
 
         // Setup the adapter for the weather items
-        adapter = new WeatherAdapter(this, R.layout.weather_item, hourInfoList);
+        adapter = new WeatherAdapter(this, R.layout.weather_item, tripInstance.getWeatherItems());
 
         // Setup the handle for the list view object
         weatherListing = (ListView)findViewById(R.id.listview);
@@ -77,6 +77,7 @@ public class TripForecastActivity extends Activity {
 
     private class DownloadTask extends AsyncTask<String, Void, String>
     {
+        // Context for the Download task
         private Context mContext;
 
         public DownloadTask (Context context){
@@ -114,7 +115,7 @@ public class TripForecastActivity extends Activity {
             Log.e("jsonResults: " + jsonResults.size(), "totalHourMarkers: " + totalHourMarkers);
             if (jsonResults.size() >= totalHourMarkers) {
                 // Create an instance of the parser task to operate on the json data objects received
-                ParserTask parserTask = new ParserTask(mContext);
+                ParserTask parserTask = new ParserTask();
 
                 parserTask.execute(jsonResults);
             }
@@ -128,24 +129,24 @@ public class TripForecastActivity extends Activity {
     }
 
 //    private class ParserTask extends AsyncTask<String, Integer, WeatherItem> {
-    private class ParserTask extends AsyncTask<ArrayList<String>, Integer, WeatherItem> {
-        private Context mContext;
-
-        public ParserTask (Context context){
-            mContext = context;
-        }
-
+    private class ParserTask extends AsyncTask<ArrayList<String>, Integer, WeatherItem>
+    {
         // Parsing the data in non-ui thread
         @Override
 //        protected WeatherItem doInBackground(String... jsonData) {
         protected WeatherItem doInBackground(ArrayList<String>... jsonData) {
             JSONObject jObject;
 
+            // Before adding the the weather items, clear the holder out
+            weatherResults.clear();
+
+            // Create a parser object to parse the json returned from the API call
+            OpenWeatherParser parser = new OpenWeatherParser();
+
             try {
+                // parse all the json data returned for the hour locations
                 for (int i = 0; i < jsonData[0].size(); i++) {
                     jObject = new JSONObject(jsonData[0].get(i));
-
-                    OpenWeatherParser parser = new OpenWeatherParser();
 
 //                    Log.e("ParserTask", "Adding a weather item");
                     weatherResults.add(parser.parse(jObject));
@@ -154,17 +155,6 @@ public class TripForecastActivity extends Activity {
                 e.printStackTrace();
             }
 
-//            try {
-//                jObject = new JSONObject(jsonData[0]);
-//                OpenWeatherParser parser = new OpenWeatherParser();
-//
-//                // Starts parsing data
-//                parser.parse(jObject);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-
             return null;
         }
 
@@ -172,14 +162,14 @@ public class TripForecastActivity extends Activity {
         @Override
         protected void onPostExecute(WeatherItem result) {
 
+            // Add all the results to the listing
             for (int i=0; i<weatherResults.size(); i++) {
-                hourInfoList.add(weatherResults.get(i));
+                // Also add the weather item to the trip instance
+                tripInstance.addTripWeatherItem(weatherResults.get(i));
             }
 
-//            hourInfoList.add(result);
-
             // Update the adapter with the updated hour listing
-            adapter.setData(hourInfoList);
+            adapter.setData(tripInstance.getWeatherItems());
 
             weatherListing.setAdapter(adapter);
         }

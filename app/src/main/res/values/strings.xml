@@ -24,6 +24,15 @@
     <string name="pick_time">Time</string>
     <string name="pick_date">Date</string>
 
+    <!-- Temperature strings -->
+    <string name="temp_fahrenheit">Fahrenheit</string>
+    <string name="temp_celsius">Celsius</string>
+    <string name="temp_kelvin">Kelvin</string>
+
+    <!-- Distance strings -->
+    <string name="distance_miles">Miles</string>
+    <string name="distance_kilometers">Kilometers</string>
+
     <!-- Days of the week -->
     <string name="sunday">Sunday</string>
     <string name="monday">Monday</string>

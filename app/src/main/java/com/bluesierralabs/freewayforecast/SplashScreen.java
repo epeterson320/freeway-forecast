@@ -56,6 +56,9 @@ public class SplashScreen extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        // Make sure that the trip is cleared out from any previous uses
+        tripInstance.clear();
+
         // Auto complete example from
         // http://www.tutorialspoint.com/android/android_auto_complete.htm
 
@@ -185,12 +188,12 @@ public class SplashScreen extends FragmentActivity implements
         // Get the date of the trip from the input box
         EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
         String date = inputDate.getText().toString();
-        tripInstance.setTripStartDate(date);
+//        tripInstance.setTripStartDate(date);
 
         // Get the time of the trip from the input box
         EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
         String time = inputTime.getText().toString();
-        tripInstance.setTripStartTime(time);
+//        tripInstance.setTripStartTime(time);
 
         // Go to the route select activity
         Intent choseRoute = new Intent(this, RouteSelectActivity.class);

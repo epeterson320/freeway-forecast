@@ -7,16 +7,16 @@
     <string name="pref_header_general">General</string>
 
     <!-- Temperature Scale settings - list under general settings -->
-    <string name="pref_temperature_units_setting">Temperature Scale</string>
+    <string name="pref_temperature">Temperature Scale</string>
     <string-array name="pref_temperature_unit_titles">
         <item>Celsius</item>
         <item>Fahrenheit</item>
         <item>Kelvin</item>
     </string-array>
     <string-array name="pref_temperature_unit_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+        <item>Kelvin</item>
     </string-array>
 
     <!-- Distance metrics - list under general settings -->
