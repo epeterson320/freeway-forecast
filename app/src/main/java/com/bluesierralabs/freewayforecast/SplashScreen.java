@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +59,9 @@ public class SplashScreen extends FragmentActivity implements
 
         // Make sure that the trip is cleared out from any previous uses
         tripInstance.clear();
+
+        // Set the default application preferences
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 
         // Auto complete example from
         // http://www.tutorialspoint.com/android/android_auto_complete.htm

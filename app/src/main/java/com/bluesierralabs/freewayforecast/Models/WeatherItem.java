@@ -2,10 +2,12 @@ package com.bluesierralabs.freewayforecast.Models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 
 import com.bluesierralabs.freewayforecast.Helpers.App;
+import com.bluesierralabs.freewayforecast.R;
 import com.bluesierralabs.freewayforecast.SettingsActivity;
 
 import java.math.BigDecimal;
@@ -16,6 +18,12 @@ import java.math.RoundingMode;
  */
 public class WeatherItem {
 //    private Context mContext;
+
+    /** Application resources */
+    private Resources resources = App.getContext().getResources();
+
+    private SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+
     private Drawable icon;
     public String title;
     public String detail;
@@ -54,18 +62,23 @@ public class WeatherItem {
         return this.location;
     }
 
+    /**
+     * Get the weather item's temperature as a string with the degree symbol
+     * @return String
+     */
     public String getTemp() {
+        // Get the temperature scale from the settings
+        String temperatureScale = sharedPref.getString("pref_temperature", "NULL");
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-//        String syncConnPref = sharedPref.getString(SettingsActivity.KEY_PREF_SYNC_CONN, "");
-
-        int type = 0; // 0 = F, 1 = C, 2 = K
-
+        // Create a new double for the converted temperature
         Double temperatureConverted = temp;
 
-        if(type == 0) {
+        // Determine the conversion type
+        if(temperatureScale.equals(resources.getString(R.string.temp_fahrenheit))) {
+            // Convert the temperature to Fahrenheit
             temperatureConverted = (temp - 273.15) * 1.8000 + 32.00;
-        } else if (type == 1) {
+        } else if (temperatureScale.equals(resources.getString(R.string.temp_celsius))) {
+            // Convert the temperature to Celsius
             temperatureConverted = temp - 273.15;
         }
         // Otherwise, keep the temperature in kelvin.
@@ -73,6 +86,7 @@ public class WeatherItem {
         // Round the temperature to one decimal place
         temperatureConverted = round(temperatureConverted, 1);
 
+        // Return the temperature as a string with the little 'degree' symbol
         return temperatureConverted + "°";
     }
 

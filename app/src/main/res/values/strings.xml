@@ -56,6 +56,7 @@
 
     <!-- Weather Conditions -->
     <string name="weather_thunderstorm_light_rain">Thunderstorm with light rain</string>
+    <string name="settings_metric_title">Use metric distances</string>
 
     <string-array name="cities_usa">
         <item>New York, NY</item>

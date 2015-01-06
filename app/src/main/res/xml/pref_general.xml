@@ -40,5 +40,10 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
+    <CheckBoxPreference
+        android:key="pref_metric"
+        android:title="@string/settings_metric_title"
+        android:defaultValue="false" />
+
 
 </PreferenceScreen>

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 
+import com.bluesierralabs.freewayforecast.Helpers.SettingsFragment;
 import com.bluesierralabs.freewayforecast.Models.Settings;
 
 import java.util.List;
@@ -49,7 +50,10 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar();
+//        setupActionBar();
+
+        // http://developer.android.com/guide/topics/ui/settings.html#Activity
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
     }
 
     /**
