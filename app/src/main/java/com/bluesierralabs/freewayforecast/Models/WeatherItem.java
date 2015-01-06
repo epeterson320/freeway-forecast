@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
 
 import com.bluesierralabs.freewayforecast.Helpers.App;
 import com.bluesierralabs.freewayforecast.R;
@@ -12,6 +13,8 @@ import com.bluesierralabs.freewayforecast.SettingsActivity;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by timothy on 11/24/14.
@@ -28,6 +31,8 @@ public class WeatherItem {
     public String title;
     public String detail;
     public Double temp;
+
+    private Date time;
 
     private final String location;
     private final float minTemp;
@@ -88,6 +93,34 @@ public class WeatherItem {
 
         // Return the temperature as a string with the little 'degree' symbol
         return temperatureConverted + "°";
+    }
+
+    public String getTime() {
+        // TODO: This function is mirrored in Trip.java - consider centralizing
+        // First convert the date object to a calendar object
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        String readableTime = "";
+
+        String minuteString = "" + minute;
+        if (minute < 10) {
+            minuteString = "0" + minuteString;
+        }
+
+        // Get the date format from the device preferences
+        if(DateFormat.is24HourFormat(App.getContext())) {
+            if (hour >= 12) {
+                readableTime = hour + ":" + minuteString + " PM";
+            } else {
+                readableTime = hour + ":" + minuteString + " AM";
+            }
+        } else {
+            readableTime = hour + ":" + minuteString;
+        }
+
+        return readableTime;
     }
 
     public float getMinTemp() {

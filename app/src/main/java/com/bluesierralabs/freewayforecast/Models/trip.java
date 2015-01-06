@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.bluesierralabs.freewayforecast.Helpers.App;
@@ -283,6 +284,7 @@ public class Trip {
     }
 
     public String getTripStartTimeReadable() {
+        // TODO: This function is mirrored in WeatherItem.java - consider centralizing
         // First convert the date object to a calendar object
         Calendar cal = Calendar.getInstance();
         cal.setTime(tripStart);
@@ -295,11 +297,15 @@ public class Trip {
             minuteString = "0" + minuteString;
         }
 
-        readableTime = "" + hour + ":" + minuteString;
-        if (hour < 12) {
-            readableTime = readableTime + " AM";
+        // Get the date format from the device preferences
+        if(DateFormat.is24HourFormat(App.getContext())) {
+            if (hour >= 12) {
+                readableTime = hour + ":" + minuteString + " PM";
+            } else {
+                readableTime = hour + ":" + minuteString + " AM";
+            }
         } else {
-            readableTime = readableTime + " PM";
+            readableTime = hour + ":" + minuteString;
         }
 
         return readableTime;
