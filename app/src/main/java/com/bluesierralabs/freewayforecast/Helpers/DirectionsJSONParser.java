@@ -4,6 +4,7 @@ package com.bluesierralabs.freewayforecast.Helpers;
 import android.util.Log;
 
 import com.bluesierralabs.freewayforecast.Models.Trip;
+import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -188,13 +189,9 @@ public class DirectionsJSONParser
                             Double percentage;
 
                             while (tempDuration > 0) {
-
-//                                int hoursTemp = (hourPoints.size() + 1);
-
                                 if(additionalMarkers == 0) {
                                     percentage = (double) leftToMakeHour / (double) stepDuration;
                                     marker = getPointBetween(start, end, percentage);
-//                                    Log.e("Adding hour marker", "" + hoursTemp + " for " + (routeDuration + leftToMakeHour));
                                     if ((tempDuration - leftToMakeHour) < 3600) {
                                         // there is no way there can be an additional marker so go
                                         // ahead and break out of the loop now
@@ -209,7 +206,6 @@ public class DirectionsJSONParser
                                     percentage = (double) additionalMarkersDuration / (double) stepDuration;
                                     marker = getPointBetween(start, end, percentage);
 
-//                                    Log.e("Adding hour marker", "" + hoursTemp + " for " + (routeDuration + additionalMarkersDuration));
                                     tempDuration = tempDuration - 3600;
 
                                     if (tempDuration < 3600) {
@@ -221,6 +217,11 @@ public class DirectionsJSONParser
 
                                 Log.e(DirectionsJSONParser.class.getName(), "Adding hour marker");
                                 tripInstance.addHourMarker(marker);
+
+                                // TODO: Start using this code.
+//                                WeatherItem tripPoint = new WeatherItem(marker);
+//                                tripInstance.addTripWeatherItem(tripPoint);
+
                                 hourPoints.add(marker);
                                 additionalMarkers++;
                             }

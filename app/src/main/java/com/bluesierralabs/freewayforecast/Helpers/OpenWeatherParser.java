@@ -26,8 +26,6 @@ public class OpenWeatherParser {
 
     private Resources resources = App.getContext().getResources();
 
-//    private Context context = App.getContext();
-
     private WeatherItem newMarker = null;
 
     public WeatherItem parse(JSONObject jWeatherObject) {
@@ -88,7 +86,14 @@ public class OpenWeatherParser {
 
             // TODO: Should i get wind speeds?
 
-            newMarker = new WeatherItem(icon, locationName, descriptionExplain, temp);
+            // Create a new weather item and add what we have.
+            newMarker = new WeatherItem();
+            newMarker.setIcon(icon);
+            newMarker.setTitle(locationName);
+            newMarker.setDetail(description);
+            newMarker.setTemp(temp);
+            newMarker.setMinTemp(temp_min);
+            newMarker.setMaxTemp(temp_max);
 
         } catch (JSONException e) {
             e.printStackTrace();

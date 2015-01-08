@@ -61,9 +61,9 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
 
 //        WeatherItem weather = data[position];
         WeatherItem weather = data.get(position);
-        holder.hourQuickForecast.setText(weather.title);
+        holder.hourQuickForecast.setText(weather.getTitle());
         holder.imgIcon.setImageDrawable(weather.getIcon());
-        holder.hourTimeAndDetail.setText(weather.detail);
+        holder.hourTimeAndDetail.setText(weather.getDetail());
         holder.hourTemp.setText(weather.getTemp());
 
         return row;

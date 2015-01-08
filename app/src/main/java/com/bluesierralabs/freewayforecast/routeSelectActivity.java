@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
 import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
 import com.bluesierralabs.freewayforecast.Models.Trip;
+import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -41,7 +42,6 @@ public class RouteSelectActivity extends FragmentActivity {
     /** Map object for displaying the trip route options */
     GoogleMap map;
 
-    ArrayList<LatLng> markerPoints;
     List<LatLng> hourPoints;
 
     @Override
@@ -50,7 +50,6 @@ public class RouteSelectActivity extends FragmentActivity {
         setContentView(R.layout.activity_route_select);
 
         // Initializing
-        this.markerPoints = new ArrayList<LatLng>();
 
         // Getting reference to SupportMapFragment of the activity_main
         SupportMapFragment fm = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
@@ -177,8 +176,12 @@ public class RouteSelectActivity extends FragmentActivity {
             List<List<HashMap<String, String>>> routes = null;
 
             // Add the starting location marker to the trip
-//            usersTrip.addHourMarker(fromPosition);
             tripInstance.addHourMarker(tripInstance.getTripStartCoordinates());
+
+            // TODO: Instead of using hour markers, start using the weatherItems from the trip instance
+            WeatherItem tripStart = new WeatherItem(tripInstance.getTripStartCoordinates());
+            // TODO: Want to start this
+//            tripInstance.addTripWeatherItem(tripStart);
 
             try
             {
@@ -194,8 +197,11 @@ public class RouteSelectActivity extends FragmentActivity {
                 e.printStackTrace();
             }
 
+            // TODO: And this too
+            WeatherItem tripEnd = new WeatherItem(tripInstance.getTripEndCoordinates());
+//            tripInstance.addTripWeatherItem(tripEnd);
+
             // Add the destination marker to the list
-//            usersTrip.addHourMarker(toPosition);
             tripInstance.addHourMarker(tripInstance.getTripEndCoordinates());
 
             return routes;

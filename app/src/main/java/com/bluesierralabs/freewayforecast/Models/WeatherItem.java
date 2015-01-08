@@ -10,8 +10,6 @@ import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.R;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 
 /**
@@ -29,19 +27,19 @@ public class WeatherItem {
     private Drawable icon;
 
     /** Title for the weather item */
-    public String title;
+    private String title;
 
     /** More detail for the weather item */
-    public String detail;
+    private String detail;
 
     /** Temperature for the weather item */
-    public Double temp;
+    private Double temp;
 
     /** Minimum temperature for the weather item - not sure if I will use this */
-    private final float minTemp;
+    private Double minTemp;
 
     /** Maximum temperature for the weather item - not sure if I will use this */
-    private final float maxTemp;
+    private Double maxTemp;
 
     /** Date that the weather item corresponds to */
     private Date time;
@@ -49,24 +47,45 @@ public class WeatherItem {
     /** Latitude and Latitude location of the weather time */
     private LatLng location;
 
+    /**
+     * Default constructor
+     */
+    public WeatherItem() {
+        // Do nothing
+    }
 
-    // Class constructor with arguments
-    public WeatherItem(Drawable icon, String title, String detail, double temp) {
-        super();
-        this.icon = icon;
-        this.title = title;
-        this.detail = detail;
-        this.temp = temp; // + "°";
+    public WeatherItem(LatLng itemLocation) {
+        this.location = itemLocation;
+    }
 
-        this.location = new LatLng(34,34);  // TODO: Fix this
-        this.minTemp = 0;
-        this.maxTemp = 0;
+
+    public void setIcon(Drawable weatherIcon) {
+        this.icon = weatherIcon;
     }
 
     public Drawable getIcon() {
-        return this.icon;
+        return icon;
     }
 
+    public void setTitle(String weatherTitle) {
+        this.title = weatherTitle;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setDetail(String weatherDetail) {
+        this.detail = weatherDetail;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setTemp(Double weatherTemp) {
+        this.temp = weatherTemp;
+    }
 
     /**
      * Get the weather item's temperature as a string with the degree symbol
@@ -109,12 +128,19 @@ public class WeatherItem {
         this.location = markerLocation;
     }
 
-
-    public float getMinTemp() {
-        return this.minTemp;
+    public void setMinTemp(Double weatherMinTemp) {
+        this.minTemp = weatherMinTemp;
     }
 
-    public float getMaxTemp() {
-        return this.maxTemp;
+    public Double getMinTemp() {
+        return minTemp;
+    }
+
+    public void setMaxTemp(Double weatherMaxTemp) {
+        this.maxTemp = weatherMaxTemp;
+    }
+
+    public Double getMaxTemp() {
+        return maxTemp;
     }
 }
