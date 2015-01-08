@@ -1,42 +1,54 @@
 package com.bluesierralabs.freewayforecast.Models;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
-import android.text.format.DateFormat;
 
 import com.bluesierralabs.freewayforecast.Helpers.App;
+import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.R;
-import com.bluesierralabs.freewayforecast.SettingsActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by timothy on 11/24/14.
  */
 public class WeatherItem {
-//    private Context mContext;
 
-    /** Application resources */
+    /** Application resources for getting string values */
     private Resources resources = App.getContext().getResources();
 
+    /** Application preferences for formatting and displaying data */
     private SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
 
+    /** Icon for the weather item */
     private Drawable icon;
+
+    /** Title for the weather item */
     public String title;
+
+    /** More detail for the weather item */
     public String detail;
+
+    /** Temperature for the weather item */
     public Double temp;
 
+    /** Minimum temperature for the weather item - not sure if I will use this */
+    private final float minTemp;
+
+    /** Maximum temperature for the weather item - not sure if I will use this */
+    private final float maxTemp;
+
+    /** Date that the weather item corresponds to */
     private Date time;
 
-    private final String location;
-    private final float minTemp;
-    private final float maxTemp;
+    /** Latitude and Latitude location of the weather time */
+    private LatLng location;
+
 
     // Class constructor with arguments
     public WeatherItem(Drawable icon, String title, String detail, double temp) {
@@ -46,26 +58,15 @@ public class WeatherItem {
         this.detail = detail;
         this.temp = temp; // + "°";
 
-        this.location = "somewhere";
+        this.location = new LatLng(34,34);  // TODO: Fix this
         this.minTemp = 0;
         this.maxTemp = 0;
-    }
-
-    public WeatherItem(Drawable icon, String location, float minTemp, float maxTemp) {
-        super();
-        this.icon = icon;
-        this.location = location;
-        this.minTemp = minTemp;
-        this.maxTemp = maxTemp;
     }
 
     public Drawable getIcon() {
         return this.icon;
     }
 
-    public String getLocation() {
-        return this.location;
-    }
 
     /**
      * Get the weather item's temperature as a string with the degree symbol
@@ -89,39 +90,25 @@ public class WeatherItem {
         // Otherwise, keep the temperature in kelvin.
 
         // Round the temperature to one decimal place
-        temperatureConverted = round(temperatureConverted, 1);
+        temperatureConverted = Utilities.roundDouble(temperatureConverted, 1);
 
         // Return the temperature as a string with the little 'degree' symbol
         return temperatureConverted + "°";
     }
 
     public String getTime() {
-        // TODO: This function is mirrored in Trip.java - consider centralizing
-        // First convert the date object to a calendar object
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(time);
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
-        String readableTime = "";
-
-        String minuteString = "" + minute;
-        if (minute < 10) {
-            minuteString = "0" + minuteString;
-        }
-
-        // Get the date format from the device preferences
-        if(DateFormat.is24HourFormat(App.getContext())) {
-            if (hour >= 12) {
-                readableTime = hour + ":" + minuteString + " PM";
-            } else {
-                readableTime = hour + ":" + minuteString + " AM";
-            }
-        } else {
-            readableTime = hour + ":" + minuteString;
-        }
-
-        return readableTime;
+        // Get the hour-minute time in a string object
+        return Utilities.getTimeStringFromDate(time);
     }
+
+    public void setDate(Date weatherItemTime) {
+        this.time = weatherItemTime;
+    }
+
+    public void setLocation(LatLng markerLocation) {
+        this.location = markerLocation;
+    }
+
 
     public float getMinTemp() {
         return this.minTemp;
@@ -129,20 +116,5 @@ public class WeatherItem {
 
     public float getMaxTemp() {
         return this.maxTemp;
-    }
-
-    /**
-     * Round a double to a specified number of decimal places. Based on answer on stackoverflow
-     * http://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
-     * @param value
-     * @param places
-     * @return
-     */
-    private static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
     }
 }

@@ -1,17 +1,14 @@
 package com.bluesierralabs.freewayforecast.Models;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.bluesierralabs.freewayforecast.Helpers.App;
+import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.R;
-import com.bluesierralabs.freewayforecast.Tasks.GetCoordinatesTask;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -46,6 +43,9 @@ public class Trip {
 
     /** Date Object for the trip start time */
     private Date tripStart;
+
+    /** Integer for the duration between weather items */
+    private long tripIntervals = 3600000;
 
     /** List of latitude and longitude points where the trip hours markers will occur */
     private ArrayList<LatLng> hourMarkers;
@@ -284,34 +284,21 @@ public class Trip {
     }
 
     public String getTripStartTimeReadable() {
-        // TODO: This function is mirrored in WeatherItem.java - consider centralizing
-        // First convert the date object to a calendar object
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(tripStart);
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
-        String readableTime = "";
-
-        String minuteString = "" + minute;
-        if (minute < 10) {
-            minuteString = "0" + minuteString;
-        }
-
-        // Get the date format from the device preferences
-        if(DateFormat.is24HourFormat(App.getContext())) {
-            if (hour >= 12) {
-                readableTime = hour + ":" + minuteString + " PM";
-            } else {
-                readableTime = hour + ":" + minuteString + " AM";
-            }
-        } else {
-            readableTime = hour + ":" + minuteString;
-        }
-
-        return readableTime;
+        // Get the hour-minute of the date returned as a string object
+        return Utilities.getTimeStringFromDate(tripStart);
     }
 
     public void addTripWeatherItem(WeatherItem weather) {
+        // Determine how many weather items are currently in the trip
+        int items = this.weatherItems.size();
+
+        // Set a Date object for the weather item based on the trip start time and item position
+        Date itemTime = new Date(this.tripStart.getTime() + (this.tripIntervals * items));
+
+        // Add the time corresponding to the weather item.
+        weather.setDate(itemTime);
+
+        // Now add the weather item to the trip
         this.weatherItems.add(weather);
     }
 
