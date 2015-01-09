@@ -12,6 +12,7 @@ import com.bluesierralabs.freewayforecast.Helpers.App;
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
 import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
 import com.bluesierralabs.freewayforecast.Helpers.OpenWeatherParser;
+import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 import com.google.android.gms.maps.model.LatLng;
@@ -42,9 +43,6 @@ public class TripForecastActivity extends Activity {
     /** Array list for the weather items */
     private ArrayList<WeatherItem> weatherResults = new ArrayList<WeatherItem>();
 
-    /** Total number of hour markers */
-    private int totalHourMarkers;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,25 +52,15 @@ public class TripForecastActivity extends Activity {
         jsonResults.clear();
 
         // Setup the adapter for the weather items
-
-//        WeatherItem dummy = new WeatherItem();
-//        ArrayList<WeatherItem> test = new ArrayList<WeatherItem>();
-//        test.add(dummy);
-
         adapter = new WeatherAdapter(this, R.layout.weather_item, tripInstance.getWeatherItems());
-//        adapter = new WeatherAdapter(this, R.layout.weather_item);
 
         // Setup the handle for the list view object
         weatherListing = (ListView)findViewById(R.id.listview);
 
         // Get the latitude/longitude markers from the trip instance and work through them
-//        List<LatLng> markers = tripInstance.getHourMarkers();
-//        totalHourMarkers = markers.size();
-
         for (int i=0; i < tripInstance.getWeatherItems().size(); i++) {
             // Create the url to get the weather information
-//            String url = getForecastUrl(markers.get(i));
-            String url = getForecastUrl(tripInstance.getWeatherItems().get(i).getLocation());
+            String url = Utilities.getOpenWeatherMapUrl(tripInstance.getWeatherItems().get(i).getLocation());
 
             // Create the download task with context
             DownloadTask downloadTask = new DownloadTask(this);
@@ -124,23 +112,16 @@ public class TripForecastActivity extends Activity {
                 // Create an instance of the parser task to operate on the json data objects received
                 ParserTask parserTask = new ParserTask();
 
+                // Parse all the results when they are collectively ready
                 parserTask.execute(jsonResults);
             }
-
-//            // Create an instance of the parser task to operate on the json data received.
-//            ParserTask parserTask = new ParserTask(mContext);
-//
-//            // Invokes the thread for parsing the JSON data
-//            parserTask.execute(result);
         }
     }
 
-//    private class ParserTask extends AsyncTask<String, Integer, WeatherItem> {
     private class ParserTask extends AsyncTask<ArrayList<String>, Integer, WeatherItem>
     {
         // Parsing the data in non-ui thread
         @Override
-//        protected WeatherItem doInBackground(String... jsonData) {
         protected WeatherItem doInBackground(ArrayList<String>... jsonData) {
             JSONObject jObject;
 
@@ -172,7 +153,6 @@ public class TripForecastActivity extends Activity {
             // Add all the results to the listing
             for (int i=0; i<weatherResults.size(); i++) {
                 // Also add the weather item to the trip instance
-//                tripInstance.addTripWeatherItem(weatherResults.get(i));
 
                 tripInstance.getWeatherItems().get(i).setIcon(weatherResults.get(i).getIcon());
                 tripInstance.getWeatherItems().get(i).setMinTemp(weatherResults.get(i).getMinTemp());
@@ -182,26 +162,11 @@ public class TripForecastActivity extends Activity {
                 tripInstance.getWeatherItems().get(i).setTitle(weatherResults.get(i).getTitle());
             }
 
-            // Clear out the adaptor before adding the weather items
-//            adapter.clearData();
-
             // Update the adapter with the updated hour listing
             adapter.setData(tripInstance.getWeatherItems());
 
+            // Setup the weather listing with its adapter
             weatherListing.setAdapter(adapter);
         }
-    }
-
-    private String getForecastUrl(LatLng location)
-    {
-        // Origin of route
-        String point = "lat=" + location.latitude + "&lon=" + location.longitude;
-
-        // Building the url to the weather api
-        String url = "http://api.openweathermap.org/data/2.5/weather?" + point;
-
-        Log.e("TripForecastActivity.getForecastUrl", url);
-
-        return url;
     }
 }

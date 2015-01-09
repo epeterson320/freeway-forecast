@@ -1,6 +1,9 @@
 package com.bluesierralabs.freewayforecast.Helpers;
 
 import android.text.format.DateFormat;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,6 +25,11 @@ public class Utilities {
      */
     public static String getTimeStringFromDate(Date date) {
         // First convert the date object to a calendar object
+        if (date == null) {
+            Log.e("Utilities.getTimeStringFromDate", "Date object is null");
+            return "";
+        }
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
 
@@ -52,6 +60,7 @@ public class Utilities {
     /**
      * Round a double to a specified number of decimal places. Based on answer on stackoverflow
      * http://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+     *
      * @param value
      * @param places
      * @return
@@ -62,5 +71,25 @@ public class Utilities {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    /**
+     * Create a url string to request the weather data of a longitude and latitude point from the
+     * Open Weather Map API service
+     *
+     * @param location
+     * @return
+     */
+    public static String getOpenWeatherMapUrl(LatLng location)
+    {
+        // Origin of route
+        String point = "lat=" + location.latitude + "&lon=" + location.longitude;
+
+        // Building the url to the weather api
+        String url = "http://api.openweathermap.org/data/2.5/weather?" + point;
+
+        Log.e("TripForecastActivity.getForecastUrl", url);
+
+        return url;
     }
 }

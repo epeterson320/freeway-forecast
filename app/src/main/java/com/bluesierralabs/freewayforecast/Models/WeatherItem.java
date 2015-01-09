@@ -80,7 +80,8 @@ public class WeatherItem {
     }
 
     public String getDetail() {
-        return detail;
+        String detailWithTime = getTime() + " " + detail;
+        return detailWithTime;
     }
 
     public void setTemp(Double weatherTemp) {
