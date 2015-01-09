@@ -176,12 +176,12 @@ public class RouteSelectActivity extends FragmentActivity {
             List<List<HashMap<String, String>>> routes = null;
 
             // Add the starting location marker to the trip
-            tripInstance.addHourMarker(tripInstance.getTripStartCoordinates());
+//            tripInstance.addHourMarker(tripInstance.getTripStartCoordinates());
 
             // TODO: Instead of using hour markers, start using the weatherItems from the trip instance
             WeatherItem tripStart = new WeatherItem(tripInstance.getTripStartCoordinates());
             // TODO: Want to start this
-//            tripInstance.addTripWeatherItem(tripStart);
+            tripInstance.addTripWeatherItem(tripStart);
 
             try
             {
@@ -199,10 +199,10 @@ public class RouteSelectActivity extends FragmentActivity {
 
             // TODO: And this too
             WeatherItem tripEnd = new WeatherItem(tripInstance.getTripEndCoordinates());
-//            tripInstance.addTripWeatherItem(tripEnd);
+            tripInstance.addTripWeatherItem(tripEnd);
 
             // Add the destination marker to the list
-            tripInstance.addHourMarker(tripInstance.getTripEndCoordinates());
+//            tripInstance.addHourMarker(tripInstance.getTripEndCoordinates());
 
             return routes;
         }
@@ -260,9 +260,11 @@ public class RouteSelectActivity extends FragmentActivity {
 
             Log.e("Trying to add hour markers", "" + hourPoints.size());
 //            Log.e("Trying to add hour markers", "" + usersTrip.getHourMarkers().size());
-            for (int i = 0; i < hourPoints.size(); i++) {
+//            for (int i = 0; i < hourPoints.size(); i++) {
+            for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {
 //            for (int i = 0; i < usersTrip.getHourMarkers().size(); i++) {
-                map.addMarker(new MarkerOptions().position(hourPoints.get(i)));
+//                map.addMarker(new MarkerOptions().position(hourPoints.get(i)));
+                map.addMarker(new MarkerOptions().position(tripInstance.getWeatherItems().get(i).getLocation()));
 //                map.addMarker(new MarkerOptions().position(usersTrip.getHourMarkers().get(i)));
             }
 

@@ -115,6 +115,10 @@ public class WeatherItem {
         return temperatureConverted + "°";
     }
 
+    public Double getTempAsDouble() {
+        return temp;
+    }
+
     public String getTime() {
         // Get the hour-minute time in a string object
         return Utilities.getTimeStringFromDate(time);
@@ -126,6 +130,10 @@ public class WeatherItem {
 
     public void setLocation(LatLng markerLocation) {
         this.location = markerLocation;
+    }
+
+    public LatLng getLocation() {
+        return location;
     }
 
     public void setMinTemp(Double weatherMinTemp) {

@@ -54,18 +54,25 @@ public class TripForecastActivity extends Activity {
         jsonResults.clear();
 
         // Setup the adapter for the weather items
+
+//        WeatherItem dummy = new WeatherItem();
+//        ArrayList<WeatherItem> test = new ArrayList<WeatherItem>();
+//        test.add(dummy);
+
         adapter = new WeatherAdapter(this, R.layout.weather_item, tripInstance.getWeatherItems());
+//        adapter = new WeatherAdapter(this, R.layout.weather_item);
 
         // Setup the handle for the list view object
         weatherListing = (ListView)findViewById(R.id.listview);
 
         // Get the latitude/longitude markers from the trip instance and work through them
-        List<LatLng> markers = tripInstance.getHourMarkers();
-        totalHourMarkers = markers.size();
+//        List<LatLng> markers = tripInstance.getHourMarkers();
+//        totalHourMarkers = markers.size();
 
-        for (int i=0; i < markers.size(); i++) {
+        for (int i=0; i < tripInstance.getWeatherItems().size(); i++) {
             // Create the url to get the weather information
-            String url = getForecastUrl(markers.get(i));
+//            String url = getForecastUrl(markers.get(i));
+            String url = getForecastUrl(tripInstance.getWeatherItems().get(i).getLocation());
 
             // Create the download task with context
             DownloadTask downloadTask = new DownloadTask(this);
@@ -112,8 +119,8 @@ public class TripForecastActivity extends Activity {
             // Add the json data to the results array
             jsonResults.add(result);
 
-            Log.e("jsonResults: " + jsonResults.size(), "totalHourMarkers: " + totalHourMarkers);
-            if (jsonResults.size() >= totalHourMarkers) {
+            Log.e("jsonResults: " + jsonResults.size(), "totalHourMarkers: " + tripInstance.getWeatherItems().size());
+            if (jsonResults.size() >= tripInstance.getWeatherItems().size()) {
                 // Create an instance of the parser task to operate on the json data objects received
                 ParserTask parserTask = new ParserTask();
 
@@ -165,8 +172,18 @@ public class TripForecastActivity extends Activity {
             // Add all the results to the listing
             for (int i=0; i<weatherResults.size(); i++) {
                 // Also add the weather item to the trip instance
-                tripInstance.addTripWeatherItem(weatherResults.get(i));
+//                tripInstance.addTripWeatherItem(weatherResults.get(i));
+
+                tripInstance.getWeatherItems().get(i).setIcon(weatherResults.get(i).getIcon());
+                tripInstance.getWeatherItems().get(i).setMinTemp(weatherResults.get(i).getMinTemp());
+                tripInstance.getWeatherItems().get(i).setMaxTemp(weatherResults.get(i).getMaxTemp());
+                tripInstance.getWeatherItems().get(i).setTemp(weatherResults.get(i).getTempAsDouble());
+                tripInstance.getWeatherItems().get(i).setDetail(weatherResults.get(i).getDetail());
+                tripInstance.getWeatherItems().get(i).setTitle(weatherResults.get(i).getTitle());
             }
+
+            // Clear out the adaptor before adding the weather items
+//            adapter.clearData();
 
             // Update the adapter with the updated hour listing
             adapter.setData(tripInstance.getWeatherItems());

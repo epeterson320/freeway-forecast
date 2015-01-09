@@ -216,11 +216,11 @@ public class DirectionsJSONParser
                                 }
 
                                 Log.e(DirectionsJSONParser.class.getName(), "Adding hour marker");
-                                tripInstance.addHourMarker(marker);
+//                                tripInstance.addHourMarker(marker);
 
                                 // TODO: Start using this code.
-//                                WeatherItem tripPoint = new WeatherItem(marker);
-//                                tripInstance.addTripWeatherItem(tripPoint);
+                                WeatherItem tripPoint = new WeatherItem(marker);
+                                tripInstance.addTripWeatherItem(tripPoint);
 
                                 hourPoints.add(marker);
                                 additionalMarkers++;

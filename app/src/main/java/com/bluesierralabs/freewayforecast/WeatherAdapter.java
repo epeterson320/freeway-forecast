@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 
 import java.util.ArrayList;
@@ -20,13 +21,18 @@ import java.util.ArrayList;
  */
 public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
     Context context;
+
+    Trip tripInstance = Trip.getInstance();
+
     int layoutResourceId;
 //    WeatherItem data[] = null;
     ArrayList<WeatherItem> data = null;
 
 //    public WeatherAdapter(Context context, int layoutResourceId, WeatherItem[] data) {
     public WeatherAdapter(Context context, int layoutResourceId, ArrayList data) {
+//    public WeatherAdapter(Context context, int layoutResourceId) {
         super(context, layoutResourceId, data);
+//        super(context, layoutResourceId);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
@@ -34,6 +40,10 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
 
     public void setData(ArrayList data) {
         this.data = data;
+    }
+
+    public void clearData() {
+        this.data.clear();
     }
 
     @Override
@@ -58,6 +68,8 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
         {
             holder = (WeatherHolder)row.getTag();
         }
+
+//        WeatherItem weather = tripInstance.getWeatherItems().get(position);
 
 //        WeatherItem weather = data[position];
         WeatherItem weather = data.get(position);
