@@ -3,4 +3,9 @@
     <color name="text">#333333</color>
     <color name="background">#FFFFFF</color>
     <color name="light">#EEEEEE</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#DF0101</color>
+    <color name="green">#04B431</color>
+    <color name="purple">#8000FF</color>
+    <color name="blue">#0040FF</color>
 </resources>

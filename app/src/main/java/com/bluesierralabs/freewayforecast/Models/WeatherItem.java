@@ -54,10 +54,29 @@ public class WeatherItem {
         // Do nothing
     }
 
+    /**
+     * Public constructor to start the weather item with location information
+     * @param itemLocation
+     */
     public WeatherItem(LatLng itemLocation) {
         this.location = itemLocation;
     }
 
+    public void addWeatherInfo(Drawable icon, Double minTemp, Double maxTemp, Double temp, String title, String detail) {
+        this.icon = icon;
+        this.minTemp = minTemp;
+        this.maxTemp = maxTemp;
+        this.temp = temp;
+        this.title = title;
+        this.detail = detail;
+    }
+
+    public void addWeatherInfo(Drawable icon, Double temp, String title, String detail) {
+        this.icon = icon;
+        this.temp = temp;
+        this.title = title;
+        this.detail = detail;
+    }
 
     public void setIcon(Drawable weatherIcon) {
         this.icon = weatherIcon;

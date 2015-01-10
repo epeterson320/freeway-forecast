@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     tools:context="com.bluesierralabs.freewayforecast.TripForecastActivity">
 
+    <TextView
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test" />
+
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listview"
         android:layout_width="wrap_content"

@@ -3,10 +3,14 @@ package com.bluesierralabs.freewayforecast;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bluesierralabs.freewayforecast.Helpers.App;
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
@@ -70,7 +74,7 @@ public class TripForecastActivity extends Activity {
         }
     }
 
-    private class DownloadTask extends AsyncTask<String, Void, String>
+    private class DownloadTask extends AsyncTask<String, Integer, String>
     {
         // Context for the Download task
         private Context mContext;
@@ -91,11 +95,37 @@ public class TripForecastActivity extends Activity {
                 // Fetching the data from web service
 //                Log.e("DownloadTask", "downloading weather data");
                 data = InternetHelpers.downloadUrl(url[0]);
+                publishProgress(jsonResults.size());
+
             } catch (Exception e)
             {
                 Log.d("Background Task", e.toString());
             }
             return data;
+        }
+
+        // Runs on the UI thread after publishProgress(Progress...) is invoked.
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+            // While the down load tasks are happening, I want to change the background and
+
+            TextView test = (TextView) findViewById(R.id.progress);
+            test.setText("Download progress: " + values[0].toString());
+
+            setContentView(R.layout.activity_trip_forecast);
+
+            // Now get a handle to any View contained
+            // within the main layout you are using
+            View backgroundView = findViewById(R.id.listview);
+
+            // Find the root view
+            View root = backgroundView.getRootView();
+
+            // Set the color
+            root.setBackgroundColor(Color.GREEN);
+//            root.setBackgroundColor(getResources().getColor(android.R.color.));
         }
 
         // Executes in UI thread, after the execution of doInBackground()
@@ -111,6 +141,8 @@ public class TripForecastActivity extends Activity {
             if (jsonResults.size() >= tripInstance.getWeatherItems().size()) {
                 // Create an instance of the parser task to operate on the json data objects received
                 ParserTask parserTask = new ParserTask();
+
+
 
                 // Parse all the results when they are collectively ready
                 parserTask.execute(jsonResults);
@@ -138,6 +170,7 @@ public class TripForecastActivity extends Activity {
 
 //                    Log.e("ParserTask", "Adding a weather item");
                     weatherResults.add(parser.parse(jObject));
+//                    publishProgress(i);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -146,6 +179,15 @@ public class TripForecastActivity extends Activity {
             return null;
         }
 
+        // Runs on the UI thread after publishProgress(Progress...) is invoked.
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//
+//            TextView test = (TextView) findViewById(R.id.progress);
+//            test.setText("Progress: " + values.toString());
+//        }
+
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(WeatherItem result) {
@@ -153,13 +195,10 @@ public class TripForecastActivity extends Activity {
             // Add all the results to the listing
             for (int i=0; i<weatherResults.size(); i++) {
                 // Also add the weather item to the trip instance
-
-                tripInstance.getWeatherItems().get(i).setIcon(weatherResults.get(i).getIcon());
-                tripInstance.getWeatherItems().get(i).setMinTemp(weatherResults.get(i).getMinTemp());
-                tripInstance.getWeatherItems().get(i).setMaxTemp(weatherResults.get(i).getMaxTemp());
-                tripInstance.getWeatherItems().get(i).setTemp(weatherResults.get(i).getTempAsDouble());
-                tripInstance.getWeatherItems().get(i).setDetail(weatherResults.get(i).getDetail());
-                tripInstance.getWeatherItems().get(i).setTitle(weatherResults.get(i).getTitle());
+                WeatherItem currentItem = weatherResults.get(i);
+                tripInstance.getWeatherItems().get(i).addWeatherInfo(currentItem.getIcon(),
+                        currentItem.getMinTemp(), currentItem.getMaxTemp(),
+                        currentItem.getTempAsDouble(), currentItem.getTitle(), currentItem.getDetail());
             }
 
             // Update the adapter with the updated hour listing
