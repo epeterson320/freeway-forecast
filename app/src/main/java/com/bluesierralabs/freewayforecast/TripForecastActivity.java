@@ -142,8 +142,6 @@ public class TripForecastActivity extends Activity {
                 // Create an instance of the parser task to operate on the json data objects received
                 ParserTask parserTask = new ParserTask();
 
-
-
                 // Parse all the results when they are collectively ready
                 parserTask.execute(jsonResults);
             }

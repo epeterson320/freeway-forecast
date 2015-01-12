@@ -163,6 +163,8 @@ public class RouteSelectActivity extends FragmentActivity {
         // Go the the trip forecast activity
         Intent choseRoute = new Intent(this, TripForecastActivity.class);
         startActivity(choseRoute);
+
+//        Intent intent = new Intent(this,)
     }
 
     /** A class to parse the Google Places in JSON format */
