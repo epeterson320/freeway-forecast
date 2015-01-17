@@ -11,16 +11,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bluesierralabs.freewayforecast.Helpers.BusProvider;
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
 import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
 import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
+import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.squareup.otto.Produce;
 
 import org.json.JSONObject;
 
@@ -34,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class RouteSelectActivity extends FragmentActivity {
 
     /** Instance of the trip object that is used/modified throughout the application */
@@ -42,8 +44,6 @@ public class RouteSelectActivity extends FragmentActivity {
 
     /** Map object for displaying the trip route options */
     GoogleMap map;
-
-//    List<LatLng> hourPoints;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +67,31 @@ public class RouteSelectActivity extends FragmentActivity {
 
         DownloadTask downloadTask = new DownloadTask();
 
+        // Put a testing list item in the fragment
+        BusProvider.getInstance().post(produceRouteSummaryEvent());
+
         // Start downloading json data from Google Directions API
         downloadTask.execute(url);
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+
+        // Register ourselves so that we can provide the initial value.
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+
+        // Always unregister when an object no longer should be on the bus.
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Produce
+    public RouteAddedEvent produceRouteSummaryEvent() {
+        // Provide an initial value for location based on the last known position.
+        return new RouteAddedEvent("testing");
     }
 
     @Override
@@ -89,6 +112,13 @@ public class RouteSelectActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /** Respond to the "Select route" button being pressed */
+    public void submitRoute(View view) {
+        // Go the the trip forecast activity
+        Intent choseRoute = new Intent(this, TripForecastActivity.class);
+        startActivity(choseRoute);
+    }
+
     /** Fetches data from url passed which then calls the ParserTask */
     private class DownloadTask extends AsyncTask<String, Void, String>
     {
@@ -103,7 +133,6 @@ public class RouteSelectActivity extends FragmentActivity {
             try
             {
                 // Fetching the data from web service
-//                data = RouteSelectActivity.this.downloadUrl(url[0]);
                 data = InternetHelpers.downloadUrl(url[0]);
             } catch (Exception e)
             {
@@ -127,16 +156,6 @@ public class RouteSelectActivity extends FragmentActivity {
         }
     }
 
-    /** Respond to the "Select route" button being pressed */
-    public void submitRoute(View view) {
-
-        // Go the the trip forecast activity
-        Intent choseRoute = new Intent(this, TripForecastActivity.class);
-        startActivity(choseRoute);
-
-//        Intent intent = new Intent(this,)
-    }
-
     /** A class to parse the Google Places in JSON format */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>>
     {
@@ -148,11 +167,7 @@ public class RouteSelectActivity extends FragmentActivity {
             List<List<HashMap<String, String>>> routes = null;
 
             // Add the starting location marker to the trip
-//            tripInstance.addHourMarker(tripInstance.getTripStartCoordinates());
-
-            // TODO: Instead of using hour markers, start using the weatherItems from the trip instance
             WeatherItem tripStart = new WeatherItem(tripInstance.getTripStartCoordinates());
-            // TODO: Want to start this
             tripInstance.addTripWeatherItem(tripStart);
 
             try
@@ -162,19 +177,14 @@ public class RouteSelectActivity extends FragmentActivity {
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-
-//                hourPoints = parser.getHourPoints();
             } catch (Exception e)
             {
                 e.printStackTrace();
             }
 
-            // TODO: And this too
+            // Add the destination marker to the list
             WeatherItem tripEnd = new WeatherItem(tripInstance.getTripEndCoordinates());
             tripInstance.addTripWeatherItem(tripEnd);
-
-            // Add the destination marker to the list
-//            tripInstance.addHourMarker(tripInstance.getTripEndCoordinates());
 
             return routes;
         }
@@ -230,14 +240,9 @@ public class RouteSelectActivity extends FragmentActivity {
                 lineOptions.color(Color.RED);
             }
 
-//            Log.e("Trying to add hour markers", "" + hourPoints.size());
-//            Log.e("Trying to add hour markers", "" + usersTrip.getHourMarkers().size());
-//            for (int i = 0; i < hourPoints.size(); i++) {
+            // Add the markers to the map
             for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {
-//            for (int i = 0; i < usersTrip.getHourMarkers().size(); i++) {
-//                map.addMarker(new MarkerOptions().position(hourPoints.get(i)));
                 map.addMarker(new MarkerOptions().position(tripInstance.getWeatherItems().get(i).getLocation()));
-//                map.addMarker(new MarkerOptions().position(usersTrip.getHourMarkers().get(i)));
             }
 
             // Drawing polyline in the Google Map for the i-th route

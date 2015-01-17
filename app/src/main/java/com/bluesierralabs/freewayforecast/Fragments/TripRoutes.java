@@ -1,11 +1,16 @@
 package com.bluesierralabs.freewayforecast.Fragments;
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.bluesierralabs.freewayforecast.Helpers.App;
 import com.bluesierralabs.freewayforecast.Helpers.BusProvider;
+import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
+import com.bluesierralabs.freewayforecast.TripForecastActivity;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -34,15 +39,22 @@ public class TripRoutes extends ListFragment {
         setListAdapter(adapter);
     }
 
-//    @Subscribe public void onLocationChanged(LocationChangedEvent event) {
-//        locationEvents.add(0, event.toString());
-//        if (adapter != null) {
-//            adapter.notifyDataSetChanged();
-//        }
-//    }
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        //Do your stuff..
+        Intent choseRoute = new Intent(App.getContext(), TripForecastActivity.class);
+        startActivity(choseRoute);
+    }
+
+    @Subscribe public void onRouteAdded(RouteAddedEvent event) {
+        locationEvents.add(0, event.toString());
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
 
 //    @Subscribe
-//    public void onLocationCleared(LocationClearEvent event) {
+//    public void onRouteCleared(LocationClearEvent event) {
 //        locationEvents.clear();
 //        if (adapter != null) {
 //            adapter.notifyDataSetChanged();
