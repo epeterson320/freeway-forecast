@@ -1,34 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_weight="2"
-    tools:context="com.bluesierralabs.freewayforecast.RouteSelectActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8px">
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_marginBottom="8px"/>
+    <fragment class="com.bluesierralabs.freewayforecast.Fragments.TripRoutes"
+        android:id="@+id/routes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        tools:layout="@layout/simple_list_item_1" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:weightSum="2">
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                class="com.google.android.gms.maps.SupportMapFragment"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/submitRoute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
-        android:onClick="submitRoute"
-        android:text="@string/startTrip_select_route" />
+    <!--<Button-->
+        <!--android:id="@+id/submitRoute"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:clickable="true"-->
+        <!--android:onClick="submitRoute"-->
+        <!--android:text="@string/startTrip_select_route" />-->
 
 
-</RelativeLayout>
+</LinearLayout>

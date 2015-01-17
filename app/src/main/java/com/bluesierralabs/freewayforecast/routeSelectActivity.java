@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
 import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
+import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +43,7 @@ public class RouteSelectActivity extends FragmentActivity {
     /** Map object for displaying the trip route options */
     GoogleMap map;
 
-    List<LatLng> hourPoints;
+//    List<LatLng> hourPoints;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class RouteSelectActivity extends FragmentActivity {
         map.addMarker(new MarkerOptions().position(tripInstance.getTripEndCoordinates()).title("End"));
 
         // Getting URL to the Google Directions API
-        String url = RouteSelectActivity.this.getDirectionsUrl(tripInstance.getTripStartCoordinates(), tripInstance.getTripEndCoordinates());
+        String url = Utilities.getDirectionsUrl(tripInstance.getTripStartCoordinates(), tripInstance.getTripEndCoordinates());
 
         DownloadTask downloadTask = new DownloadTask();
 
@@ -86,37 +87,6 @@ public class RouteSelectActivity extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Compose the request url string to get the directions between two longitude and latitude
-     * points
-     *
-     * @param origin LatLng object of the trip's starting location
-     * @param destination LatLng object of the trip's ending loction
-     * @return String of the url to download
-     */
-    private String getDirectionsUrl(LatLng origin, LatLng destination)
-    {
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination=" + destination.latitude + "," + destination.longitude;
-
-        // Sensor enabled
-        String sensor = "sensor=false";
-
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
-        return url;
     }
 
     /** Fetches data from url passed which then calls the ParserTask */
@@ -193,7 +163,7 @@ public class RouteSelectActivity extends FragmentActivity {
                 // Starts parsing data
                 routes = parser.parse(jObject);
 
-                hourPoints = parser.getHourPoints();
+//                hourPoints = parser.getHourPoints();
             } catch (Exception e)
             {
                 e.printStackTrace();
@@ -260,7 +230,7 @@ public class RouteSelectActivity extends FragmentActivity {
                 lineOptions.color(Color.RED);
             }
 
-            Log.e("Trying to add hour markers", "" + hourPoints.size());
+//            Log.e("Trying to add hour markers", "" + hourPoints.size());
 //            Log.e("Trying to add hour markers", "" + usersTrip.getHourMarkers().size());
 //            for (int i = 0; i < hourPoints.size(); i++) {
             for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {

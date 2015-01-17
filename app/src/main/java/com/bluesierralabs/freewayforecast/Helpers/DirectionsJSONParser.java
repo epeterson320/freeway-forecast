@@ -72,7 +72,7 @@ public class DirectionsJSONParser
         JSONObject jDurationSeconds = null;
 
         // Create an array list for the Latitude/Longitude points at the hour markers
-        hourPoints = new ArrayList<LatLng>();
+//        hourPoints = new ArrayList<LatLng>();
 
         int routeDuration;
         int newRouteDuration;
@@ -222,7 +222,7 @@ public class DirectionsJSONParser
                                 WeatherItem tripPoint = new WeatherItem(marker);
                                 tripInstance.addTripWeatherItem(tripPoint);
 
-                                hourPoints.add(marker);
+//                                hourPoints.add(marker);
                                 additionalMarkers++;
                             }
                         }

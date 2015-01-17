@@ -92,4 +92,35 @@ public class Utilities {
 
         return url;
     }
+
+    /**
+     * Compose the request url string to get the directions between two longitude and latitude
+     * points
+     *
+     * @param origin LatLng object of the trip's starting location
+     * @param destination LatLng object of the trip's ending loction
+     * @return String of the url to download
+     */
+    public static String getDirectionsUrl(LatLng origin, LatLng destination)
+    {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + destination.latitude + "," + destination.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        return url;
+    }
 }
