@@ -114,18 +114,7 @@ public class TripForecastActivity extends Activity {
             TextView test = (TextView) findViewById(R.id.progress);
             test.setText("Download progress: " + values[0].toString());
 
-            setContentView(R.layout.activity_trip_forecast);
-
-            // Now get a handle to any View contained
-            // within the main layout you are using
-            View backgroundView = findViewById(R.id.listview);
-
-            // Find the root view
-            View root = backgroundView.getRootView();
-
-            // Set the color
-            root.setBackgroundColor(Color.GREEN);
-//            root.setBackgroundColor(getResources().getColor(android.R.color.));
+//            setContentView(R.layout.activity_trip_forecast);
         }
 
         // Executes in UI thread, after the execution of doInBackground()
@@ -194,6 +183,7 @@ public class TripForecastActivity extends Activity {
             for (int i=0; i<weatherResults.size(); i++) {
                 // Also add the weather item to the trip instance
                 WeatherItem currentItem = weatherResults.get(i);
+
                 tripInstance.getWeatherItems().get(i).addWeatherInfo(currentItem.getIcon(),
                         currentItem.getMinTemp(), currentItem.getMaxTemp(),
                         currentItem.getTempAsDouble(), currentItem.getTitle(), currentItem.getDetail());
