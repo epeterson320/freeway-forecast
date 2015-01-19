@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
+import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.otto.Produce;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,9 +73,6 @@ public class DirectionsJSONParser
         JSONObject jDuration = null;
         JSONObject jDurationSeconds = null;
 
-        // Create an array list for the Latitude/Longitude points at the hour markers
-//        hourPoints = new ArrayList<LatLng>();
-
         int routeDuration;
         int newRouteDuration;
 
@@ -88,6 +87,10 @@ public class DirectionsJSONParser
             {
                 // Set the duration of the route to zero seconds
                 routeDuration = 0;
+
+                // Put a testing list item in the fragment
+//                RouteAddedEvent test = new RouteAddedEvent("test from the parser");
+//                BusProvider.getInstance().post(test);
 
                 jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
                 List<HashMap<String, String>> path = new ArrayList<HashMap<String, String>>();

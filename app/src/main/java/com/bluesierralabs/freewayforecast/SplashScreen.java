@@ -111,6 +111,31 @@ public class SplashScreen extends FragmentActivity implements
         startAutoComplete.setAdapter(adapter);
         endAutoComplete.setAdapter(adapter);
 
+        // If the date entry field gains focus, show the DateSelectFragment
+        ((EditText) findViewById(R.id.tripStartDate)).setKeyListener(null);
+        ((EditText) findViewById(R.id.tripStartDate)).setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    DialogFragment newFragment = new DateSelectFragment();
+                    newFragment.show(getSupportFragmentManager(), "datePicker");
+                }
+            }
+        });
+
+        // If the time entry field gains focus, show the TimeSelectFragment
+        ((EditText) findViewById(R.id.tripStartTime)).setKeyListener(null);
+        ((EditText) findViewById(R.id.tripStartTime)).setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    DialogFragment newFragment = new TimeSelectFragment();
+                    newFragment.show(getSupportFragmentManager(), "timePicker");
+                    
+                }
+            }
+        });
+
         // 2. create LocationClient
         mLocationClient = new LocationClient(this, this, this);
 
