@@ -112,8 +112,11 @@ public class Utilities {
         // Sensor enabled
         String sensor = "sensor=false";
 
+        // Alternatives enabled
+        String alternatives = "alternatives=true";
+
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + alternatives;
 
         // Output format
         String output = "json";
@@ -122,5 +125,16 @@ public class Utilities {
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
         return url;
+    }
+
+    public static boolean validateCityState(String cityStateString) {
+        Log.e("checking for valid city, state", cityStateString);
+
+//        boolean checkResult = cityStateString.matches(".*, [A-Z][A-Z]");
+        boolean checkResult = cityStateString.matches(".*, ([a-zA-Z]+|[a-zA-Z]+\\\\s[a-zA-Z]+)");
+
+        Log.e("will return", String.valueOf(checkResult));
+
+        return checkResult;
     }
 }

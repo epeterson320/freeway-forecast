@@ -6,6 +6,7 @@ import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -29,7 +30,6 @@ public class enterLocation extends AutoCompleteTextView {
         final String viewMode = "editing";
         final String viewSide = "right";
 
-        // TODO: Get an icon 'x' for the delete button
 //        final Drawable x = getResources().getDrawable(R.drawable.ic_action_delete);
         final Drawable x = getResources().getDrawable(R.drawable.ic_action_cancel);
 
@@ -58,6 +58,7 @@ public class enterLocation extends AutoCompleteTextView {
                 if (event.getAction() != MotionEvent.ACTION_UP) {
                     return false;
                 }
+
                 // x pressed
                 if ((viewSide.equals("left") && event.getX() < getPaddingLeft()
                         + x.getIntrinsicWidth())

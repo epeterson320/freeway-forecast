@@ -5,9 +5,12 @@ import android.support.v4.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.bluesierralabs.freewayforecast.Models.Trip;
+import com.bluesierralabs.freewayforecast.R;
 
 import java.util.Calendar;
 
@@ -35,5 +38,9 @@ public class TimeSelectFragment extends DialogFragment implements TimePickerDial
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Set the trip with the hours and minutes.
         tripInstance.setTripStartWithTimeSelect(hourOfDay, minute);
+
+        // Change edit text box in the activity
+        EditText inputTime = (EditText) getActivity().findViewById(R.id.tripStartTime);
+        inputTime.setText(tripInstance.getTripStartTimeReadable());
     }
 }

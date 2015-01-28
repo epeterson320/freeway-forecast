@@ -8,6 +8,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +21,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluesierralabs.freewayforecast.Helpers.DateSelectFragment;
 import com.bluesierralabs.freewayforecast.Helpers.TimeSelectFragment;
+import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -34,7 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import static android.widget.AdapterView.*;
+import static android.widget.AdapterView.OnFocusChangeListener;
 
 public class SplashScreen extends FragmentActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
@@ -45,7 +48,14 @@ public class SplashScreen extends FragmentActivity implements
     private Trip tripInstance = Trip.getInstance();
 
     private AutoCompleteTextView startAutoComplete;
+
     private AutoCompleteTextView endAutoComplete;
+
+    /** Boolean to track if the start location field was correctly supplied */
+    private boolean startLocationGood = false;
+
+    /** Boolean to track if the end location field was supplied */
+    private boolean endLocationGood = false;
 
     // locations objects
     LocationClient mLocationClient;
@@ -56,9 +66,6 @@ public class SplashScreen extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
-        // Make sure that the trip is cleared out from any previous uses
-        tripInstance.clear();
 
         // Set the default application preferences
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
@@ -78,6 +85,31 @@ public class SplashScreen extends FragmentActivity implements
             }
         });
 
+        startAutoComplete.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO: Auto-generated method stub
+                Log.e("Start location, beforeTextChanged", s.toString());
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("Start location changed to", s.toString());
+//                if (s.length() > 0) {
+//                    startLocationGood = true;
+//
+////                    .*, [A-Z][A-Z]
+//                }
+                startLocationGood = Utilities.validateCityState(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO: Auto-generated method stub
+                Log.e("Start location, afterTextChanged", s.toString());
+            }
+        });
+
         // Setup the listeners and handlers for the trip end location edit text box
         endAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripEndAddress);
         endAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,18 +122,27 @@ public class SplashScreen extends FragmentActivity implements
             }
         });
 
-        Calendar fillerCal = Calendar.getInstance();
-        fillerCal.setTime(tripInstance.getTripStart());
+        // Listen for when the trip end's location gets edited.
+        endAutoComplete.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
+            }
 
-        // Set up the date (Day, Month) for the splash screen
-        EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
-        String inputDateString = "" + tripInstance.getTripStartDayName() + ", "
-                + tripInstance.getTripStartMonthName() + " " + tripInstance.getTripStartDayNumber();
-        inputDate.setText(inputDateString);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("End location changed to", s.toString());
+//                if (s.length() > 0) {
+//                    endLocationGood = true;
+//                }
+                endLocationGood = Utilities.validateCityState(s.toString());
+            }
 
-        // Set up the time (Hours and Minutes) for the splash screen
-        EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
-        inputTime.setText(tripInstance.getTripStartTimeReadable());
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+        });
 
         // Setup the auto complete of cities based on the user's location.
         String[] countries = getResources().getStringArray(R.array.cities_usa);
@@ -111,27 +152,32 @@ public class SplashScreen extends FragmentActivity implements
         startAutoComplete.setAdapter(adapter);
         endAutoComplete.setAdapter(adapter);
 
+        // On create, clear any focus that was present
+        findViewById(R.id.tripStartDate).clearFocus();
+
         // If the date entry field gains focus, show the DateSelectFragment
         ((EditText) findViewById(R.id.tripStartDate)).setKeyListener(null);
-        ((EditText) findViewById(R.id.tripStartDate)).setOnFocusChangeListener(new OnFocusChangeListener() {
+        (findViewById(R.id.tripStartDate)).setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     DialogFragment newFragment = new DateSelectFragment();
                     newFragment.show(getSupportFragmentManager(), "datePicker");
+
+
                 }
             }
         });
 
         // If the time entry field gains focus, show the TimeSelectFragment
         ((EditText) findViewById(R.id.tripStartTime)).setKeyListener(null);
-        ((EditText) findViewById(R.id.tripStartTime)).setOnFocusChangeListener(new OnFocusChangeListener() {
+        (findViewById(R.id.tripStartTime)).setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     DialogFragment newFragment = new TimeSelectFragment();
                     newFragment.show(getSupportFragmentManager(), "timePicker");
-                    
+
                 }
             }
         });
@@ -157,12 +203,40 @@ public class SplashScreen extends FragmentActivity implements
         super.onStart();
         // 1. connect the client.
         mLocationClient.connect();
+
+        Log.e("SplashScreen", "onStart");
+
+        // When the SplashScreen Activity is started, clear out anything in the trip object. Every
+        // setting is going to change
+        tripInstance.clear();
+
+        // Set up the date (Day, Month) for the splash screen
+        EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
+        inputDate.setText(tripInstance.getTripStartDateReadable());
+
+        // Set up the time (Hours and Minutes) for the splash screen
+        EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
+        inputTime.setText(tripInstance.getTripStartTimeReadable());
+
+        // Make sure that we flag the start and end locations as "not provided"
+        startLocationGood = false;
+        endLocationGood = false;
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Log.e("SplashScreen", "onRestart");
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
         // 1. disconnecting the client invalidates it.
         mLocationClient.disconnect();
+
+        Log.e("SplashScreen", "onStop");
     }
 
     @Override
@@ -200,33 +274,55 @@ public class SplashScreen extends FragmentActivity implements
     }
 
     public void submitTimesAndPlaces(View view) {
-        // Get the starting address for the trip from the input box
-        EditText inputStartAddress = (EditText) findViewById(R.id.tripStartAddress);
-        String startAddress = inputStartAddress.getText().toString();
 
-        // Pass the context as well.
-        tripInstance.setTripStartAddress(startAddress, this);
+        if (startLocationGood && endLocationGood) {
 
-        // Get the ending address for the trip from the input box
-        EditText inputEndAddress = (EditText) findViewById(R.id.tripEndAddress);
-        String endAddress = inputEndAddress.getText().toString();
+            // Get the starting address for the trip from the input box
+            EditText inputStartAddress = (EditText) findViewById(R.id.tripStartAddress);
+            String startAddress = inputStartAddress.getText().toString();
 
-        // Pass the context as well
-        tripInstance.setTripEndAddress(endAddress, this);
+            Log.e("start address", startAddress);
 
-        // Get the date of the trip from the input box
-        EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
-        String date = inputDate.getText().toString();
+            // Pass the context as well.
+            tripInstance.setTripStartAddress(startAddress, this);
+
+            // Get the ending address for the trip from the input box
+            EditText inputEndAddress = (EditText) findViewById(R.id.tripEndAddress);
+            String endAddress = inputEndAddress.getText().toString();
+
+            Log.e("end address", endAddress);
+
+            // Pass the context as well
+            tripInstance.setTripEndAddress(endAddress, this);
+
+            // Get the date of the trip from the input box
+            EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
+            String date = inputDate.getText().toString();
 //        tripInstance.setTripStartDate(date);
 
-        // Get the time of the trip from the input box
-        EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
-        String time = inputTime.getText().toString();
+            // Get the time of the trip from the input box
+            EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
+            String time = inputTime.getText().toString();
 //        tripInstance.setTripStartTime(time);
 
-        // Go to the route select activity
-        Intent choseRoute = new Intent(this, RouteSelectActivity.class);
-        startActivity(choseRoute);
+            // Go to the route select activity
+            Intent choseRoute = new Intent(this, RouteSelectActivity.class);
+            startActivity(choseRoute);
+        } else if (!startLocationGood) {
+            Context context = getApplicationContext();
+            CharSequence text = "Please supply a trip start location";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        } else if (!endLocationGood) {
+            Context context = getApplicationContext();
+            CharSequence text = "Please supply a trip end location";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
     }
 
     // Open the settings activity
@@ -257,7 +353,6 @@ public class SplashScreen extends FragmentActivity implements
                     if (addresses.size() > 0)
                         city = String.valueOf(addresses.get(0).getLocality());
                     state = String.valueOf(addresses.get(0).getAdminArea());
-//            Toast.makeText(this, (city + ", " + state), Toast.LENGTH_SHORT).show();
 
                     EditText tripStartLocation = (EditText) findViewById(R.id.tripStartAddress);
                     tripStartLocation.setText((city + ", " + state));

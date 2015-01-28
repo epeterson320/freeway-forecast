@@ -75,11 +75,21 @@ public class Trip {
         return tripObject;
     }
 
+    /**
+     * Clear all the hour markers and weather items from the trip instance. This function is
+     * intended to be used when the user returns to the splash screen - either they wish to edit the
+     * trip or start over. This function helps ensures everything gets set back to start.
+     */
     public void clear() {
-
         // Clear the hour and weather array lists
         this.hourMarkers.clear();
         this.weatherItems.clear();
+
+        // Set the trip start date to the current time
+        Calendar cal = Calendar.getInstance();
+        Date currentTime = new Date();  // Initializes this Date instance to the current time.
+        cal.setTime(currentTime);
+        this.tripStart = cal.getTime();
     }
 
     // Set the address for the start of the trip
@@ -281,6 +291,13 @@ public class Trip {
             default:
                 return null;
         }
+    }
+
+    public String getTripStartDateReadable() {
+        String inputDateString = "" + getTripStartDayName() + ", "
+                + getTripStartMonthName() + " " + getTripStartDayNumber();
+
+        return inputDateString;
     }
 
     public String getTripStartTimeReadable() {
