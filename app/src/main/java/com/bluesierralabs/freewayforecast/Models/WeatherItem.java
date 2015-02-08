@@ -47,6 +47,9 @@ public class WeatherItem {
     /** Latitude and Latitude location of the weather time */
     private LatLng location;
 
+    /** Route number that the weather item is mapped to */
+    private int routeNumber;
+
     /**
      * Default constructor
      */
@@ -99,7 +102,7 @@ public class WeatherItem {
     }
 
     public String getDetail() {
-        String detailWithTime = getTime() + " " + detail;
+        String detailWithTime = getTime() + " " + detail + " " + routeNumber;
         return detailWithTime;
     }
 
@@ -170,5 +173,13 @@ public class WeatherItem {
 
     public Double getMaxTemp() {
         return maxTemp;
+    }
+
+    public void setRouteNumber(int number) {
+        this.routeNumber = number;
+    }
+
+    public int getRouteNumber() {
+        return routeNumber;
     }
 }

@@ -47,9 +47,6 @@ public class Trip {
     /** Integer for the duration between weather items */
     private long tripIntervals = 3600000;
 
-    /** List of latitude and longitude points where the trip hours markers will occur */
-    private ArrayList<LatLng> hourMarkers;
-
     /** Weather items associated with the hour markers **/
     private ArrayList<WeatherItem> weatherItems;
 
@@ -57,7 +54,6 @@ public class Trip {
     private Trip() {
 
         // Initialize the array lists
-        this.hourMarkers = new ArrayList<LatLng>();
         this.weatherItems = new ArrayList<WeatherItem>();
 
         // Set the trip start date to the current time
@@ -81,8 +77,7 @@ public class Trip {
      * trip or start over. This function helps ensures everything gets set back to start.
      */
     public void clear() {
-        // Clear the hour and weather array lists
-        this.hourMarkers.clear();
+        // Clear the weather array lists
         this.weatherItems.clear();
 
         // Set the trip start date to the current time
@@ -158,14 +153,6 @@ public class Trip {
 
     public LatLng getTripEndCoordinates() {
         return this.tripEndCoordinates;
-    }
-
-    public void addHourMarker(LatLng marker) {
-        this.hourMarkers.add(marker);
-    }
-
-    public List<LatLng> getHourMarkers() {
-        return hourMarkers;
     }
 
     public Date getTripStart() {
@@ -319,8 +306,16 @@ public class Trip {
         this.weatherItems.add(weather);
     }
 
+    public void removeTripWeatherItem(int item) {
+        Log.e("TripInstance", "Removing time associated with route " + getWeatherItems().get(item).getRouteNumber());
+        this.weatherItems.remove(item);
+    }
+
     public ArrayList<WeatherItem> getWeatherItems() {
         return weatherItems;
     }
 
+    public WeatherItem getWeatherItem (int itemNum) {
+        return weatherItems.get(itemNum);
+    }
 }

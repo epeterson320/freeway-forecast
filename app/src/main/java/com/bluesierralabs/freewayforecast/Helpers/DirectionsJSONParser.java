@@ -83,16 +83,21 @@ public class DirectionsJSONParser
             Log.e("Found routes: ", "" + jRoutes.length());
 
             /** Traversing all routes */
-            for (int i = 0; i < jRoutes.length(); i++)
+            for (int routeNum = 0; routeNum < jRoutes.length(); routeNum++)
             {
                 // Set the duration of the route to zero seconds
                 routeDuration = 0;
+
+                // Get the summary of the trip from the json data
+                String routeSummary = ((JSONObject) jRoutes.get(routeNum)).getString("summary");
+
+                Log.e("DirectionsJSONParser", "route summary - " + routeSummary);
 
                 // Put a testing list item in the fragment
 //                RouteAddedEvent test = new RouteAddedEvent("test from the parser");
 //                BusProvider.getInstance().post(test);
 
-                jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+                jLegs = ((JSONObject) jRoutes.get(routeNum)).getJSONArray("legs");
                 List<HashMap<String, String>> path = new ArrayList<HashMap<String, String>>();
                 /** Traversing all legs of the route */
                 for (int j = 0; j < jLegs.length(); j++)
@@ -218,14 +223,14 @@ public class DirectionsJSONParser
 //                                    Log.e("Left over", "" + tempDuration);
                                 }
 
-                                Log.e(DirectionsJSONParser.class.getName(), "Adding hour marker");
-//                                tripInstance.addHourMarker(marker);
+                                Log.e(DirectionsJSONParser.class.getName(), "Adding hour marker for route " + routeNum);
 
-                                // TODO: Start using this code.
+                                // Create a weather item and add it to the trip object
                                 WeatherItem tripPoint = new WeatherItem(marker);
+                                tripPoint.setRouteNumber(routeNum);
                                 tripInstance.addTripWeatherItem(tripPoint);
 
-//                                hourPoints.add(marker);
+                                // Increment the marker counter
                                 additionalMarkers++;
                             }
                         }

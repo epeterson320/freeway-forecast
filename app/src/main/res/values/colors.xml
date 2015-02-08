@@ -8,4 +8,5 @@
     <color name="green">#04B431</color>
     <color name="purple">#8000FF</color>
     <color name="blue">#0040FF</color>
+    <color name="contrastGreen">#009933</color>
 </resources>

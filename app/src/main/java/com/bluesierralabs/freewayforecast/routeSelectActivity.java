@@ -18,9 +18,11 @@ import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.squareup.otto.Produce;
@@ -104,13 +106,6 @@ public class RouteSelectActivity extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /** Respond to the "Select route" button being pressed */
-    public void submitRoute(View view) {
-        // Go the the trip forecast activity
-        Intent choseRoute = new Intent(this, TripForecastActivity.class);
-        startActivity(choseRoute);
     }
 
     /** Fetches data from url passed which then calls the ParserTask */
@@ -202,6 +197,8 @@ public class RouteSelectActivity extends FragmentActivity {
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++)
             {
+                Log.e("RouteSelectActivity", "printing route " + (i + 1));
+
                 points = new ArrayList<LatLng>();
                 lineOptions = new PolylineOptions();
 
@@ -230,17 +227,46 @@ public class RouteSelectActivity extends FragmentActivity {
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(5);
-                lineOptions.color(Color.RED);
+                lineOptions.width(7);
+
+                if (i == 0) {
+                    lineOptions.color(Color.parseColor("#009933")); // Contrast green
+                } else if (i == 1) {
+                    lineOptions.color(Color.BLUE);
+                } else if (i == 2) {
+                    lineOptions.color(Color.RED);
+                } else {
+                    lineOptions.color(Color.parseColor("#8000FF")); // Purple
+                }
+
+                // Drawing polyline in the Google Map for the i-th route
+                RouteSelectActivity.this.map.addPolyline(lineOptions);
             }
 
             // Add the markers to the map
-            for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {
-                map.addMarker(new MarkerOptions().position(tripInstance.getWeatherItems().get(i).getLocation()));
-            }
+            // TODO: Add this back in later when I return to the marker accuracy
+//            for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {
+//                map.addMarker(new MarkerOptions().position(tripInstance.getWeatherItems().get(i).getLocation()));
+//            }
 
-            // Drawing polyline in the Google Map for the i-th route
-            RouteSelectActivity.this.map.addPolyline(lineOptions);
+            // TODO: Might be able to get away with setting the bounds using only the start and end locations.
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//            for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {
+//                builder.include(tripInstance.getWeatherItems().get(i).getLocation());
+//            }
+            builder.include(tripInstance.getTripStartCoordinates());
+            builder.include(tripInstance.getTripEndCoordinates());
+
+            // Build the bounds
+            LatLngBounds mapBounds = builder.build();
+            int zoom_padding = 50;
+
+            // Zoom the map to show only the route
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, zoom_padding));
+
+            // Disable zooming once the trip routes are correctly bounded
+            // TODO: Determine if there should be some ability to zoom/pan
+            map.getUiSettings().setAllGesturesEnabled(false);
         }
     }
 }

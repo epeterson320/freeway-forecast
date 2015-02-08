@@ -47,6 +47,8 @@ public class TripForecastActivity extends Activity {
     /** Array list for the weather items */
     private ArrayList<WeatherItem> weatherResults = new ArrayList<WeatherItem>();
 
+    private int pointsToShow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,16 +63,35 @@ public class TripForecastActivity extends Activity {
         // Setup the handle for the list view object
         weatherListing = (ListView)findViewById(R.id.listview);
 
+        Log.e("Entering forecast with", "" + tripInstance.getWeatherItems().size() + " items");
+
         // Get the latitude/longitude markers from the trip instance and work through them
         for (int i=0; i < tripInstance.getWeatherItems().size(); i++) {
-            // Create the url to get the weather information
-            String url = Utilities.getOpenWeatherMapUrl(tripInstance.getWeatherItems().get(i).getLocation());
+            WeatherItem item = tripInstance.getWeatherItem(i);
 
-            // Create the download task with context
-            DownloadTask downloadTask = new DownloadTask(this);
+            if ((i > 0) && (i < (tripInstance.getWeatherItems().size() - 1))) {
+                if (item.getRouteNumber() != 0) {
+                    tripInstance.removeTripWeatherItem(i);
+                } else {
+                    // Create the url to get the weather information
+                    String url = Utilities.getOpenWeatherMapUrl(item.getLocation());
 
-            // Start downloading json data from Google Directions API
-            downloadTask.execute(url);
+                    // Create the download task with context
+                    DownloadTask downloadTask = new DownloadTask(this);
+
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url);
+                }
+            } else {
+                // Create the url to get the weather information
+                String url = Utilities.getOpenWeatherMapUrl(item.getLocation());
+
+                // Create the download task with context
+                DownloadTask downloadTask = new DownloadTask(this);
+
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(url);
+            }
         }
     }
 
@@ -110,11 +131,8 @@ public class TripForecastActivity extends Activity {
             super.onProgressUpdate(values);
 
             // While the down load tasks are happening, I want to change the background and
-
             TextView test = (TextView) findViewById(R.id.progress);
             test.setText("Download progress: " + values[0].toString());
-
-//            setContentView(R.layout.activity_trip_forecast);
         }
 
         // Executes in UI thread, after the execution of doInBackground()
@@ -126,8 +144,22 @@ public class TripForecastActivity extends Activity {
             // Add the json data to the results array
             jsonResults.add(result);
 
+            // TODO:
+            // This is probably not incredibly efficient but I was getting here with other route's
+            // items in the trip instance still so needed to do a double clear. Maybe I can do this
+            // better
+            for (int i=0; i < tripInstance.getWeatherItems().size(); i++) {
+                WeatherItem test = tripInstance.getWeatherItem(i);
+                if (test.getRouteNumber() != 0) {
+                    tripInstance.removeTripWeatherItem(i);
+                }
+            }
+
             Log.e("jsonResults: " + jsonResults.size(), "totalHourMarkers: " + tripInstance.getWeatherItems().size());
             if (jsonResults.size() >= tripInstance.getWeatherItems().size()) {
+
+                Log.e("Download Task", "getting ready to start parsing. Items in trip=" + tripInstance.getWeatherItems().size());
+
                 // Create an instance of the parser task to operate on the json data objects received
                 ParserTask parserTask = new ParserTask();
 

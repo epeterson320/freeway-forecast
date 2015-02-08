@@ -124,6 +124,8 @@ public class Utilities {
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
+        Log.e("url", url);
+
         return url;
     }
 
