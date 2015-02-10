@@ -114,7 +114,6 @@ public class TripForecastActivity extends Activity {
             try
             {
                 // Fetching the data from web service
-//                Log.e("DownloadTask", "downloading weather data");
                 data = InternetHelpers.downloadUrl(url[0]);
                 publishProgress(jsonResults.size());
 
@@ -197,15 +196,6 @@ public class TripForecastActivity extends Activity {
 
             return null;
         }
-
-        // Runs on the UI thread after publishProgress(Progress...) is invoked.
-//        @Override
-//        protected void onProgressUpdate(Integer... values) {
-//            super.onProgressUpdate(values);
-//
-//            TextView test = (TextView) findViewById(R.id.progress);
-//            test.setText("Progress: " + values.toString());
-//        }
 
         // Executes in UI thread, after the parsing process
         @Override

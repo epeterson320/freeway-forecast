@@ -88,7 +88,20 @@ public class Utilities {
         // Building the url to the weather api
         String url = "http://api.openweathermap.org/data/2.5/weather?" + point;
 
-        Log.e("TripForecastActivity.getForecastUrl", url);
+//        Log.e("TripForecastActivity.getForecastUrl", url);
+
+        return url;
+    }
+
+    public static String getForecastIoUrl(LatLng location) {
+
+        // Latitude and longitude section of the url
+        String point = location.latitude + "," + location.longitude;
+
+        // API Key
+        String apikey = "afa12fa27091cbeef16585dd3bc7b2cc";
+
+        String url = "https://api.forecast.io/forecast/" + apikey + "/" + point;
 
         return url;
     }
