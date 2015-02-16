@@ -156,8 +156,8 @@ public class RouteSelectActivity extends FragmentActivity {
             List<List<HashMap<String, String>>> routes = null;
 
             // Add the starting location marker to the trip
-            WeatherItem tripStart = new WeatherItem(tripInstance.getTripStartCoordinates());
-            tripInstance.addTripWeatherItem(tripStart);
+//            WeatherItem tripStart = new WeatherItem(tripInstance.getTripStartCoordinates());
+//            tripInstance.addTripWeatherItem(tripStart);
 
             try
             {
@@ -172,8 +172,8 @@ public class RouteSelectActivity extends FragmentActivity {
             }
 
             // Add the destination marker to the list
-            WeatherItem tripEnd = new WeatherItem(tripInstance.getTripEndCoordinates());
-            tripInstance.addTripWeatherItem(tripEnd);
+//            WeatherItem tripEnd = new WeatherItem(tripInstance.getTripEndCoordinates());
+//            tripInstance.addTripWeatherItem(tripEnd);
 
             return routes;
         }

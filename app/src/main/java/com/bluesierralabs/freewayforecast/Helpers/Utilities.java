@@ -152,4 +152,24 @@ public class Utilities {
 
         return checkResult;
     }
+
+    static Date toNearestWholeHour(Date d) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+
+        // If the supplied date is already and exact hour, go ahead and use it.
+        if (c.get(Calendar.MINUTE) == 0) {
+//            Log.e("Utilities.toNearestWholeHour", "already using exact hour");
+            return d;
+        }
+
+        c.add(Calendar.HOUR, 1);
+
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+//        Log.e("Utilities.toNearestWholeHour", "changing hour to " + c.toString());
+        return c.getTime();
+    }
 }

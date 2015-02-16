@@ -50,11 +50,19 @@ public class Trip {
     /** Weather items associated with the hour markers **/
     private ArrayList<WeatherItem> weatherItems;
 
+    /** Route summary strings that are displayed for the user to select the desired route */
+    private ArrayList<String> routeSummaries;
+
+    /** Directions summary for the selected route */
+    private String routeSummary;
+
     // Class constructor
     private Trip() {
 
         // Initialize the array lists
         this.weatherItems = new ArrayList<WeatherItem>();
+
+        this.routeSummaries = new ArrayList<String>();
 
         // Set the trip start date to the current time
         Calendar cal = Calendar.getInstance();
@@ -79,6 +87,9 @@ public class Trip {
     public void clear() {
         // Clear the weather array lists
         this.weatherItems.clear();
+
+        // Clear the route summaries list
+        this.routeSummaries.clear();
 
         // Set the trip start date to the current time
         Calendar cal = Calendar.getInstance();
@@ -194,6 +205,7 @@ public class Trip {
         // Now change the hour and minutes
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
         // Finally convert the calendar back to a date, and save it for the trip
@@ -294,13 +306,13 @@ public class Trip {
 
     public void addTripWeatherItem(WeatherItem weather) {
         // Determine how many weather items are currently in the trip
-        int items = this.weatherItems.size();
-
-        // Set a Date object for the weather item based on the trip start time and item position
-        Date itemTime = new Date(this.tripStart.getTime() + (this.tripIntervals * items));
-
-        // Add the time corresponding to the weather item.
-        weather.setDate(itemTime);
+//        int items = this.weatherItems.size();
+//
+//        // Set a Date object for the weather item based on the trip start time and item position
+//        Date itemTime = new Date(this.tripStart.getTime() + (this.tripIntervals * items));
+//
+//        // Add the time corresponding to the weather item.
+//        weather.setDate(itemTime);
 
         // Now add the weather item to the trip
         this.weatherItems.add(weather);
@@ -317,5 +329,9 @@ public class Trip {
 
     public WeatherItem getWeatherItem (int itemNum) {
         return weatherItems.get(itemNum);
+    }
+
+    public void addSummary(String summary) {
+        this.routeSummaries.add(summary);
     }
 }

@@ -147,6 +147,10 @@ public class WeatherItem {
         return Utilities.getTimeStringFromDate(time);
     }
 
+    public void setTime(Date timeForForecast) {
+        this.time = timeForForecast;
+    }
+
     public void setDate(Date weatherItemTime) {
         this.time = weatherItemTime;
     }
