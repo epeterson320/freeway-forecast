@@ -1,6 +1,5 @@
 package com.bluesierralabs.freewayforecast;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.bluesierralabs.freewayforecast.Helpers.BusProvider;
@@ -16,7 +14,6 @@ import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
 import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
 import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
-import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,39 +32,40 @@ import java.util.List;
 
 public class RouteSelectActivity extends FragmentActivity {
 
+    public static int ZOOM_PADDING = 50;
+
     /** Instance of the trip object that is used/modified throughout the application */
-    Trip tripInstance = Trip.getInstance();
+    Trip mTrip;
 
     /** Map object for displaying the trip route options */
-    GoogleMap map;
+    SupportMapFragment mMapFragment;
+    GoogleMap mMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_select);
 
-        // Initializing
+        mTrip = Trip.getInstance();
 
         // Getting reference to SupportMapFragment of the activity_main
-        SupportMapFragment fm = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
+        mMapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
 
         // Getting Map for the SupportMapFragment
-        this.map = fm.getMap();
+        mMap = mMapFragment.getMap();
 
         // Set the trip start and end markers
-        map.addMarker(new MarkerOptions().position(tripInstance.getTripStartCoordinates()).title("Start"));
-        map.addMarker(new MarkerOptions().position(tripInstance.getTripEndCoordinates()).title("End"));
+        mMap.addMarker(new MarkerOptions().position(mTrip.getTripStartCoordinates()).title("Start"));
+        mMap.addMarker(new MarkerOptions().position(mTrip.getTripEndCoordinates()).title("End"));
 
         // Getting URL to the Google Directions API
-        String url = Utilities.getDirectionsUrl(tripInstance.getTripStartCoordinates(), tripInstance.getTripEndCoordinates());
-
-        DownloadTask downloadTask = new DownloadTask();
+        String url = Utilities.getDirectionsUrl(mTrip.getTripStartCoordinates(), mTrip.getTripEndCoordinates());
 
         // Put a testing list item in the fragment
         BusProvider.getInstance().post(produceRouteSummaryEvent());
 
         // Start downloading json data from Google Directions API
-        downloadTask.execute(url);
+        new DownloadTask().execute(url);
     }
 
     @Override protected void onResume() {
@@ -156,8 +154,8 @@ public class RouteSelectActivity extends FragmentActivity {
             List<List<HashMap<String, String>>> routes = null;
 
             // Add the starting location marker to the trip
-//            WeatherItem tripStart = new WeatherItem(tripInstance.getTripStartCoordinates());
-//            tripInstance.addTripWeatherItem(tripStart);
+//            WeatherItem tripStart = new WeatherItem(mTrip.getTripStartCoordinates());
+//            mTrip.addTripWeatherItem(tripStart);
 
             try
             {
@@ -172,8 +170,8 @@ public class RouteSelectActivity extends FragmentActivity {
             }
 
             // Add the destination marker to the list
-//            WeatherItem tripEnd = new WeatherItem(tripInstance.getTripEndCoordinates());
-//            tripInstance.addTripWeatherItem(tripEnd);
+//            WeatherItem tripEnd = new WeatherItem(mTrip.getTripEndCoordinates());
+//            mTrip.addTripWeatherItem(tripEnd);
 
             return routes;
         }
@@ -240,33 +238,27 @@ public class RouteSelectActivity extends FragmentActivity {
                 }
 
                 // Drawing polyline in the Google Map for the i-th route
-                RouteSelectActivity.this.map.addPolyline(lineOptions);
+                RouteSelectActivity.this.mMap.addPolyline(lineOptions);
             }
 
             // Add the markers to the map
             // TODO: Add this back in later when I return to the marker accuracy
-//            for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {
-//                map.addMarker(new MarkerOptions().position(tripInstance.getWeatherItems().get(i).getLocation()));
+//            for (int i = 0; i < mTrip.getWeatherItems().size(); i++) {
+//                mMap.addMarker(new MarkerOptions().position(mTrip.getWeatherItems().get(i).getLocation()));
 //            }
 
             // TODO: Might be able to get away with setting the bounds using only the start and end locations.
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//            for (int i = 0; i < tripInstance.getWeatherItems().size(); i++) {
-//                builder.include(tripInstance.getWeatherItems().get(i).getLocation());
-//            }
-            builder.include(tripInstance.getTripStartCoordinates());
-            builder.include(tripInstance.getTripEndCoordinates());
-
-            // Build the bounds
+            builder.include(mTrip.getTripStartCoordinates());
+            builder.include(mTrip.getTripEndCoordinates());
             LatLngBounds mapBounds = builder.build();
-            int zoom_padding = 50;
 
-            // Zoom the map to show only the route
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, zoom_padding));
+            // Zoom the mMap to show only the route
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, ZOOM_PADDING));
 
             // Disable zooming once the trip routes are correctly bounded
             // TODO: Determine if there should be some ability to zoom/pan
-            map.getUiSettings().setAllGesturesEnabled(false);
+            mMap.getUiSettings().setAllGesturesEnabled(false);
         }
     }
 }

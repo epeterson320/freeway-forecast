@@ -69,7 +69,7 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
             holder = (WeatherHolder)row.getTag();
         }
 
-//        WeatherItem weather = tripInstance.getWeatherItems().get(position);
+//        WeatherItem weather = mTrip.getWeatherItems().get(position);
 
 //        WeatherItem weather = data[position];
         WeatherItem weather = data.get(position);

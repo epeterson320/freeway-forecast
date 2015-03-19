@@ -2,30 +2,21 @@ package com.bluesierralabs.freewayforecast;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bluesierralabs.freewayforecast.Helpers.App;
-import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
 import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
 import com.bluesierralabs.freewayforecast.Helpers.OpenWeatherParser;
 import com.bluesierralabs.freewayforecast.Helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Trip forecast
@@ -33,7 +24,7 @@ import java.util.List;
 public class TripForecastActivity extends Activity {
 
     /** Instance of the trip object that is used/modified throughout the application */
-    private Trip tripInstance = Trip.getInstance();
+    private Trip mTrip = Trip.getInstance();
 
     /** List view to populate with forecast items */
     private ListView weatherListing;
@@ -58,20 +49,20 @@ public class TripForecastActivity extends Activity {
         jsonResults.clear();
 
         // Setup the adapter for the weather items
-        adapter = new WeatherAdapter(this, R.layout.weather_item, tripInstance.getWeatherItems());
+        adapter = new WeatherAdapter(this, R.layout.weather_item, mTrip.getWeatherItems());
 
         // Setup the handle for the list view object
         weatherListing = (ListView)findViewById(R.id.listview);
 
-        Log.e("Entering forecast with", "" + tripInstance.getWeatherItems().size() + " items");
+        Log.e("Entering forecast with", "" + mTrip.getWeatherItems().size() + " items");
 
         // Get the latitude/longitude markers from the trip instance and work through them
-        for (int i=0; i < tripInstance.getWeatherItems().size(); i++) {
-            WeatherItem item = tripInstance.getWeatherItem(i);
+        for (int i=0; i < mTrip.getWeatherItems().size(); i++) {
+            WeatherItem item = mTrip.getWeatherItem(i);
 
-            if ((i > 0) && (i < (tripInstance.getWeatherItems().size() - 1))) {
+            if ((i > 0) && (i < (mTrip.getWeatherItems().size() - 1))) {
                 if (item.getRouteNumber() != 0) {
-                    tripInstance.removeTripWeatherItem(i);
+                    mTrip.removeTripWeatherItem(i);
                 } else {
                     // Create the url to get the weather information
                     String url = Utilities.getOpenWeatherMapUrl(item.getLocation());
@@ -147,17 +138,17 @@ public class TripForecastActivity extends Activity {
             // This is probably not incredibly efficient but I was getting here with other route's
             // items in the trip instance still so needed to do a double clear. Maybe I can do this
             // better
-            for (int i=0; i < tripInstance.getWeatherItems().size(); i++) {
-                WeatherItem test = tripInstance.getWeatherItem(i);
+            for (int i=0; i < mTrip.getWeatherItems().size(); i++) {
+                WeatherItem test = mTrip.getWeatherItem(i);
                 if (test.getRouteNumber() != 0) {
-                    tripInstance.removeTripWeatherItem(i);
+                    mTrip.removeTripWeatherItem(i);
                 }
             }
 
-            Log.e("jsonResults: " + jsonResults.size(), "totalHourMarkers: " + tripInstance.getWeatherItems().size());
-            if (jsonResults.size() >= tripInstance.getWeatherItems().size()) {
+            Log.e("jsonResults: " + jsonResults.size(), "totalHourMarkers: " + mTrip.getWeatherItems().size());
+            if (jsonResults.size() >= mTrip.getWeatherItems().size()) {
 
-                Log.e("Download Task", "getting ready to start parsing. Items in trip=" + tripInstance.getWeatherItems().size());
+                Log.e("Download Task", "getting ready to start parsing. Items in trip=" + mTrip.getWeatherItems().size());
 
                 // Create an instance of the parser task to operate on the json data objects received
                 ParserTask parserTask = new ParserTask();
@@ -206,13 +197,13 @@ public class TripForecastActivity extends Activity {
                 // Also add the weather item to the trip instance
                 WeatherItem currentItem = weatherResults.get(i);
 
-                tripInstance.getWeatherItems().get(i).addWeatherInfo(currentItem.getIcon(),
+                mTrip.getWeatherItems().get(i).addWeatherInfo(currentItem.getIcon(),
                         currentItem.getMinTemp(), currentItem.getMaxTemp(),
                         currentItem.getTempAsDouble(), currentItem.getTitle(), currentItem.getDetail());
             }
 
             // Update the adapter with the updated hour listing
-            adapter.setData(tripInstance.getWeatherItems());
+            adapter.setData(mTrip.getWeatherItems());
 
             // Setup the weather listing with its adapter
             weatherListing.setAdapter(adapter);
