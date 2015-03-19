@@ -34,6 +34,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,12 +45,11 @@ public class SplashScreen extends FragmentActivity implements
         GooglePlayServicesClient.OnConnectionFailedListener,
         LocationListener {
 
-    // Object of the trip class.
-    private Trip tripInstance = Trip.getInstance();
-
-    private AutoCompleteTextView startAutoComplete;
-
-    private AutoCompleteTextView endAutoComplete;
+    private Trip mTrip;
+    private AutoCompleteTextView mFrom;
+    private AutoCompleteTextView mDest;
+    private EditText mDate;
+    private EditText mTime;
 
     /** Boolean to track if the start location field was correctly supplied */
     private boolean startLocationGood = false;
@@ -67,6 +67,12 @@ public class SplashScreen extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        mFrom = (AutoCompleteTextView) findViewById(R.id.tripStartAddress);
+        mDest = (AutoCompleteTextView) findViewById(R.id.tripEndAddress);
+        mDate = (EditText) findViewById(R.id.tripStartDate);
+        mTime = (EditText) findViewById(R.id.tripStartTime);
+        mTrip = Trip.getInstance();
+
         // Set the default application preferences
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 
@@ -74,74 +80,53 @@ public class SplashScreen extends FragmentActivity implements
         // http://www.tutorialspoint.com/android/android_auto_complete.htm
 
         // Setup the listeners and handlers for the trip start location edit text box
-        startAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripStartAddress);
-        startAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mFrom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Hide the virtual keyboard if an item is selected
-                InputMethodManager imm = (InputMethodManager)getSystemService(
+                InputMethodManager imm = (InputMethodManager) getSystemService(
                         Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(startAutoComplete.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(mFrom.getWindowToken(), 0);
             }
         });
 
-        startAutoComplete.addTextChangedListener(new TextWatcher() {
+        mFrom.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // TODO: Auto-generated method stub
-                Log.e("Start location, beforeTextChanged", s.toString());
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e("Start location changed to", s.toString());
-//                if (s.length() > 0) {
-//                    startLocationGood = true;
-//
-////                    .*, [A-Z][A-Z]
-//                }
+                Log.e("Start location", s.toString());
                 startLocationGood = Utilities.validateCityState(s.toString());
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                // TODO: Auto-generated method stub
-                Log.e("Start location, afterTextChanged", s.toString());
-            }
+            public void afterTextChanged(Editable s){ }
         });
 
         // Setup the listeners and handlers for the trip end location edit text box
-        endAutoComplete = (AutoCompleteTextView) findViewById(R.id.tripEndAddress);
-        endAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mDest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Hide the virtual keyboard if an item is selected
-                InputMethodManager imm = (InputMethodManager)getSystemService(
-                        Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(endAutoComplete.getWindowToken(), 0);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mDest.getWindowToken(), 0);
             }
         });
 
         // Listen for when the trip end's location gets edited.
-        endAutoComplete.addTextChangedListener(new TextWatcher() {
+        mDest.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // TODO Auto-generated method stub
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.e("End location changed to", s.toString());
-//                if (s.length() > 0) {
-//                    endLocationGood = true;
-//                }
                 endLocationGood = Utilities.validateCityState(s.toString());
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-            }
+            public void afterTextChanged(Editable s) { }
         });
 
         // Setup the auto complete of cities based on the user's location.
@@ -149,18 +134,18 @@ public class SplashScreen extends FragmentActivity implements
         ArrayAdapter adapter = new ArrayAdapter (this,android.R.layout.simple_list_item_1,countries);
 
         // Set the adapter for the start and end trip fields
-        startAutoComplete.setAdapter(adapter);
-        endAutoComplete.setAdapter(adapter);
+        mFrom.setAdapter(adapter);
+        mDest.setAdapter(adapter);
 
         // On create, clear any focus that was present
-        findViewById(R.id.tripStartDate).clearFocus();
+        mDate.clearFocus();
 
         // If the date entry field gains focus, show the DateSelectFragment
-        ((EditText) findViewById(R.id.tripStartDate)).setKeyListener(null);
-        (findViewById(R.id.tripStartDate)).setOnFocusChangeListener(new OnFocusChangeListener() {
+        mDate.setKeyListener(null);
+        mDate.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     DialogFragment newFragment = new DateSelectFragment();
                     newFragment.show(getSupportFragmentManager(), "datePicker");
 
@@ -170,11 +155,11 @@ public class SplashScreen extends FragmentActivity implements
         });
 
         // If the time entry field gains focus, show the TimeSelectFragment
-        ((EditText) findViewById(R.id.tripStartTime)).setKeyListener(null);
-        (findViewById(R.id.tripStartTime)).setOnFocusChangeListener(new OnFocusChangeListener() {
+        mTime.setKeyListener(null);
+        mTime.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     DialogFragment newFragment = new TimeSelectFragment();
                     newFragment.show(getSupportFragmentManager(), "timePicker");
 
@@ -208,26 +193,17 @@ public class SplashScreen extends FragmentActivity implements
 
         // When the SplashScreen Activity is started, clear out anything in the trip object. Every
         // setting is going to change
-        tripInstance.clear();
+        mTrip.clear();
 
         // Set up the date (Day, Month) for the splash screen
-        EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
-        inputDate.setText(tripInstance.getTripStartDateReadable());
+        mDate.setText(mTrip.getTripStartDateReadable());
 
         // Set up the time (Hours and Minutes) for the splash screen
-        EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
-        inputTime.setText(tripInstance.getTripStartTimeReadable());
+        mTime.setText(mTrip.getTripStartTimeReadable());
 
         // Make sure that we flag the start and end locations as "not provided"
         startLocationGood = false;
         endLocationGood = false;
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-        Log.e("SplashScreen", "onRestart");
     }
 
     @Override
@@ -255,22 +231,12 @@ public class SplashScreen extends FragmentActivity implements
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_settings:
-                openSettings();
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DateSelectFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimeSelectFragment();
-        newFragment.show(getSupportFragmentManager(), "timePicker");
-
     }
 
     public void submitTimesAndPlaces(View view) {
@@ -278,58 +244,34 @@ public class SplashScreen extends FragmentActivity implements
         if (startLocationGood && endLocationGood) {
 
             // Get the starting address for the trip from the input box
-            EditText inputStartAddress = (EditText) findViewById(R.id.tripStartAddress);
-            String startAddress = inputStartAddress.getText().toString();
-
+            String startAddress = mFrom.getText().toString();
             Log.e("start address", startAddress);
-
-            // Pass the context as well.
-            tripInstance.setTripStartAddress(startAddress, this);
+            mTrip.setTripStartAddress(startAddress, this);
 
             // Get the ending address for the trip from the input box
-            EditText inputEndAddress = (EditText) findViewById(R.id.tripEndAddress);
-            String endAddress = inputEndAddress.getText().toString();
-
+            String endAddress = mDest.getText().toString();
             Log.e("end address", endAddress);
-
-            // Pass the context as well
-            tripInstance.setTripEndAddress(endAddress, this);
+            mTrip.setTripEndAddress(endAddress, this);
 
             // Get the date of the trip from the input box
-            EditText inputDate = (EditText) findViewById(R.id.tripStartDate);
-            String date = inputDate.getText().toString();
-//        tripInstance.setTripStartDate(date);
+            String date = mDate.getText().toString();
+            //mTrip.setTripStartDate(date);
 
             // Get the time of the trip from the input box
-            EditText inputTime = (EditText) findViewById(R.id.tripStartTime);
-            String time = inputTime.getText().toString();
-//        tripInstance.setTripStartTime(time);
+            String time = mTime.getText().toString();
+            //mTrip.setTripStartTime(time);
 
             // Go to the route select activity
-            Intent choseRoute = new Intent(this, RouteSelectActivity.class);
-            startActivity(choseRoute);
+            Intent routeIntent = new Intent(this, RouteSelectActivity.class);
+            startActivity(routeIntent);
+
         } else if (!startLocationGood) {
-            Context context = getApplicationContext();
             CharSequence text = "Please supply a trip start location";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         } else if (!endLocationGood) {
-            Context context = getApplicationContext();
             CharSequence text = "Please supply a trip end location";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    // Open the settings activity
-    // TODO: Might consider moving this function to a class file so that other activities can access
-    public void openSettings() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
     }
 
     // From: http://hmkcode.com/android-get-current-location-location-updates-location-services-api-tutorial/
@@ -343,31 +285,26 @@ public class SplashScreen extends FragmentActivity implements
         if(mLocationClient != null){
             // get location
             mCurrentLocation = mLocationClient.getLastLocation();
-            try{
+            try {
                 String city = "";
                 String state = "";
 
-                try{
-                    Geocoder gcd = new Geocoder(this, Locale.getDefault());
-                    List<Address> addresses = gcd.getFromLocation(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude(), 1);
-                    if (addresses.size() > 0)
-                        city = String.valueOf(addresses.get(0).getLocality());
+                Geocoder gcd = new Geocoder(this, Locale.getDefault());
+                List<Address> addresses = gcd.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                if (addresses.size() > 0) {
+                    city = String.valueOf(addresses.get(0).getLocality());
                     state = String.valueOf(addresses.get(0).getAdminArea());
-
-                    EditText tripStartLocation = (EditText) findViewById(R.id.tripStartAddress);
-                    tripStartLocation.setText((city + ", " + state));
+                    mFrom.setText((city + ", " + state));
                 }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-
-            }catch(NullPointerException npe){
+            } catch(NullPointerException npe) {
 
                 Toast.makeText(this, "Failed to Connect", Toast.LENGTH_SHORT).show();
 
                 // switch on location service intent
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
+            } catch(Exception e) {
+                e.printStackTrace();
             }
         }
     }

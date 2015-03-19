@@ -5,19 +5,19 @@ import com.google.android.gms.maps.GoogleMap;
 /**
  * Created by timothy on 12/31/14.
  */
-public class mapModel {
+public class MapModel {
 
-    protected static mapModel mapInstance = null;
+    protected static MapModel mapInstance = null;
 
     private GoogleMap map;
 
-    public mapModel() {
+    public MapModel() {
         // your init code...
     }
 
-    public static mapModel getInstance() {
+    public static MapModel getInstance() {
         if (mapInstance == null) {
-            mapInstance = new mapModel();
+            mapInstance = new MapModel();
         }
 
         return mapInstance;
