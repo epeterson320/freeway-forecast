@@ -1,11 +1,9 @@
-package com.bluesierralabs.freewayforecast.Helpers;
+package com.bluesierralabs.freewayforecast.helpers;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -15,7 +13,6 @@ import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.R;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by timothy on 11/28/14.
@@ -82,7 +79,7 @@ public class DateSelectFragment extends DialogFragment implements DatePickerDial
             getDialog().setDismissMessage(null);
         super.onDestroyView();
 
-        View view = getActivity().getLayoutInflater().inflate(R.layout.activity_splash_screen,null);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.activity_splash_screen, null);
         view.findViewById(R.id.tripStartDate).clearFocus();
     }
 }

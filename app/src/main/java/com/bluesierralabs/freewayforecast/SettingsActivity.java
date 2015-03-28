@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 
-import com.bluesierralabs.freewayforecast.Helpers.SettingsFragment;
+import com.bluesierralabs.freewayforecast.helpers.SettingsFragment;
 import com.bluesierralabs.freewayforecast.Models.Settings;
 
 import java.util.List;

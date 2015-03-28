@@ -11,7 +11,8 @@
         android:layout_width="fill_parent"
         android:paddingTop="20dp"
         android:layout_height="120dp"
-        android:src="@drawable/ic_weather_sunny_white"/>
+        android:src="@drawable/ic_weather_sunny_white"
+        android:contentDescription="@string/loading_weather"/>
 
     <TextView
         android:id="@+id/explain"
@@ -20,6 +21,6 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
-        android:text="Loading Weather ..."/>
+        android:text="@string/loading_weather"/>
 
 </LinearLayout>

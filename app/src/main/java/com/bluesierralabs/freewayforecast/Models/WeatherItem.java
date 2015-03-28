@@ -5,8 +5,8 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 
-import com.bluesierralabs.freewayforecast.Helpers.App;
-import com.bluesierralabs.freewayforecast.Helpers.Utilities;
+import com.bluesierralabs.freewayforecast.helpers.App;
+import com.bluesierralabs.freewayforecast.helpers.Utilities;
 import com.bluesierralabs.freewayforecast.R;
 import com.google.android.gms.maps.model.LatLng;
 

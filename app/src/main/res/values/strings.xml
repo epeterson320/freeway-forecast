@@ -13,6 +13,8 @@
     <string name="startTrip_time_title">at</string>
     <string name="startTrip_get_directions">Get Directions</string>
 
+    <string name="loading_weather">Loading Weather…</string>
+
     <string name="selectRoute_activity_title">Select Route</string>
     <string name="settings_temperature_scale_title">Temperature Scale</string>
     <string name="title_activity_trip_forecast">Trip Forecast</string>

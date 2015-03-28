@@ -23,9 +23,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bluesierralabs.freewayforecast.Helpers.DateSelectFragment;
-import com.bluesierralabs.freewayforecast.Helpers.TimeSelectFragment;
-import com.bluesierralabs.freewayforecast.Helpers.Utilities;
+import com.bluesierralabs.freewayforecast.helpers.DateSelectFragment;
+import com.bluesierralabs.freewayforecast.helpers.TimeSelectFragment;
+import com.bluesierralabs.freewayforecast.helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -33,8 +33,6 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

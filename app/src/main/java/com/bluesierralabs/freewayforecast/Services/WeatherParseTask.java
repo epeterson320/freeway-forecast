@@ -2,7 +2,7 @@ package com.bluesierralabs.freewayforecast.Services;
 
 import android.os.AsyncTask;
 
-import com.bluesierralabs.freewayforecast.Helpers.OpenWeatherParser;
+import com.bluesierralabs.freewayforecast.helpers.OpenWeatherParser;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 

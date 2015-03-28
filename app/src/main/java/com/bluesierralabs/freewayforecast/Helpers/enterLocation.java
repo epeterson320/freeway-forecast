@@ -1,4 +1,4 @@
-package com.bluesierralabs.freewayforecast.Helpers;
+package com.bluesierralabs.freewayforecast.helpers;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -6,7 +6,6 @@ import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;

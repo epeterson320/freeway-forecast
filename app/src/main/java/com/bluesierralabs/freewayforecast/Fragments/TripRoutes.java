@@ -3,15 +3,13 @@ package com.bluesierralabs.freewayforecast.Fragments;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.bluesierralabs.freewayforecast.Helpers.App;
-import com.bluesierralabs.freewayforecast.Helpers.BusProvider;
+import com.bluesierralabs.freewayforecast.helpers.App;
+import com.bluesierralabs.freewayforecast.helpers.BusProvider;
 import com.bluesierralabs.freewayforecast.Models.Trip;
-import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
 import com.bluesierralabs.freewayforecast.TripForecastActivity;
 import com.squareup.otto.Subscribe;

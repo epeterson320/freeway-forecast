@@ -1,13 +1,11 @@
-package com.bluesierralabs.freewayforecast.Helpers;
+package com.bluesierralabs.freewayforecast.helpers;
 
 
 import android.util.Log;
 
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
-import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
 import com.google.android.gms.maps.model.LatLng;
-import com.squareup.otto.Produce;
 
 import org.json.JSONArray;
 import org.json.JSONException;

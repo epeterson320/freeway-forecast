@@ -8,9 +8,9 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
-import com.bluesierralabs.freewayforecast.Helpers.OpenWeatherParser;
-import com.bluesierralabs.freewayforecast.Helpers.Utilities;
+import com.bluesierralabs.freewayforecast.helpers.InternetHelpers;
+import com.bluesierralabs.freewayforecast.helpers.OpenWeatherParser;
+import com.bluesierralabs.freewayforecast.helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Models.WeatherItem;
 

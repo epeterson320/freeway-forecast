@@ -1,4 +1,4 @@
-package com.bluesierralabs.freewayforecast.Helpers;
+package com.bluesierralabs.freewayforecast.helpers;
 
 import android.util.Log;
 

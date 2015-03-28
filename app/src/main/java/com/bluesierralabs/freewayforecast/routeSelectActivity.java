@@ -9,10 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.bluesierralabs.freewayforecast.Helpers.BusProvider;
-import com.bluesierralabs.freewayforecast.Helpers.DirectionsJSONParser;
-import com.bluesierralabs.freewayforecast.Helpers.InternetHelpers;
-import com.bluesierralabs.freewayforecast.Helpers.Utilities;
+import com.bluesierralabs.freewayforecast.helpers.BusProvider;
+import com.bluesierralabs.freewayforecast.helpers.DirectionsJSONParser;
+import com.bluesierralabs.freewayforecast.helpers.InternetHelpers;
+import com.bluesierralabs.freewayforecast.helpers.Utilities;
 import com.bluesierralabs.freewayforecast.Models.Trip;
 import com.bluesierralabs.freewayforecast.Services.RouteAddedEvent;
 import com.google.android.gms.maps.CameraUpdateFactory;
