@@ -33,7 +33,7 @@
     <ListPreference
         android:key="pref_temperature"
         android:title="@string/settings_temperature_scale_title"
-        android:defaultValue="@string/temp_fahrenheit"
+        android:defaultValue="@string/fahrenheit"
         android:entries="@array/pref_temperature_unit_titles"
         android:entryValues="@array/pref_temperature_unit_values"
         android:negativeButtonText="@null"

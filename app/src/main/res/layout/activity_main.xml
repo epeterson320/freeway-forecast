@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <com.bluesierralabs.freewayforecast.helpers.enterLocation
+    <EditText
         android:id="@+id/tripStartAddress"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
@@ -35,7 +35,7 @@
         android:text="@string/startTrip_end_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <com.bluesierralabs.freewayforecast.helpers.enterLocation
+    <EditText
         android:id="@+id/tripEndAddress"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
@@ -55,17 +55,8 @@
         android:inputType="date"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/tripEndAddress"
-        android:layout_alignStart="@+id/tripEndAddress" />
-
-    <!--<Button-->
-        <!--android:id="@+id/button2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/pick_date"-->
-        <!--android:onClick="showDatePickerDialog"-->
-        <!--android:layout_alignBottom="@+id/tripStartDate"-->
-        <!--android:layout_alignRight="@+id/button"-->
-        <!--android:layout_alignEnd="@+id/button" />-->
+        android:layout_alignStart="@+id/tripEndAddress"
+        android:onClick="showDatePickerDialog" />
 
     <TextView
         android:id="@+id/tripDateTitle"
@@ -76,6 +67,7 @@
         android:layout_alignBaseline="@+id/tripStartDate"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp" />
 
     <TextView
@@ -89,7 +81,6 @@
         android:layout_alignLeft="@+id/tripDateTitle"
         android:layout_alignStart="@+id/tripDateTitle" />
 
-    <!--android:onClick="showTimePickerDialog"-->
     <EditText
         android:id="@+id/tripStartTime"
         android:layout_width="wrap_content"
@@ -98,17 +89,8 @@
         android:ems="10"
         android:layout_alignTop="@+id/timeTitle"
         android:layout_alignLeft="@+id/tripStartDate"
-        android:layout_alignStart="@+id/tripStartDate" />
-
-    <!--<Button-->
-        <!--android:id="@+id/button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/pick_time"-->
-        <!--android:onClick="showTimePickerDialog"-->
-        <!--android:layout_alignBottom="@+id/timeTitle"-->
-        <!--android:layout_toRightOf="@+id/tripStartTime"-->
-        <!--android:layout_toEndOf="@+id/tripStartTime" />-->
+        android:layout_alignStart="@+id/tripStartDate"
+        android:onClick="showTimePickerDialog" />
 
     <Button
         android:id="@+id/submitTimesAndPlaces"
@@ -120,7 +102,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:clickable="true"
-        android:onClick="submitTimesAndPlaces"
+        android:onClick="getRoutes"
         android:text="@string/startTrip_get_directions" />
 
 </RelativeLayout>

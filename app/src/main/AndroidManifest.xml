@@ -22,8 +22,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name=".helpers.App">
+        android:theme="@style/AppTheme">
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -36,7 +35,7 @@
         <!-- Start screen - where the user selects a start and end location along with date and
              time. This screen leads into a route selection. -->
         <activity
-            android:name=".SplashScreen"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,28 +46,30 @@
         <!-- Route selection screen - where the user selects a route that they wish to travel on.
              This screen leads into a trip forecast-->
         <activity
-            android:name=".RouteSelectActivity"
+            android:name=".activities.RouteSelectActivity"
             android:label="@string/title_activity_route_select"
-            android:parentActivityName=".SplashScreen" >
+            android:parentActivityName=".activities.MainActivity" >
         </activity>
         <!-- Trip forecast screen - where a list view screen shows a forecast of the trip -->
         <activity
-            android:name=".TripForecastActivity"
+            android:name=".activities.TripForecastActivity"
             android:label="@string/title_activity_trip_forecast"
-            android:parentActivityName=".SplashScreen" >
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bluesierralabs.freewayforecast.SplashScreen" />
+                android:value=".activities.MainActivity" />
         </activity>
         <!-- Settings screen - select temperature scale and other cool things -->
+        <!--
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".SplashScreen" >
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bluesierralabs.freewayforecast.SplashScreen" />
+                android:value=".activities.MainActivity" />
         </activity>
+        -->
 
     </application>
 </manifest>

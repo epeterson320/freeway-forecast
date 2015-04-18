@@ -1,7 +1,7 @@
 package com.bluesierralabs.freewayforecast;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bluesierralabs.freewayforecast.Models.Trip;
-import com.bluesierralabs.freewayforecast.Models.WeatherItem;
+import com.bluesierralabs.freewayforecast.models.WeatherItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Custom ArrayAdapter for the trip's hour-by-hour weather forecast
@@ -20,41 +19,20 @@ import java.util.ArrayList;
  * Created by timothy on 11/24/14.
  */
 public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
-    Context context;
 
-    Trip tripInstance = Trip.getInstance();
-
-    int layoutResourceId;
-//    WeatherItem data[] = null;
-    ArrayList<WeatherItem> data = null;
-
-//    public WeatherAdapter(Context context, int layoutResourceId, WeatherItem[] data) {
-    public WeatherAdapter(Context context, int layoutResourceId, ArrayList data) {
-//    public WeatherAdapter(Context context, int layoutResourceId) {
-        super(context, layoutResourceId, data);
-//        super(context, layoutResourceId);
-        this.layoutResourceId = layoutResourceId;
-        this.context = context;
-        this.data = data;
-    }
-
-    public void setData(ArrayList data) {
-        this.data = data;
-    }
-
-    public void clearData() {
-        this.data.clear();
+    public WeatherAdapter(Context context, List<WeatherItem> data) {
+        super(context, android.R.layout.simple_list_item_1 , data);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        WeatherHolder holder = null;
+        WeatherHolder holder;
 
         if(row == null)
         {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            row = inflater.inflate(R.layout.weather_item, parent, false);
 
             holder = new WeatherHolder();
             holder.imgIcon = (ImageView)row.findViewById(R.id.hourIcon);
@@ -69,14 +47,13 @@ public class WeatherAdapter extends ArrayAdapter<WeatherItem>{
             holder = (WeatherHolder)row.getTag();
         }
 
-//        WeatherItem weather = mTrip.getWeatherItems().get(position);
-
-//        WeatherItem weather = data[position];
-        WeatherItem weather = data.get(position);
-        holder.hourQuickForecast.setText(weather.getTitle());
-        holder.imgIcon.setImageDrawable(weather.getIcon());
-        holder.hourTimeAndDetail.setText(weather.getDetail());
-        holder.hourTemp.setText(weather.getTemp());
+        WeatherItem weather = getItem(position);
+        holder.hourQuickForecast.setText(weather.getDescription());
+        Drawable icon =
+            getContext().getResources().getDrawable(R.drawable.ic_weather_sunny);
+        holder.imgIcon.setImageDrawable(icon);
+        holder.hourTimeAndDetail.setText(weather.getTime());
+        holder.hourTemp.setText(weather.getTemperature());
 
         return row;
     }
