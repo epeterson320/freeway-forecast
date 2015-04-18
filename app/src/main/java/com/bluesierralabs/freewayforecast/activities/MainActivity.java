@@ -2,13 +2,11 @@ package com.bluesierralabs.freewayforecast.activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +28,6 @@ import com.google.android.gms.location.places.Place;
 import com.google.maps.model.DirectionsRoute;
 
 import java.util.Calendar;
-import java.text.DateFormat;
 import java.util.Date;
 
 public class MainActivity extends GooglePlayServicesActivity implements
@@ -44,7 +41,8 @@ public class MainActivity extends GooglePlayServicesActivity implements
     protected EditText mDate;
     protected EditText mTime;
     protected Button mSubmitButton;
-    protected DateFormat f;
+    protected java.text.DateFormat df;
+    protected java.text.DateFormat tf;
     protected Calendar mDepartingOn;
 
     @Override
@@ -56,7 +54,8 @@ public class MainActivity extends GooglePlayServicesActivity implements
 
         buildGoogleApiClient();
 
-        f = android.text.format.DateFormat.getDateFormat(this);
+        df = DateFormat.getDateFormat(this);
+        tf = DateFormat.getTimeFormat(this);
 
         setProgressBarIndeterminate(true);
 
@@ -66,7 +65,7 @@ public class MainActivity extends GooglePlayServicesActivity implements
         mTime = (EditText) findViewById(R.id.tripStartTime);
         mSubmitButton = (Button) findViewById(R.id.submitTimesAndPlaces);
 
-        setDepartingOn(Calendar.getInstance());
+        initializeDateTime();
 
         // Set the default application preferences
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
@@ -183,29 +182,23 @@ public class MainActivity extends GooglePlayServicesActivity implements
         CurrentLocation.get(mGoogleApiClient, this);
     }
 
-    public void setDepartingOn(Calendar c) {
-        mDepartingOn = c;
-        //Set UI Too!
-        mDate.setText(f.format(new Date(mDepartingOn.getTimeInMillis())));
-        mTime.setText(f.format(new Date(mDepartingOn.getTimeInMillis())));
+    public void initializeDateTime() {
+        mDepartingOn = Calendar.getInstance();
+        mTime.setText(tf.format(new Date(mDepartingOn.getTimeInMillis())));
+        mDate.setText(df.format(new Date(mDepartingOn.getTimeInMillis())));
     }
 
     public void showTimePickerDialog(View v){
         int hour = mDepartingOn.get(Calendar.HOUR_OF_DAY);
         int minute = mDepartingOn.get(Calendar.MINUTE);
-        boolean is24Hour = false;
+        boolean is24Hour = DateFormat.is24HourFormat(this);
         new TimePickerDialog(this, this, hour, minute, is24Hour).show();
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         mDepartingOn.set(Calendar.HOUR_OF_DAY, hourOfDay);
         mDepartingOn.set(Calendar.MINUTE, minute);
-    }
-
-    public void onDateSet(DatePicker view, int year, int month, int day) {
-        mDepartingOn.set(Calendar.YEAR, year);
-        mDepartingOn.set(Calendar.MONTH, month);
-        mDepartingOn.set(Calendar.DAY_OF_MONTH, day);
+        mTime.setText(tf.format(new Date(mDepartingOn.getTimeInMillis())));
     }
 
     public void showDatePickerDialog(View v) {
@@ -215,4 +208,10 @@ public class MainActivity extends GooglePlayServicesActivity implements
         new DatePickerDialog(this, this, year, month, day).show();
     }
 
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        mDepartingOn.set(Calendar.YEAR, year);
+        mDepartingOn.set(Calendar.MONTH, month);
+        mDepartingOn.set(Calendar.DAY_OF_MONTH, day);
+        mDate.setText(df.format(new Date(mDepartingOn.getTimeInMillis())));
+    }
 }
