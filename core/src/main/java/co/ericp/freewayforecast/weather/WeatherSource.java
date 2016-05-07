@@ -1,5 +1,7 @@
-package co.ericp.freewayforecast;
+package co.ericp.freewayforecast.weather;
 
+import co.ericp.freewayforecast.LatLng;
+import co.ericp.freewayforecast.weather.Forecast;
 import rx.Single;
 
 /**

@@ -1,7 +1,8 @@
-package co.ericp.freewayforecast;
+package co.ericp.freewayforecast.routes;
 
 import java.util.List;
 
+import co.ericp.freewayforecast.Location;
 import rx.Single;
 
 /**

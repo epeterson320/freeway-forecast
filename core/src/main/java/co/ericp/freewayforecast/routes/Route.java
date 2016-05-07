@@ -1,4 +1,4 @@
-package co.ericp.freewayforecast;
+package co.ericp.freewayforecast.routes;
 
 /**
  * A route at a particular time from a place to a place.

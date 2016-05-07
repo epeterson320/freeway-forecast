@@ -7,6 +7,6 @@ import java.util.List;
  * combined with a list of weather points along the way.
  */
 public class RouteForecast {
-    Route route;
+    co.ericp.freewayforecast.routes.Route route;
     List<WeatherPoint> weatherPoints;
 }

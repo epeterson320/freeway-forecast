@@ -1,6 +1,8 @@
-package co.ericp.freewayforecast;
+package co.ericp.freewayforecast.weather;
 
 import java.util.List;
+
+import co.ericp.freewayforecast.LatLng;
 
 /**
  * The weather forecast over a given stretch of time in one place.

@@ -1,4 +1,6 @@
-package co.ericp.freewayforecast;
+package co.ericp.freewayforecast.weather;
+
+import co.ericp.freewayforecast.LatLng;
 
 /**
  * A the weather at a specific time and place.
