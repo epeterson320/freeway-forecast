@@ -5,7 +5,7 @@ package co.ericp.freewayforecast;
  */
 public class Route {
     Object[] legs; // A leg has a Polyline, distance, and duration
-    double distance;
+    double distance; // distance in meters
     long duration;
     long startTime;
     long endTime;
