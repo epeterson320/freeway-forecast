@@ -1,6 +1,7 @@
 package co.ericp.freewayforecast;
 
 import java.util.List;
+import co.ericp.freewayforecast.weather.WeatherPoint;
 
 /**
  * The main data structure of this API. This represents a route to travel

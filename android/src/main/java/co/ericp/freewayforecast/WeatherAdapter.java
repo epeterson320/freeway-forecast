@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bluesierralabs.freewayforecast.R;
+import co.ericp.freewayforecast.R;
 
 import co.ericp.freewayforecast.models.WeatherItem;
 

@@ -4,12 +4,14 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
+
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName '1.0'
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -18,7 +20,7 @@ android {
     }
 
     sourceSets {
-        // Kotlin files are in src/main/java but this still
+        // Project Kotlin files are in src/main/java but this still
         // needs to be added for the Kotlin core library.
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -27,7 +29,7 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.maps:google-maps-services:0.1.6'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

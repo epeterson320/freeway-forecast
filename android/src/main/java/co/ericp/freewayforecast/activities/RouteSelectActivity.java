@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import co.ericp.freewayforecast.Constants;
-import com.bluesierralabs.freewayforecast.R;
+import co.ericp.freewayforecast.R;
 import co.ericp.freewayforecast.RoutesAdapter;
 import co.ericp.freewayforecast.models.Routes;
 import com.google.android.gms.maps.CameraUpdateFactory;

@@ -2,7 +2,7 @@ package co.ericp.freewayforecast.netdata;
 
 import android.content.Context;
 
-import com.bluesierralabs.freewayforecast.R;
+import co.ericp.freewayforecast.R;
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;

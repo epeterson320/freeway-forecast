@@ -8,7 +8,7 @@ import android.view.Window;
 import android.widget.ListView;
 
 import co.ericp.freewayforecast.Constants;
-import com.bluesierralabs.freewayforecast.R;
+import co.ericp.freewayforecast.R;
 import co.ericp.freewayforecast.TripWeatherTask;
 import co.ericp.freewayforecast.WeatherAdapter;
 import co.ericp.freewayforecast.models.Routes;

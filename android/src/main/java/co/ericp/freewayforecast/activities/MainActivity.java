@@ -19,7 +19,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import co.ericp.freewayforecast.Constants;
-import com.bluesierralabs.freewayforecast.R;
+import co.ericp.freewayforecast.R;
 import co.ericp.freewayforecast.models.Routes;
 import co.ericp.freewayforecast.netdata.CurrentLocation;
 import co.ericp.freewayforecast.netdata.Directions;
