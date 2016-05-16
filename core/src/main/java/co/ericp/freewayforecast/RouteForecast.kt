@@ -1,4 +1,4 @@
-package co.ericp.freewayforecast;
+package co.ericp.freewayforecast
 
 import co.ericp.freewayforecast.routes.Route
 import co.ericp.freewayforecast.weather.WeatherPoint

@@ -1,7 +1,7 @@
-package co.ericp.freewayforecast.routes;
+package co.ericp.freewayforecast.routes
 
-import co.ericp.freewayforecast.Location;
-import rx.Single;
+import co.ericp.freewayforecast.Location
+import rx.Single
 
 /**
  * A source for getting directions from place to place.

@@ -1,7 +1,7 @@
 package co.ericp.freewayforecast
 
 import rx.Single
-import java.util.*
+import java.util.Collections
 
 class RouteForecastSourceImpl : RouteForecastSource {
     override fun getRouteForecast(

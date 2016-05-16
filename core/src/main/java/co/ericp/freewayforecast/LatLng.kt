@@ -1,4 +1,4 @@
-package co.ericp.freewayforecast;
+package co.ericp.freewayforecast
 
 /**
  * A latitude and longitude.
