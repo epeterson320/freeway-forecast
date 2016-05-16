@@ -5,9 +5,9 @@ import co.ericp.freewayforecast.LatLng;
 /**
  * A the weather at a specific time and place.
  */
-public class WeatherPoint {
-    LatLng coords;
-    long time;
-    double temp;
-    int status;
-}
+data class WeatherPoint(
+        val coords: LatLng,
+        val time: Long,
+        val temp: Double,
+        val status: Int
+)

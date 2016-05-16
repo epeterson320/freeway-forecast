@@ -3,7 +3,4 @@ package co.ericp.freewayforecast;
 /**
  * A named location.
  */
-public class Location {
-    String name;
-    LatLng coords;
-}
+data class Location(val name: String, val coords: LatLng)
