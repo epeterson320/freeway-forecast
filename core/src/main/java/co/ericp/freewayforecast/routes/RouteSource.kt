@@ -1,7 +1,5 @@
 package co.ericp.freewayforecast.routes;
 
-import java.util.List;
-
 import co.ericp.freewayforecast.Location;
 import rx.Single;
 
@@ -10,7 +8,7 @@ import rx.Single;
  *
  * An example implementation of this interface would be Google Maps.
  */
-public interface RouteSource {
+interface RouteSource {
     /**
      * Get the possible routes from one place to another.
      *
@@ -24,5 +22,5 @@ public interface RouteSource {
      * @param destination the location at which to arrive
      * @return a list of possible routes, asynchronously
      */
-    Single<List<Route>> getRoutes(Location origin, Location destination);
+    fun getRoutes(origin: Location, destination: Location): Single<List<Route>>
 }
