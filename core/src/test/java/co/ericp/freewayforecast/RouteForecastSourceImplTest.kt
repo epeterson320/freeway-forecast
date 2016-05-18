@@ -1,15 +1,20 @@
 package co.ericp.freewayforecast
 
-import co.ericp.freewayforecast.routes.*
+import co.ericp.freewayforecast.routes.Leg
+import co.ericp.freewayforecast.routes.Route
+import co.ericp.freewayforecast.routes.RouteSource
+import co.ericp.freewayforecast.routes.Step
 import co.ericp.freewayforecast.weather.Forecast
 import co.ericp.freewayforecast.weather.WeatherPoint
 import co.ericp.freewayforecast.weather.WeatherSource
+import co.ericp.freewayforecast.LocationQuery.ByName
+import org.hamcrest.CoreMatchers.`is`
+import org.junit.Assert.assertThat
 import org.junit.Test
+import org.mockito.Matchers.any
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import rx.Single
-
-import org.mockito.Mockito.*
-import org.junit.Assert.*
-import org.hamcrest.CoreMatchers.*
 
 class RouteForecastSourceImplTest {
     val minute = 1000L * 60L
@@ -27,40 +32,25 @@ class RouteForecastSourceImplTest {
                 step(50, 0.00, 0.00, 2.00, 0.00),
                 step(50, 2.00, 0.00, 4.00, 0.00))
 
-        val rSource = mockRouteSource(r1, r2)
-
-        val wSource = object : WeatherSource {
-            override fun getForecast(
-                    coords: LatLng,
-                    time: Long): Single<Forecast> {
-                val forecast = forecastAt(coords, time)
-                return Single.just(forecast)
-            }
-        }
+        val mockRouteSource = mock(RouteSource::class.java)
+        `when`(mockRouteSource.getRoutes(ByName("Start"), ByName("End")))
+                .thenReturn(Single.just(listOf(r1, r2)))
 
         val rfSource: RouteForecastSource =
-                RouteForecastSourceImpl(rSource, wSource)
+                RouteForecastSourceImpl(mockRouteSource, mockWeatherSource)
 
         // When I get directions
 
         val forecast = rfSource.getRouteForecast(
-                LocationQuery.ByName("Start"),
-                LocationQuery.ByName("End"),
+                ByName("Start"), ByName("End"),
                 System.currentTimeMillis()).toBlocking().value()
 
         // Then I get weather points at the right locations
-        val r1pts = forecast
-                .get(0)
-                .weatherPoints
-                .map(WeatherPoint::coords)
-                .toTypedArray()
-        val r2pts = forecast.get(1)
-                .weatherPoints.map(WeatherPoint::coords).toTypedArray()
+        val r1pts = forecast[0].weatherPoints.map(WeatherPoint::coords)
+        val r2pts = forecast[1].weatherPoints.map(WeatherPoint::coords)
 
-        val r1expPts =
-                arrayOf(LatLng(0.0, 0.0), LatLng(2.0, 1.0), LatLng(4.0, 0.0))
-        val r2expPts =
-                arrayOf(LatLng(0.0, 0.0), LatLng(2.0, 0.0), LatLng(4.0, 0.0))
+        val r1expPts = listOf(LatLng(0.0, 0.0), LatLng(2.0, 1.0), LatLng(4.0, 0.0))
+        val r2expPts = listOf(LatLng(0.0, 0.0), LatLng(2.0, 0.0), LatLng(4.0, 0.0))
 
         assertThat(r1pts, `is`(r1expPts))
         assertThat(r2pts, `is`(r2expPts))
@@ -78,15 +68,24 @@ class RouteForecastSourceImplTest {
                 step(15, 6.0, 0.0, 7.0, 0.0),
                 step(25, 7.0, 0.0, 8.0, 0.0))
 
-        val rSource = mockRouteSource(r)
+        val mockRouteSource = mock(RouteSource::class.java)
+        `when`(mockRouteSource.getRoutes(ByName("Start"), ByName("End")))
+                .thenReturn(Single.just(listOf(r)))
+
+        val rfSource = RouteForecastSourceImpl(mockRouteSource, mockWeatherSource)
 
         // When I get directions
-
+        val forecast = rfSource.getRouteForecast(
+                ByName("Start"), ByName("End"),
+                System.currentTimeMillis()).toBlocking().value();
 
         // Then it returns weather at the right points
-        val expPts = listOf(
-                LatLng(0.0, 0.0), LatLng(3.5, 0.0),
+        val expPts = listOf(LatLng(0.0, 0.0), LatLng(3.5, 0.0),
                 LatLng(5.5, 0.0), LatLng(8.0, 0.0))
+
+        val pts = forecast[0].weatherPoints.map(WeatherPoint::coords)
+
+        assertThat(pts, `is`(expPts))
     }
 
     fun step(minutes: Long, vararg ptsAry: Double): Step {
@@ -116,30 +115,32 @@ class RouteForecastSourceImplTest {
 
         val leg = Leg(Location("Start", steps.first().start),
                 Location("End", steps.last().end),
-                steps.sumByDouble { it.distance },
-                steps.map { it.duration }.sum(),
+                steps.sumByDouble(Step::distance),
+                steps.map(Step::duration).sum(),
                 steps.asList())
 
-        return Route(leg.distance, leg.duration, now, now + leg.duration,
-                anyLatLng, anyLatLng, leg.start, leg.end, listOf(leg))
+        return Route(
+                leg.distance, leg.duration,
+                now, now + leg.duration,
+                anyLatLng, anyLatLng,
+                leg.start, leg.end,
+                listOf(leg))
     }
 
-    fun forecastAt(coords: LatLng, time: Long): Forecast {
-        val wPoints = listOf(
-                WeatherPoint(coords, time + 0 * minute, 20.0, 0),
-                WeatherPoint(coords, time + 60 * minute, 20.0, 0),
-                WeatherPoint(coords, time + 120 * minute, 20.0, 0))
-        return Forecast(coords, wPoints, time, time + minute * 180)
-    }
+    val mockWeatherSource = object : WeatherSource {
+        override fun getForecast(
+                coords: LatLng,
+                time: Long): Single<Forecast> {
 
-    fun mockRouteSource(vararg alwaysReturn: Route): RouteSource {
-        return object : RouteSource {
-            override fun getRoutes(
-                    origin: LocationQuery,
-                    destination: LocationQuery): Single<List<Route>> {
+            val points = listOf(
+                    WeatherPoint(coords, time + 0 * minute, 20.0, 0),
+                    WeatherPoint(coords, time + 60 * minute, 20.0, 0),
+                    WeatherPoint(coords, time + 120 * minute, 20.0, 0))
 
-                return Single.just(alwaysReturn.toList())
-            }
+            val forecast = Forecast(coords, points,
+                    points.first().time, points.last().time)
+
+            return Single.just(forecast)
         }
     }
 }
