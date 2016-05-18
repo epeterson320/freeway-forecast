@@ -7,8 +7,9 @@ import co.ericp.freewayforecast.weather.WeatherSource
 import org.junit.Test
 import rx.Single
 
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertArrayEquals
+import org.mockito.Mockito.*
+import org.junit.Assert.*
+import org.hamcrest.CoreMatchers.*
 
 class RouteForecastSourceImplTest {
     val minute = 1000L * 60L
@@ -26,21 +27,14 @@ class RouteForecastSourceImplTest {
                 step(50, 0.00, 0.00, 2.00, 0.00),
                 step(50, 2.00, 0.00, 4.00, 0.00))
 
-        val rSource = object : RouteSource {
-            override fun getRoutes(
-                    origin: LocationQuery,
-                    destination: LocationQuery): Single<List<Route>> {
-
-                return Single.just(listOf(r1, r2));
-            }
-        }
+        val rSource = mockRouteSource(r1, r2)
 
         val wSource = object : WeatherSource {
             override fun getForecast(
                     coords: LatLng,
                     time: Long): Single<Forecast> {
-                //TODO
-                return Single.error(Exception("Todo"))
+                val forecast = forecastAt(coords, time)
+                return Single.just(forecast)
             }
         }
 
@@ -55,17 +49,21 @@ class RouteForecastSourceImplTest {
                 System.currentTimeMillis()).toBlocking().value()
 
         // Then I get weather points at the right locations
-        val r1pts = forecast.get(0).weatherPoints
-        val r2pts = forecast.get(1).weatherPoints
+        val r1pts = forecast
+                .get(0)
+                .weatherPoints
+                .map(WeatherPoint::coords)
+                .toTypedArray()
+        val r2pts = forecast.get(1)
+                .weatherPoints.map(WeatherPoint::coords).toTypedArray()
 
         val r1expPts =
-                listOf(LatLng(0.0, 0.0), LatLng(2.0, 1.0), LatLng(4.0, 0.0))
+                arrayOf(LatLng(0.0, 0.0), LatLng(2.0, 1.0), LatLng(4.0, 0.0))
         val r2expPts =
-                listOf(LatLng(0.0, 0.0), LatLng(2.0, 0.0), LatLng(4.0, 0.0))
+                arrayOf(LatLng(0.0, 0.0), LatLng(2.0, 0.0), LatLng(4.0, 0.0))
 
-        // TODO get these the same type
-        //assertArrayEquals(r1expPts, r1pts)
-        //assertArrayEquals(r2expPts, r2pts)
+        assertThat(r1pts, `is`(r1expPts))
+        assertThat(r2pts, `is`(r2expPts))
     }
 
 
@@ -79,6 +77,8 @@ class RouteForecastSourceImplTest {
                 step(20, 5.0, 0.0, 6.0, 0.0),
                 step(15, 6.0, 0.0, 7.0, 0.0),
                 step(25, 7.0, 0.0, 8.0, 0.0))
+
+        val rSource = mockRouteSource(r)
 
         // When I get directions
 
@@ -122,5 +122,24 @@ class RouteForecastSourceImplTest {
 
         return Route(leg.distance, leg.duration, now, now + leg.duration,
                 anyLatLng, anyLatLng, leg.start, leg.end, listOf(leg))
+    }
+
+    fun forecastAt(coords: LatLng, time: Long): Forecast {
+        val wPoints = listOf(
+                WeatherPoint(coords, time + 0 * minute, 20.0, 0),
+                WeatherPoint(coords, time + 60 * minute, 20.0, 0),
+                WeatherPoint(coords, time + 120 * minute, 20.0, 0))
+        return Forecast(coords, wPoints, time, time + minute * 180)
+    }
+
+    fun mockRouteSource(vararg alwaysReturn: Route): RouteSource {
+        return object : RouteSource {
+            override fun getRoutes(
+                    origin: LocationQuery,
+                    destination: LocationQuery): Single<List<Route>> {
+
+                return Single.just(alwaysReturn.toList())
+            }
+        }
     }
 }
