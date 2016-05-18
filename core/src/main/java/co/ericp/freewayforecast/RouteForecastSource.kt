@@ -1,5 +1,6 @@
 package co.ericp.freewayforecast
 
+import co.ericp.freewayforecast.LocationQuery
 import rx.Single
 
 /**
@@ -11,7 +12,8 @@ import rx.Single
  */
 interface RouteForecastSource {
     fun getRouteForecast(
-            origin: Location,
-            destination: Location,
+            origin: LocationQuery,
+            destination: LocationQuery,
             departure: Long): Single<List<RouteForecast>>
 }
+

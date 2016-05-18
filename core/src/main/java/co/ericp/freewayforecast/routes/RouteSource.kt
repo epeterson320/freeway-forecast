@@ -1,6 +1,8 @@
 package co.ericp.freewayforecast.routes
 
+import co.ericp.freewayforecast.LatLng
 import co.ericp.freewayforecast.Location
+import co.ericp.freewayforecast.LocationQuery
 import rx.Single
 
 /**
@@ -22,5 +24,6 @@ interface RouteSource {
      * @param destination the location at which to arrive
      * @return a list of possible routes, asynchronously
      */
-    fun getRoutes(origin: Location, destination: Location): Single<List<Route>>
+    fun getRoutes(origin: LocationQuery,
+                  destination: LocationQuery): Single<List<Route>>
 }
