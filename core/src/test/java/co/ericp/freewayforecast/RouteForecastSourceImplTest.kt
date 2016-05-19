@@ -18,7 +18,7 @@ import rx.Single
 
 class RouteForecastSourceImplTest {
     val minute = 1000L * 60L
-    val anyLatLng = LatLng(0.0, 0.0)
+    val anyLatLng = LatLon(0.0, 0.0)
     val anyHtmlInstructions = "Head \u003cb\u003esoutheast\u003cb\u003e"
 
     @Test fun weatherPointLocations1() {
@@ -49,8 +49,8 @@ class RouteForecastSourceImplTest {
         val r1pts = forecast[0].weatherPoints.map(WeatherPoint::coords)
         val r2pts = forecast[1].weatherPoints.map(WeatherPoint::coords)
 
-        val r1expPts = listOf(LatLng(0.0, 0.0), LatLng(2.0, 1.0), LatLng(4.0, 0.0))
-        val r2expPts = listOf(LatLng(0.0, 0.0), LatLng(2.0, 0.0), LatLng(4.0, 0.0))
+        val r1expPts = listOf(LatLon(0.0, 0.0), LatLon(2.0, 1.0), LatLon(4.0, 0.0))
+        val r2expPts = listOf(LatLon(0.0, 0.0), LatLon(2.0, 0.0), LatLon(4.0, 0.0))
 
         assertThat(r1pts, `is`(r1expPts))
         assertThat(r2pts, `is`(r2expPts))
@@ -80,8 +80,8 @@ class RouteForecastSourceImplTest {
                 System.currentTimeMillis()).toBlocking().value();
 
         // Then it returns weather at the right points
-        val expPts = listOf(LatLng(0.0, 0.0), LatLng(3.5, 0.0),
-                LatLng(5.5, 0.0), LatLng(8.0, 0.0))
+        val expPts = listOf(LatLon(0.0, 0.0), LatLon(3.5, 0.0),
+                LatLon(5.5, 0.0), LatLon(8.0, 0.0))
 
         val pts = forecast[0].weatherPoints.map(WeatherPoint::coords)
 
@@ -91,11 +91,11 @@ class RouteForecastSourceImplTest {
     fun step(minutes: Long, vararg ptsAry: Double): Step {
         val xPts = ptsAry.filterIndexed { i, d -> i % 2 == 0 }
         val yPts = ptsAry.filterIndexed { i, d -> i % 2 == 1 }
-        val pts = xPts.zip(yPts, { x, y -> LatLng(x, y) })
+        val pts = xPts.zip(yPts, { x, y -> LatLon(x, y) })
 
         val cartesianDist = pts.zip(pts.drop(1)).map { pair ->
             val (p1, p2) = pair
-            val dx = p1.lng - p2.lng
+            val dx = p1.lon - p2.lon
             val dy = p1.lat - p2.lat
             Math.sqrt((dx * dx) + (dy * dy))
         }.sum()
@@ -129,7 +129,7 @@ class RouteForecastSourceImplTest {
 
     val mockWeatherSource = object : WeatherSource {
         override fun getForecast(
-                coords: LatLng,
+                coords: LatLon,
                 time: Long): Single<Forecast> {
 
             val points = listOf(

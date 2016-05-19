@@ -1,6 +1,6 @@
 package co.ericp.freewayforecast.routes
 
-import co.ericp.freewayforecast.LatLng
+import co.ericp.freewayforecast.LatLon
 import co.ericp.freewayforecast.Location
 
 /**
@@ -11,8 +11,8 @@ class Route(
         val duration: Long,
         val startTime: Long,
         val endTime: Long,
-        val neBound: LatLng,
-        val swBound: LatLng,
+        val neBound: LatLon,
+        val swBound: LatLon,
         val origin: Location,
         val destination: Location,
         val legs: List<Leg>

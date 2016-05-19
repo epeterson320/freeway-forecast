@@ -1,6 +1,6 @@
 package co.ericp.freewayforecast.weather
 
-import co.ericp.freewayforecast.LatLng
+import co.ericp.freewayforecast.LatLon
 import rx.Single
 
 /**
@@ -9,5 +9,5 @@ import rx.Single
  * An example implementation of this would be the weather.com API.
  */
 interface WeatherSource {
-    fun getForecast(coords: LatLng, time: Long): Single<Forecast>
+    fun getForecast(coords: LatLon, time: Long): Single<Forecast>
 }

@@ -1,6 +1,6 @@
 package co.ericp.freewayforecast.routes
 
-import co.ericp.freewayforecast.LatLng
+import co.ericp.freewayforecast.LatLon
 import co.ericp.freewayforecast.Location
 import co.ericp.freewayforecast.LocationQuery
 import rx.Single

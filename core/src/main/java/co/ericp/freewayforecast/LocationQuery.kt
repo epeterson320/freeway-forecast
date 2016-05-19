@@ -2,6 +2,6 @@ package co.ericp.freewayforecast
 
 sealed class LocationQuery {
     class ByName(val name: String) : LocationQuery()
-    class ByCoords(val coords: LatLng) : LocationQuery()
+    class ByCoords(val coords: LatLon) : LocationQuery()
 }
 
