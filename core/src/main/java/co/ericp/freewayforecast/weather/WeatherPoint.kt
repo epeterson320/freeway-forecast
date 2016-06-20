@@ -8,6 +8,7 @@ import co.ericp.freewayforecast.LatLon
 data class WeatherPoint(
         val coords: LatLon,
         val time: Long,
-        val temp: Double,
-        val status: Int
+        val temp: Double = 0.0,
+        val status: Int = 0
 )
+

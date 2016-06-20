@@ -11,7 +11,6 @@ import co.ericp.freewayforecast.LocationQuery.ByName
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
-import org.mockito.Matchers.any
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import rx.Single
@@ -93,16 +92,14 @@ class RouteForecastSourceImplTest {
         val yPts = ptsAry.filterIndexed { i, d -> i % 2 == 1 }
         val pts = xPts.zip(yPts, { x, y -> LatLon(x, y) })
 
-        val cartesianDist = pts.zip(pts.drop(1)).map { pair ->
+        val dist = pts.zip(pts.drop(1)).map { pair ->
             val (p1, p2) = pair
-            val dx = p1.lon - p2.lon
-            val dy = p1.lat - p2.lat
-            Math.sqrt((dx * dx) + (dy * dy))
+            LatLon.dist(p1, p2)
         }.sum()
 
         return Step(
                 anyHtmlInstructions,
-                cartesianDist,
+                dist,
                 minutes * minute,
                 pts.first(),
                 pts.last(),
