@@ -2,54 +2,44 @@ package co.ericp.freewayforecast
 
 import co.ericp.freewayforecast.routes.Leg
 import co.ericp.freewayforecast.routes.Route
-import co.ericp.freewayforecast.routes.RouteSource
 import co.ericp.freewayforecast.routes.Step
-import co.ericp.freewayforecast.weather.Forecast
 import co.ericp.freewayforecast.weather.WeatherPoint
 import co.ericp.freewayforecast.weather.WeatherSource
-import co.ericp.freewayforecast.LocationQuery.ByName
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import rx.Single
+import rx.Observable
 
 class RouteForecastSourceImplTest {
     val minute = 1000L * 60L
-    val anyLatLng = LatLon(0.0, 0.0)
+    val anyLatLng = Location(0.0, 0.0)
     val anyHtmlInstructions = "Head \u003cb\u003esoutheast\u003cb\u003e"
 
     @Test fun weatherPointLocations1() {
-        // Given a route source that returns two routes
-
+        // Given two routes and a forecast source
         val r1 = route(
                 step(60, 0.00, 0.00, 1.00, 0.75, 2.00, 1.00),
                 step(60, 2.00, 1.00, 3.00, 0.75, 4.00, 0.00))
-
         val r2 = route(
                 step(50, 0.00, 0.00, 2.00, 0.00),
                 step(50, 2.00, 0.00, 4.00, 0.00))
 
-        val mockRouteSource = mock(RouteSource::class.java)
-        `when`(mockRouteSource.getRoutes(ByName("Start"), ByName("End")))
-                .thenReturn(Single.just(listOf(r1, r2)))
+        val routes = listOf(r1, r2)
+        val rfSource = RouteForecastSourceImpl(mockWeatherSource)
+        val departing = System.currentTimeMillis()
 
-        val rfSource: RouteForecastSource =
-                RouteForecastSourceImpl(mockRouteSource, mockWeatherSource)
-
-        // When I get directions
-
-        val forecast = rfSource.getRouteForecast(
-                ByName("Start"), ByName("End"),
-                System.currentTimeMillis()).toBlocking().value()
+        // When I get a forecast for those two routes
+        val forecast = rfSource.getRouteForecasts(routes, departing)
+            .toBlocking()
+            .toIterable()
+            .iterator()
 
         // Then I get weather points at the right locations
-        val r1pts = forecast[0].weatherPoints.map(WeatherPoint::coords)
-        val r2pts = forecast[1].weatherPoints.map(WeatherPoint::coords)
+        val r1pts = forecast.next().weatherPoints.map(WeatherPoint::location)
+        val r2pts = forecast.next().weatherPoints.map(WeatherPoint::location)
 
-        val r1expPts = listOf(LatLon(0.0, 0.0), LatLon(2.0, 1.0), LatLon(4.0, 0.0))
-        val r2expPts = listOf(LatLon(0.0, 0.0), LatLon(2.0, 0.0), LatLon(4.0, 0.0))
+        val r1expPts = listOf(Location(0.0, 0.0), Location(2.0, 1.0), Location(4.0, 0.0))
+        val r2expPts = listOf(Location(0.0, 0.0), Location(2.0, 0.0), Location(4.0, 0.0))
 
         assertThat(r1pts, `is`(r1expPts))
         assertThat(r2pts, `is`(r2expPts))
@@ -57,8 +47,7 @@ class RouteForecastSourceImplTest {
 
 
     @Test fun weatherPointLocations2() {
-        // Given a route source
-
+        // Given a route and a forecast source
         val r = route(
                 step(25, 0.0, 0.0, 1.0, 0.0),
                 step(30, 1.0, 0.0, 2.0, 0.0, 3.0, 0.0, 4.0, 0.0),
@@ -67,35 +56,35 @@ class RouteForecastSourceImplTest {
                 step(15, 6.0, 0.0, 7.0, 0.0),
                 step(25, 7.0, 0.0, 8.0, 0.0))
 
-        val mockRouteSource = mock(RouteSource::class.java)
-        `when`(mockRouteSource.getRoutes(ByName("Start"), ByName("End")))
-                .thenReturn(Single.just(listOf(r)))
+        val routes = listOf(r)
+        val departing = System.currentTimeMillis()
 
-        val rfSource = RouteForecastSourceImpl(mockRouteSource, mockWeatherSource)
+        val rfSource = RouteForecastSourceImpl(mockWeatherSource)
 
         // When I get directions
-        val forecast = rfSource.getRouteForecast(
-                ByName("Start"), ByName("End"),
-                System.currentTimeMillis()).toBlocking().value();
+        val forecast = rfSource.getRouteForecasts(routes, departing)
+                .toBlocking()
+                .toIterable()
+                .iterator()
+                .next()
 
         // Then it returns weather at the right points
-        val expPts = listOf(LatLon(0.0, 0.0), LatLon(3.5, 0.0),
-                LatLon(5.5, 0.0), LatLon(8.0, 0.0))
+        val expPts = listOf(
+                Location(0.0, 0.0), Location(3.5, 0.0),
+                Location(5.5, 0.0), Location(8.0, 0.0))
 
-        val pts = forecast[0].weatherPoints.map(WeatherPoint::coords)
-
-        assertThat(pts, `is`(expPts))
+        val actPts = forecast.weatherPoints.map(WeatherPoint::location)
+        assertThat(actPts, `is`(expPts))
     }
 
     fun step(minutes: Long, vararg ptsAry: Double): Step {
         val xPts = ptsAry.filterIndexed { i, d -> i % 2 == 0 }
         val yPts = ptsAry.filterIndexed { i, d -> i % 2 == 1 }
-        val pts = xPts.zip(yPts, { x, y -> LatLon(x, y) })
+        val pts = xPts.zip(yPts, { pt1, pt2 -> Location(pt1, pt2) })
 
-        val dist = pts.zip(pts.drop(1)).map { pair ->
-            val (p1, p2) = pair
-            LatLon.dist(p1, p2)
-        }.sum()
+        val dist = pts.zip(pts.drop(1))
+                .map { pair -> Location.dist(pair.first, pair.second) }
+                .sum()
 
         return Step(
                 anyHtmlInstructions,
@@ -110,9 +99,10 @@ class RouteForecastSourceImplTest {
     fun route(vararg steps: Step): Route {
         val now = System.currentTimeMillis()
 
-        val leg = Leg(Location("Start", steps.first().start),
-                Location("End", steps.last().end),
-                steps.sumByDouble(Step::distance),
+        val leg = Leg(
+                Location(steps.first().start.lat, steps.first().start.lon, "Start"),
+                Location(steps.last().end.lat, steps.last().end.lon, "End"),
+                steps.fold(0L, { acc, step -> step.distance + acc }),
                 steps.map(Step::duration).sum(),
                 steps.asList())
 
@@ -126,18 +116,16 @@ class RouteForecastSourceImplTest {
 
     val mockWeatherSource = object : WeatherSource {
         override fun getForecast(
-                coords: LatLon,
-                time: Long): Single<Forecast> {
+                location: Location,
+                time: Long,
+                until: Long?): Observable<WeatherPoint> {
 
             val points = listOf(
-                    WeatherPoint(coords, time + 0 * minute, 20.0, 0),
-                    WeatherPoint(coords, time + 60 * minute, 20.0, 0),
-                    WeatherPoint(coords, time + 120 * minute, 20.0, 0))
+                    WeatherPoint(location, time + 0 * minute, 20.0, 0),
+                    WeatherPoint(location, time + 60 * minute, 20.0, 0),
+                    WeatherPoint(location, time + 120 * minute, 20.0, 0))
 
-            val forecast = Forecast(coords, points,
-                    points.first().time, points.last().time)
-
-            return Single.just(forecast)
+            return Observable.from(points)
         }
     }
 }

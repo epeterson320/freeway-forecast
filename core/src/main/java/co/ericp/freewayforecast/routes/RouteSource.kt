@@ -1,9 +1,7 @@
 package co.ericp.freewayforecast.routes
 
-import co.ericp.freewayforecast.LatLon
-import co.ericp.freewayforecast.Location
 import co.ericp.freewayforecast.LocationQuery
-import rx.Single
+import rx.Observable
 
 /**
  * A source for getting directions from place to place.
@@ -14,7 +12,7 @@ interface RouteSource {
     /**
      * Get the possible routes from one place to another.
      *
-     * The parameters are {@link Location} objects. These may have a name,
+     * The parameters are {@link LocationQuery} objects. These may have a name,
      * coordinates, or both. If the name is empty or null, the coordinates
      * will be used. If the coordinates are not a valid latitude and
      * longitude, the name will be used. If neither the name nor the
@@ -25,5 +23,5 @@ interface RouteSource {
      * @return a list of possible routes, asynchronously
      */
     fun getRoutes(origin: LocationQuery,
-                  destination: LocationQuery): Single<List<Route>>
+                  destination: LocationQuery): Observable<Route>
 }

@@ -8,7 +8,7 @@ import co.ericp.freewayforecast.Location
 data class Leg(
         val start: Location,
         val end: Location,
-        val distance: Double,
+        val distance: Long,
         val duration: Long,
         val steps: List<Step>
 )
