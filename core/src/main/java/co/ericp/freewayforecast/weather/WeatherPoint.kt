@@ -9,6 +9,6 @@ data class WeatherPoint(
         val location: Location,
         val time: Long,
         val temp: Double = 0.0,
-        val status: Int = 0
+        val status: Status = Status.UNKNOWN
 )
 

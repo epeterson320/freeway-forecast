@@ -7,7 +7,7 @@ import co.ericp.freewayforecast.Location
  */
 data class Step(
         val htmlInstructions: String,
-        val distance: Long, // meters
+        val distance: Double, // meters
         val duration: Long, // milliseconds
         val start: Location,
         val end: Location,

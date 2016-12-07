@@ -5,7 +5,7 @@ import org.junit.runners.Suite
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-        LatLngTest::class,
+        GeoCalculatorTest::class,
         RouteForecastSourceImplTest::class
 )
 class CoreTestSuite
