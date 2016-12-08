@@ -4,13 +4,11 @@ import co.ericp.freewayforecast.routes.Leg
 import co.ericp.freewayforecast.routes.Route
 import co.ericp.freewayforecast.weather.WeatherPoint
 import co.ericp.freewayforecast.weather.WeatherSource
-import rx.Observable
+import io.reactivex.Observable
 
-class RouteForecastSourceImpl(
-        val weatherSource: WeatherSource,
-        val calculator: DistanceCalculator
-)
-    : RouteForecastSource {
+class RouteForecastSourceImpl(val weatherSource: WeatherSource,
+                              val calculator: DistanceCalculator
+) : RouteForecastSource {
 
     val MAX_TIME_BETWEEN_POINTS = 60L * 60L * 1000L // 1 hour
 
@@ -18,14 +16,17 @@ class RouteForecastSourceImpl(
             routes: List<Route>,
             departure: Long): Observable<RouteForecast> {
 
-        return Observable.from(routes)
-                .flatMap { route ->
-                    val pointsNeeded = getPointsAlongRoute(route)
-                    val pointsRx = getTempsAtPoints(pointsNeeded)
-                    pointsRx.toList().map { points ->
-                        RouteForecast(route, points)
-                    }
-                }
+        return Observable.fromIterable(routes)
+                .flatMap { route -> routeToForecast(route) }
+    }
+
+    fun routeToForecast(route: Route): Observable<RouteForecast> {
+        val points = getPointsAlongRoute(route)
+        val pointsWithWeather = getTempsAtPoints(points)
+        return pointsWithWeather
+                .toList()
+                .map { points -> RouteForecast(route, points) }
+                .toObservable()
     }
 
     /**
@@ -149,11 +150,12 @@ class RouteForecastSourceImpl(
      * filled in.
      */
     fun getTempsAtPoints(points: List<WeatherPoint>): Observable<WeatherPoint> {
-        return Observable.from(points)
+        return Observable.fromIterable(points)
                 .flatMap { point ->
                     weatherSource.getForecast(point.location, point.time)
                             .toList()
                             .map { forecastPoints -> extrapolate(point, forecastPoints) }
+                            .toObservable()
                 }
     }
 

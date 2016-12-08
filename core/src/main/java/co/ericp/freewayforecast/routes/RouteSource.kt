@@ -1,7 +1,7 @@
 package co.ericp.freewayforecast.routes
 
 import co.ericp.freewayforecast.LocationQuery
-import rx.Observable
+import io.reactivex.Observable
 
 /**
  * A source for getting directions from place to place.

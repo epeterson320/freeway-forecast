@@ -1,8 +1,7 @@
 package co.ericp.freewayforecast
 
 import co.ericp.freewayforecast.routes.Route
-import co.ericp.freewayforecast.weather.WeatherPoint
-import rx.Observable
+import io.reactivex.Observable
 
 /**
  * The main API to our business logic.
@@ -11,8 +10,7 @@ import rx.Observable
  * available.
  */
 interface RouteForecastSource {
-    fun getRouteForecasts(
-            routes: List<Route>,
-            departure: Long): Observable<RouteForecast>
+    fun getRouteForecasts(routes: List<Route>,
+                          departure: Long): Observable<RouteForecast>
 }
 

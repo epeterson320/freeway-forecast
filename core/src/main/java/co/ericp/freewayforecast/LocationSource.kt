@@ -1,11 +1,11 @@
 package co.ericp.freewayforecast
 
-import rx.Single
+import io.reactivex.Observable
 
 /**
  * A mechanism to get locations.
  */
 interface LocationSource {
-    fun currentLocation(): Single<List<Location>>
-    fun getLocations(query: String): Single<List<Location>>
+    fun currentLocation(): Observable<Location>
+    fun getLocations(query: String): Observable<Location>
 }

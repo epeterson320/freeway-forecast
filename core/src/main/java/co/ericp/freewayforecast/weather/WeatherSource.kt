@@ -1,7 +1,7 @@
 package co.ericp.freewayforecast.weather
 
 import co.ericp.freewayforecast.Location
-import rx.Observable
+import io.reactivex.Observable
 
 /**
  * A source for getting the weather.

@@ -1,26 +1,21 @@
 package co.ericp.freewayforecast.routes
 
+import co.ericp.freewayforecast.Location
 import co.ericp.freewayforecast.LocationQuery
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
-import com.google.maps.model.DirectionsLeg
-import com.google.maps.model.DirectionsResult
-import com.google.maps.model.DirectionsRoute
-import com.google.maps.model.LatLng
+import com.google.maps.PendingResult
+import com.google.maps.model.*
+import io.reactivex.Observable
 import org.joda.time.Instant
-import rx.Observable
 
 /**
  * The one and likely only production implementation of RouteSource.
  *
  * This is backed by the Google Directions API.
  */
-class GoogleMapsRouteSource : RouteSource {
-    val apiContext = GeoApiContext()
-
-    init {
-        apiContext.setApiKey(TODO())
-    }
+class GoogleMapsRouteSource(apiKey: String) : RouteSource {
+    val apiContext: GeoApiContext = GeoApiContext().setApiKey(apiKey)
 
     override fun getRoutes(origin: LocationQuery,
                            destination: LocationQuery,
@@ -40,17 +35,73 @@ class GoogleMapsRouteSource : RouteSource {
             request.departureTime(Instant(departureTime))
         }
 
-        return Observable.error<DirectionsResult>(NotImplementedError())
-                .flatMap { Observable.from(it.routes) }
+        val responseRx = Observable.create<DirectionsResult> { emitter ->
+
+            val callback = object : PendingResult.Callback<DirectionsResult> {
+
+                override fun onResult(result: DirectionsResult) {
+                    emitter.onNext(result)
+                    emitter.onComplete()
+                }
+
+                override fun onFailure(e: Throwable?) {
+                    emitter.onError(e)
+                }
+            }
+
+            request.setCallback(callback)
+
+            emitter.setCancellable { request.cancel() }
+        }
+
+        return responseRx
+                .flatMap { Observable.fromIterable(it.routes.toList()) }
                 .flatMap { route -> Observable.just(googleRouteToFFRoute(route)) }
     }
 
     fun googleRouteToFFRoute(gRoute: DirectionsRoute): Route {
-        TODO()
+
+        val legs = gRoute.legs.map { googleLegToFFLeg(it) }
+        val firstLeg = legs.first()
+        val lastLeg = legs.last()
+
+        return Route(
+                legs.map(Leg::distance).sum(),
+                legs.map(Leg::duration).sum(),
+                firstLeg.departureTime,
+                lastLeg.arrivalTime,
+                location(gRoute.bounds.northeast),
+                location(gRoute.bounds.southwest),
+                firstLeg.start,
+                lastLeg.end,
+                gRoute.legs.map { googleLegToFFLeg(it) }
+        )
     }
 
     fun googleLegToFFLeg(gLeg: DirectionsLeg): Leg {
-        TODO()
+        return Leg(
+                location(gLeg.startLocation, gLeg.startAddress),
+                location(gLeg.endLocation, gLeg.endAddress),
+                gLeg.distance.inMeters.toDouble(),
+                gLeg.duration.inSeconds * 1000,
+                gLeg.departureTime.millis,
+                gLeg.arrivalTime.millis,
+                gLeg.steps.map { googleStepToFFStep(it) }
+        )
     }
 
+    fun googleStepToFFStep(gStep: DirectionsStep): Step {
+        val polyline = gStep.polyline.decodePath().map { location(it) }
+        return Step(
+                gStep.htmlInstructions,
+                gStep.distance.inMeters.toDouble(),
+                gStep.duration.inSeconds * 1000,
+                location(gStep.startLocation),
+                location(gStep.endLocation),
+                polyline
+        )
+    }
+
+    fun location(latLng: LatLng, name: String? = null): Location
+            = Location(latLng.lat, latLng.lng, name)
 }

@@ -10,5 +10,7 @@ data class Leg(
         val end: Location,
         val distance: Double,
         val duration: Long,
+        val departureTime: Long,
+        val arrivalTime: Long,
         val steps: List<Step>
 )

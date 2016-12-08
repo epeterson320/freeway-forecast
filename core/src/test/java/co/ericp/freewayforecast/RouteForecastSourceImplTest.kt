@@ -5,9 +5,9 @@ import co.ericp.freewayforecast.routes.Route
 import co.ericp.freewayforecast.routes.Step
 import co.ericp.freewayforecast.weather.WeatherPoint
 import co.ericp.freewayforecast.weather.WeatherSource
+import io.reactivex.Observable
 import org.junit.Assert.*
 import org.junit.Test
-import rx.Observable
 import co.ericp.freewayforecast.Location as Loc
 
 class RouteForecastSourceImplTest {
@@ -30,14 +30,13 @@ class RouteForecastSourceImplTest {
         val departing = System.currentTimeMillis()
 
         // When I get a forecast for those two routes
-        val forecast = rfSource.getRouteForecasts(routes, departing)
-            .toBlocking()
-            .toIterable()
-            .iterator()
+        val forecastRx = rfSource.getRouteForecasts(routes, departing).test()
+        forecastRx.awaitTerminalEvent()
+        val forecasts = forecastRx.values()
 
         // Then I get weather points at the right locations
-        val r1pts = forecast.next().weatherPoints.map(WeatherPoint::location)
-        val r2pts = forecast.next().weatherPoints.map(WeatherPoint::location)
+        val r1pts = forecasts[0].weatherPoints.map(WeatherPoint::location)
+        val r2pts = forecasts[1].weatherPoints.map(WeatherPoint::location)
 
         val r1expPts = listOf(Loc(0, 0), Loc(2, 1), Loc(4, 0))
         val r2expPts = listOf(Loc(0, 0), Loc(2, 0), Loc(4, 0))
@@ -63,18 +62,15 @@ class RouteForecastSourceImplTest {
         val rfSource = RouteForecastSourceImpl(mockWeatherSource, CartesianCalculator)
 
         // When I get directions
-        val forecast = rfSource.getRouteForecasts(routes, departing)
-                .toBlocking()
-                .toIterable()
-                .iterator()
-                .next()
+        val forecastRx = rfSource.getRouteForecasts(routes, departing).test()
+        forecastRx.awaitTerminalEvent()
 
         // Then it returns weather at the right points
         val expPts = listOf(
                 Loc(0.0, 0), Loc(3.5, 0),
                 Loc(5.5, 0), Loc(8.0, 0))
 
-        val actPts = forecast.weatherPoints.map(WeatherPoint::location)
+        val actPts = forecastRx.values()[0].weatherPoints.map(WeatherPoint::location)
 
         assertCoordsEqual(expPts, actPts)
     }
@@ -227,11 +223,15 @@ class RouteForecastSourceImplTest {
     fun route(vararg steps: Step): Route {
         val now = System.currentTimeMillis()
 
+        val duration = steps.map(Step::duration).sum()
+
         val leg = Leg(
                 Loc(steps.first().start.lat, steps.first().start.lon, "Start"),
                 Loc(steps.last().end.lat, steps.last().end.lon, "End"),
                 steps.sumByDouble(Step::distance),
-                steps.map(Step::duration).sum(),
+                duration,
+                now,
+                now + duration,
                 steps.asList())
 
         return Route(
@@ -243,17 +243,12 @@ class RouteForecastSourceImplTest {
     }
 
     val mockWeatherSource = object : WeatherSource {
-        override fun getForecast(
-                location: Loc,
-                time: Long,
-                until: Long?): Observable<WeatherPoint> {
-
-            val points = listOf(
+        override fun getForecast(location: Loc,
+                                 time: Long,
+                                 until: Long?): Observable<WeatherPoint> =
+            Observable.fromArray(
                     WeatherPoint(location, time + 0 * minute, 20.0),
                     WeatherPoint(location, time + 60 * minute, 20.0),
                     WeatherPoint(location, time + 120 * minute, 20.0))
-
-            return Observable.from(points)
-        }
     }
 }
