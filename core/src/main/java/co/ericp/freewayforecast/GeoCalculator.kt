@@ -9,8 +9,7 @@ import org.gavaghan.geodesy.GlobalCoordinates
  */
 object GeoCalculator : DistanceCalculator {
     internal val calc = GeodeticCalculator()
-    internal val earthModel = Ellipsoid.Sphere
-    internal val r: Double = earthModel.semiMajorAxis
+    internal val earthModel = Ellipsoid.WGS84
 
     /**
      * Get the distance between two locations in meters.
