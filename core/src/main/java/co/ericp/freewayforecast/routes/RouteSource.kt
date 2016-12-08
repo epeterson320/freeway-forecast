@@ -23,5 +23,6 @@ interface RouteSource {
      * @return a list of possible routes, asynchronously
      */
     fun getRoutes(origin: LocationQuery,
-                  destination: LocationQuery): Observable<Route>
+                  destination: LocationQuery,
+                  departureTime: Long? = null): Observable<Route>
 }
