@@ -30,7 +30,7 @@ class GeoCalculatorTest {
 
     @Test fun smallDistances() {
         val sperryville = Location(38.659090, -78.230307) // Lee Hwy & Sperryville Pike
-        val culpeper = Location(38.476555, -77.994917) // Speeryville Pike & Main
+        val culpeper = Location(38.476555, -77.994917) // Sperryville Pike & Main
 
         val calcDist = GeoCalculator.dist(sperryville, culpeper)
 

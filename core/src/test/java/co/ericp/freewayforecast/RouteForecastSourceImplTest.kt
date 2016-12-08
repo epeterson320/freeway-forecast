@@ -4,9 +4,7 @@ import co.ericp.freewayforecast.routes.Leg
 import co.ericp.freewayforecast.routes.Route
 import co.ericp.freewayforecast.routes.Step
 import co.ericp.freewayforecast.weather.WeatherPoint
-import co.ericp.freewayforecast.weather.WeatherSource
-import io.reactivex.Observable
-import org.junit.Assert.*
+import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 import co.ericp.freewayforecast.Location as Loc
 
@@ -15,15 +13,16 @@ class RouteForecastSourceImplTest {
     val anyLatLng = Loc(0, 0)
     val anyHtmlInstructions = "Head \u003cb\u003esoutheast\u003cb\u003e..."
     val delta = 1E-6
+    val mockWeatherSource = MockWeatherSource()
 
     @Test fun weatherPointLocations1() {
         // Given two routes and a forecast source
-        val r1 = route(
-                step(60, 0, 0, 1, 0.75, 2, 1),
-                step(60, 2, 1, 3, 0.75, 4, 0))
-        val r2 = route(
-                step(50, 0, 0, 2, 0),
-                step(50, 2, 0, 4, 0))
+        val r1 = Route(
+                Step(60, 0, 0, 1, 0.75, 2, 1),
+                Step(60, 2, 1, 3, 0.75, 4, 0))
+        val r2 = Route(
+                Step(50, 0, 0, 2, 0),
+                Step(50, 2, 0, 4, 0))
 
         val routes = listOf(r1, r2)
         val rfSource = RouteForecastSourceImpl(mockWeatherSource, CartesianCalculator)
@@ -48,13 +47,13 @@ class RouteForecastSourceImplTest {
 
     @Test fun weatherPointLocations2() {
         // Given a route and a forecast source
-        val r = route(
-                step(25, 0, 0, 1, 0),
-                step(30, 1, 0, 2, 0, 3, 0, 4, 0),
-                step(35, 4, 0, 5, 0),
-                step(20, 5, 0, 6, 0),
-                step(15, 6, 0, 7, 0),
-                step(25, 7, 0, 8, 0))
+        val r = Route(
+                Step(25, 0, 0, 1, 0),
+                Step(30, 1, 0, 2, 0, 3, 0, 4, 0),
+                Step(35, 4, 0, 5, 0),
+                Step(20, 5, 0, 6, 0),
+                Step(15, 6, 0, 7, 0),
+                Step(25, 7, 0, 8, 0))
 
         val routes = listOf(r)
         val departing = System.currentTimeMillis()
@@ -76,13 +75,13 @@ class RouteForecastSourceImplTest {
     }
 
     @Test fun pointsAlongLegCoords() {
-        val route = route(
-                step(25, 0, 0, 1, 0),
-                step(30, 1, 0, 2, 0, 3, 0, 4, 0),
-                step(35, 4, 0, 5, 0),
-                step(20, 5, 0, 6, 0),
-                step(15, 6, 0, 7, 0),
-                step(25, 7, 0, 8, 0))
+        val route = Route(
+                Step(25, 0, 0, 1, 0),
+                Step(30, 1, 0, 2, 0, 3, 0, 4, 0),
+                Step(35, 4, 0, 5, 0),
+                Step(20, 5, 0, 6, 0),
+                Step(15, 6, 0, 7, 0),
+                Step(25, 7, 0, 8, 0))
 
         val leg = route.legs[0]
         val rfSource = RouteForecastSourceImpl(mockWeatherSource, CartesianCalculator)
@@ -99,7 +98,7 @@ class RouteForecastSourceImplTest {
     @Test fun pointsAlongPolyline() {
         val rfSource = RouteForecastSourceImpl(mockWeatherSource, CartesianCalculator)
 
-        // Side of an equilaterial right triangle whose hypotenuse is 1
+        // Side of an equilateral right triangle whose hypotenuse is 1
         val s = Math.sqrt(2.0) / 2
 
         val p1 = Loc(0, 0)
@@ -137,7 +136,7 @@ class RouteForecastSourceImplTest {
     @Test fun pointsAlongPolyline3() {
         val rfSource = RouteForecastSourceImpl(mockWeatherSource, CartesianCalculator)
 
-        val p = step(4, 0, 0, 1, 0.75, 2, 1).polyline
+        val p = Step(4, 0, 0, 1, 0.75, 2, 1).polyline
 
         val p0ToP1 = CartesianCalculator.dist(p[0], p[1])
         val p1ToP2 = CartesianCalculator.dist(p[1], p[2])
@@ -189,19 +188,19 @@ class RouteForecastSourceImplTest {
         if (delta == null) {
             assertArrayEquals(message, expCoords, actCoords)
         } else {
-            val eLats = expCoords.map(Loc::lat).toDoubleArray()
-            val aLats = actCoords.map(Loc::lat).toDoubleArray()
+            val eLatitudes = expCoords.map(Loc::lat).toDoubleArray()
+            val aLatitudes = actCoords.map(Loc::lat).toDoubleArray()
             val latMsg: String = (message?.plus(" (lat)")) ?: "latitude"
-            assertArrayEquals(latMsg, eLats, aLats, delta)
+            assertArrayEquals(latMsg, eLatitudes, aLatitudes, delta)
 
-            val eLons = expCoords.map(Loc::lon).toDoubleArray()
-            val aLons = actCoords.map(Loc::lon).toDoubleArray()
+            val eLongitudes = expCoords.map(Loc::lon).toDoubleArray()
+            val aLongitudes = actCoords.map(Loc::lon).toDoubleArray()
             val lonMsg = (message?.plus(" (lon")) ?: "longitude"
-            assertArrayEquals(lonMsg, eLons, aLons, delta)
+            assertArrayEquals(lonMsg, eLongitudes, aLongitudes, delta)
         }
     }
 
-    fun step(minutes: Long, vararg ptsAry: Number): Step {
+    fun Step(minutes: Long, vararg ptsAry: Number): Step {
         val xPts = ptsAry.filterIndexed { i, d -> i % 2 == 0 }
         val yPts = ptsAry.filterIndexed { i, d -> i % 2 == 1 }
         val pts = xPts.zip(yPts, { pt1, pt2 -> Loc(pt1, pt2) })
@@ -220,7 +219,7 @@ class RouteForecastSourceImplTest {
         )
     }
 
-    fun route(vararg steps: Step): Route {
+    fun Route(vararg steps: Step): Route {
         val now = System.currentTimeMillis()
 
         val duration = steps.map(Step::duration).sum()
@@ -242,13 +241,4 @@ class RouteForecastSourceImplTest {
                 listOf(leg))
     }
 
-    val mockWeatherSource = object : WeatherSource {
-        override fun getForecast(location: Loc,
-                                 time: Long,
-                                 until: Long?): Observable<WeatherPoint> =
-            Observable.fromArray(
-                    WeatherPoint(location, time + 0 * minute, 20.0),
-                    WeatherPoint(location, time + 60 * minute, 20.0),
-                    WeatherPoint(location, time + 120 * minute, 20.0))
-    }
 }

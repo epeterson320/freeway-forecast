@@ -6,8 +6,14 @@ import com.google.gson.annotations.SerializedName;
  * A POJO corresponding to a response from the Dark Sky API. Used for
  * deserializing with Gson.
  *
+ * Because this class maps one-to-one with response fields from the Dark Sky
+ * API, priority is given to transparent field names rather than field names
+ * that conform to Java best practices. As a result, some inspections are
+ * disabled.
+ *
  * @see <a href="https://darksky.net/dev/docs/response">Dark Sky Response Format</a>
  */
+@SuppressWarnings({"unused", "WeakerAccess", "SpellCheckingInspection"})
 class DarkSkyResponse {
     double latitude;
     double longitude;
