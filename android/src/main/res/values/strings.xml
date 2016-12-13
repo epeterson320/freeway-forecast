@@ -6,6 +6,7 @@
     <string name="title_activity_route_select">Select Route</string>
 
     <string name="maps_api_key">AIzaSyDfOQs4J_Z2OY6kY4MgycejVOeS2mjY4eQ</string>
+    <string name="darksky_api_key">Secret1234</string>
 
     <string name="startTrip_begin_title">I\'m starting from</string>
     <string name="startTrip_begin_prompt">Enter starting point</string>

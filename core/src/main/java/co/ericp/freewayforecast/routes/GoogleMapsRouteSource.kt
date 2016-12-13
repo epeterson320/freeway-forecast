@@ -66,6 +66,7 @@ class GoogleMapsRouteSource(apiKey: String) : RouteSource {
         val lastLeg = legs.last()
 
         return Route(
+                gRoute.summary,
                 legs.map(Leg::distance).sum(),
                 legs.map(Leg::duration).sum(),
                 firstLeg.departureTime,

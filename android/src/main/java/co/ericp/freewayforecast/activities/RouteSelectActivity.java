@@ -1,7 +1,6 @@
 package co.ericp.freewayforecast.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -12,44 +11,45 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import co.ericp.freewayforecast.Constants;
+import co.ericp.freewayforecast.GeoCalculator;
 import co.ericp.freewayforecast.R;
-import co.ericp.freewayforecast.RoutesAdapter;
-import co.ericp.freewayforecast.models.Routes;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.model.DirectionsRoute;
+import co.ericp.freewayforecast.RouteAdapter;
+import co.ericp.freewayforecast.RouteForecast;
+import co.ericp.freewayforecast.RouteForecastSource;
+import co.ericp.freewayforecast.RouteForecastSourceImpl;
+import co.ericp.freewayforecast.State;
+import co.ericp.freewayforecast.routes.Route;
+import co.ericp.freewayforecast.weather.DarkSkyWeatherSource;
+import io.reactivex.functions.Consumer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RouteSelectActivity extends FragmentActivity implements OnMapReadyCallback,
+public class RouteSelectActivity extends FragmentActivity implements /* OnMapReadyCallback, */
         AdapterView.OnItemClickListener {
 
     private static int ZOOM_PADDING = 50;
 
-    private DirectionsRoute[] mRoutes = Routes.getRoutes();
+    private List<Route> mRoutes = State.getRoutes();
+    private RouteForecastSource rfSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("RouteSelect", "onCreate Entered");
         setContentView(R.layout.activity_route_select);
-
+        rfSource = new RouteForecastSourceImpl(
+            new DarkSkyWeatherSource(getString(R.string.darksky_api_key)),
+            GeoCalculator.INSTANCE
+        );
         // Get UI Elements
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        //SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
+        //mapFragment.getMapAsync(this);
 
         ListView list = (ListView) findViewById(R.id.routes_list);
-        RoutesAdapter routesAdapter = new RoutesAdapter(this, mRoutes);
-        list.setAdapter(routesAdapter);
+        RouteAdapter routeAdapter = new RouteAdapter(this, (Route[]) mRoutes.toArray());
+        list.setAdapter(routeAdapter);
         list.setOnItemClickListener(this);
-
     }
 
     @Override
@@ -67,15 +67,31 @@ public class RouteSelectActivity extends FragmentActivity implements OnMapReadyC
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
-    public void onItemClick(AdapterView parent, View v, int position, long id) {
-        Intent showWeatherIntent = new Intent(this, TripForecastActivity.class);
-        showWeatherIntent.putExtras(getIntent());
-        showWeatherIntent.putExtra(Constants.ROUTE_SELECTED_EXTRA, position);
-        startActivity(showWeatherIntent);
+    public void onItemClick(AdapterView parent, View v, final int position, long id) {
+        Intent intent = getIntent();
+        final Route route = State.getRoutes().get(position);
+        List<Route> routes = new ArrayList<>(1);
+        routes.add(route);
+
+        long departingOnMillis = intent.getLongExtra(Constants.DEPARTING_ON_EXTRA, 0L);
+
+        rfSource.getRouteForecasts(routes, departingOnMillis)
+                .subscribe(
+                        new Consumer<RouteForecast>() {
+                            @Override
+                            public void accept(RouteForecast routeForecast) throws Exception {
+                                State.setForecast(routeForecast);
+                                Intent showWeatherIntent = new Intent(
+                                        RouteSelectActivity.this,
+                                        TripForecastActivity.class);
+                                startActivity(showWeatherIntent);
+                            }
+                        }
+                );
     }
 
-    public void onMapReady(GoogleMap map) {
-        DirectionsRoute route = mRoutes[0];
+    /* public void onMapReady(GoogleMap map) {
+        Route route = mRoutes.get(0);
         List<com.google.android.gms.maps.model.LatLng> mapsPolyline = new ArrayList<>();
         List<com.google.maps.model.LatLng> directionsPolyline = route.overviewPolyline.decodePath();
         PolylineOptions lineOptions;
@@ -132,8 +148,8 @@ public class RouteSelectActivity extends FragmentActivity implements OnMapReadyC
 
     protected void setAndZoomToBounds(GoogleMap map){
         // Set the bounds using the bounds for the first route.
-        com.google.maps.model.LatLng directionsNE = mRoutes[0].bounds.northeast;
-        com.google.maps.model.LatLng directionsSW = mRoutes[0].bounds.southwest;
+        com.google.maps.model.LatLng directionsNE = mRoutes.get(0).getNeBound();
+        com.google.maps.model.LatLng directionsSW = mRoutes.get(0).getSwBound();
 
         com.google.android.gms.maps.model.LatLng mapsNE = new LatLng(directionsNE.lat, directionsNE.lng);
         com.google.android.gms.maps.model.LatLng mapsSW = new LatLng(directionsSW.lat, directionsSW.lng);
@@ -148,7 +164,7 @@ public class RouteSelectActivity extends FragmentActivity implements OnMapReadyC
     }
 
     protected void setStartEndMarkers(GoogleMap map,
-                                      List<com.google.maps.model.LatLng> directionsPolyline){
+                                      List<com.google.maps.model.LatLng> directionsPolyline) {
 
         com.google.maps.model.LatLng startPos = directionsPolyline.get(0);
         com.google.android.gms.maps.model.LatLng startPosCast =
@@ -160,5 +176,5 @@ public class RouteSelectActivity extends FragmentActivity implements OnMapReadyC
                 new com.google.android.gms.maps.model.LatLng(endPos.lat, endPos.lng);
         map.addMarker(new MarkerOptions().position(endPosCast).title("End"));
 
-    }
+    } */
 }

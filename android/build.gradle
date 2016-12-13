@@ -27,9 +27,16 @@ android {
 }
 
 dependencies {
+    compile project(':core')
+
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support:appcompat-v7:25.0.1'
+
     compile 'com.google.android.gms:play-services-location:10.0.1'
+    compile 'com.google.android.gms:play-services-places:10.0.1'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+
     compile 'com.google.maps:google-maps-services:0.1.6'
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

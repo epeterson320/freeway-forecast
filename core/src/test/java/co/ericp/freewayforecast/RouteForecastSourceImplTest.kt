@@ -234,6 +234,7 @@ class RouteForecastSourceImplTest {
                 steps.asList())
 
         return Route(
+                "",
                 leg.distance, leg.duration,
                 now, now + leg.duration,
                 anyLatLng, anyLatLng,

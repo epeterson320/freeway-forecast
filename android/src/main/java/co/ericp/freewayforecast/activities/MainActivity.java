@@ -19,31 +19,31 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import co.ericp.freewayforecast.Constants;
+import co.ericp.freewayforecast.LocationQuery;
 import co.ericp.freewayforecast.R;
-import co.ericp.freewayforecast.models.Routes;
-import co.ericp.freewayforecast.netdata.CurrentLocation;
-import co.ericp.freewayforecast.netdata.Directions;
+import co.ericp.freewayforecast.State;
+import co.ericp.freewayforecast.routes.GoogleMapsRouteSource;
+import co.ericp.freewayforecast.routes.Route;
+import io.reactivex.functions.Consumer;
 
 import com.google.android.gms.location.places.Place;
-import com.google.maps.model.DirectionsRoute;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends GooglePlayServicesActivity implements
-        CurrentLocation.Callbacks,
-        Directions.Callbacks,
         TimePickerDialog.OnTimeSetListener,
         DatePickerDialog.OnDateSetListener {
 
-    protected EditText mFrom;
-    protected EditText mDest;
-    protected EditText mDate;
-    protected EditText mTime;
-    protected Button mSubmitButton;
-    protected java.text.DateFormat df;
-    protected java.text.DateFormat tf;
-    protected Calendar mDepartingOn;
+    EditText mFrom;
+    EditText mDest;
+    EditText mDate;
+    EditText mTime;
+    Button mSubmitButton;
+    java.text.DateFormat df;
+    java.text.DateFormat tf;
+    Calendar mDepartingOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,24 +139,38 @@ public class MainActivity extends GooglePlayServicesActivity implements
             Log.i("Splash", "Preparing to Start next activity");
             setProgressBarIndeterminateVisibility(true);
             mSubmitButton.setEnabled(false);
-            Directions.get(startAddress, endAddress, this, this);
+            new GoogleMapsRouteSource(getString(R.string.maps_api_key))
+                    .getRoutes(new LocationQuery.ByName(startAddress),
+                    new LocationQuery.ByName(endAddress),
+                    mDepartingOn.getTimeInMillis()).toList().subscribe(
+                    new Consumer<List<Route>>() {
+                        @Override
+                        public void accept(List<Route> routes) throws Exception {
+                            MainActivity.this.directionsResult(routes);
+                        }
+                    },
+                    new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+
+                        }
+                    }
+            );
         }
     }
 
-    public void directionsResult(final DirectionsRoute[] routes) {
+    public void directionsResult(final List<Route> routes) {
         final Activity act = this;
         runOnUiThread(new Runnable(){
             public void run(){
-
                 setProgressBarIndeterminateVisibility(false);
                 mSubmitButton.setEnabled(true);
-                if (routes.length == 0){
+                if (routes.size() == 0) {
                     Toast.makeText(act, R.string.no_routes_found, Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     Intent pickRouteIntent = new Intent(act, RouteSelectActivity.class);
                     //this should really be done with pickRouteIntent.putExtra();
-                    Routes.setRoutes(routes);
+                    State.setRoutes(routes);
                     pickRouteIntent.putExtra(Constants.DEPARTING_ON_EXTRA, mDepartingOn.getTimeInMillis());
                     startActivity(pickRouteIntent);
                 }
@@ -179,7 +193,6 @@ public class MainActivity extends GooglePlayServicesActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         Log.i("Splash", "Connected.  Getting location...");
-        CurrentLocation.get(mGoogleApiClient, this);
     }
 
     public void initializeDateTime() {

@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.maps.model.DirectionsRoute;
+import co.ericp.freewayforecast.routes.Route;
 
 /**
  * Provides a list of routes to a ListView
  */
-public class RoutesAdapter extends ArrayAdapter<DirectionsRoute> {
-    public RoutesAdapter(Context c, DirectionsRoute[] routes){
+public class RouteAdapter extends ArrayAdapter<Route> {
+    public RouteAdapter(Context c, Route[] routes){
         super(c, android.R.layout.simple_list_item_1, routes);
     }
 
@@ -27,8 +27,8 @@ public class RoutesAdapter extends ArrayAdapter<DirectionsRoute> {
         } else {
             view = (TextView) convertView;
         }
-        DirectionsRoute route = getItem(position);
-        view.setText(route.summary);
+        Route route = getItem(position);
+        view.setText(route.getSummary());
         return view;
     }
 }

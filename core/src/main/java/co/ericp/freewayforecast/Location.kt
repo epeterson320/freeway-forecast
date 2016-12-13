@@ -8,8 +8,8 @@ data class Location(
         val lon: Double,
         val name: String? = null
 ) {
-    constructor(lat: Number, lon: Number, name: String? = null)
-            : this(lat.toDouble(), lon.toDouble(), name)
+    constructor(lat: Number, lon: Number, name: CharSequence? = null)
+            : this(lat.toDouble(), lon.toDouble(), name?.toString())
 
     override fun toString(): String =
         if (name == null) "$lat, $lon" else "$lat, $lon ($name)"
