@@ -3,6 +3,7 @@ package co.ericp.freewayforecast
 import co.ericp.freewayforecast.routes.Leg
 import co.ericp.freewayforecast.routes.Route
 import co.ericp.freewayforecast.routes.Step
+import co.ericp.freewayforecast.weather.MockWeatherSource
 import co.ericp.freewayforecast.weather.WeatherPoint
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test

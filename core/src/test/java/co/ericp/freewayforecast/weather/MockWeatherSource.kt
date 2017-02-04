@@ -1,5 +1,6 @@
-package co.ericp.freewayforecast
+package co.ericp.freewayforecast.weather
 
+import co.ericp.freewayforecast.Location
 import co.ericp.freewayforecast.weather.WeatherPoint
 import co.ericp.freewayforecast.weather.WeatherSource
 import io.reactivex.Observable
