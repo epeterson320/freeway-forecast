@@ -1,6 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
+test {
+    systemProperty 'GOOGLE_API_KEY', GOOGLE_API_KEY
+    systemProperty 'DARKSKY_API_KEY', DARKSKY_API_KEY
+}
+
 dependencies {
     compile "io.reactivex.rxjava2:rxjava:$rx_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

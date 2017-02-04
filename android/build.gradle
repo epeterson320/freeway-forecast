@@ -1,10 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
@@ -14,14 +10,17 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName '1.0'
+
+        buildConfigField "String", "DARKSKY_API_KEY", '"'+DARKSKY_API_KEY+'"'
+        buildConfigField "String", "GOOGLE_API_KEY", '"'+GOOGLE_API_KEY+'"'
     }
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+            storeFile file(KEYSTORE_FILE)
+            storePassword KEYSTORE_PASSWORD
         }
     }
 
