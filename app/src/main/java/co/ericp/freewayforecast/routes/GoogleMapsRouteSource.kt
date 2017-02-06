@@ -64,12 +64,15 @@ class GoogleMapsRouteSource(apiKey: String) : RouteSource {
         val firstLeg = legs.first()
         val lastLeg = legs.last()
 
+        val durationMillis = gRoute.legs.sumBy { it.duration.inSeconds.toInt() }.toLong() * 1000;
+        val arrivalTime = departureTime + durationMillis
+
         return Route(
                 gRoute.summary,
                 legs.map(Leg::distance).sum(),
                 legs.map(Leg::duration).sum(),
-                gRoute.legs.first().departureTime.millis,
-                gRoute.legs.last().arrivalTime.millis,
+                departureTime,
+                arrivalTime,
                 location(gRoute.bounds.northeast),
                 location(gRoute.bounds.southwest),
                 firstLeg.start,
@@ -84,8 +87,6 @@ class GoogleMapsRouteSource(apiKey: String) : RouteSource {
                 location(gLeg.endLocation, gLeg.endAddress),
                 gLeg.distance.inMeters.toDouble(),
                 gLeg.duration.inSeconds * 1000,
-                gLeg.departureTime.millis,
-                gLeg.arrivalTime.millis,
                 gLeg.steps.map { googleStepToFFStep(it) }
         )
     }
