@@ -18,7 +18,7 @@ class DarkSkyWeatherSource(val apiKey: String) : WeatherSource {
 
     override fun getForecast(location: Location,
                              time: Long,
-                             until: Long?): Observable<WeatherPoint> {
+                             until: Long): Observable<WeatherPoint> {
 
         val url = getUrl(location, time)
         val request = Request.Builder().url(url).build()

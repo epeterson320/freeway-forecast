@@ -10,6 +10,6 @@ import io.reactivex.Observable
  */
 interface WeatherSource {
     fun getForecast(location: Location,
-                    time: Long,
-                    until: Long? = null): Observable<WeatherPoint>
+                    time: Long = System.currentTimeMillis(),
+                    until: Long = time + 24 * 3600 * 1000): Observable<WeatherPoint>
 }

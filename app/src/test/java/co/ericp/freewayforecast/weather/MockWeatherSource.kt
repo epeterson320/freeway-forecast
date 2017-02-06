@@ -10,7 +10,7 @@ class MockWeatherSource : WeatherSource {
 
     override fun getForecast(location: Location,
                              time: Long,
-                             until: Long?): Observable<WeatherPoint> =
+                             until: Long): Observable<WeatherPoint> =
             Observable.fromArray(
                     WeatherPoint(location, time + 0 * minute, 20.0),
                     WeatherPoint(location, time + 60 * minute, 20.0),
