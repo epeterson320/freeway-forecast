@@ -22,9 +22,7 @@ public class HomeScreenUITest {
             MainActivity.class);
 
     @Test
-    public void hasInput() {
-        onView(withId(R.id.text_input))
-                .perform(click())
-                .check(matches(hasFocus()));
+    public void displaysInputAtFirst() {
+        onView(withId(R.id.text_input)).check(matches(isDisplayed()));
     }
 }
