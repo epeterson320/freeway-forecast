@@ -34,6 +34,11 @@ class MainActivity : AppCompatActivity(), PickTripFragment.OnForecastListener {
     }
 
     override fun onNextForecast(forecast: RouteForecast) {
+        // Ignore for now. In large screen mode, should add a route forecast
+        // to the map on the screen.
+    }
+
+    override fun onChooseForecast(forecast: RouteForecast) {
         val viewTripFragment = ViewTripFragment.newInstance("i", "j")
 
         supportFragmentManager.beginTransaction()
