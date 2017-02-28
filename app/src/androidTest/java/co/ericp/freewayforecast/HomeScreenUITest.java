@@ -23,6 +23,6 @@ public class HomeScreenUITest {
 
     @Test
     public void displaysInputAtFirst() {
-        onView(withId(R.id.text_input)).check(matches(isDisplayed()));
+        onView(withId(R.id.input_origin)).check(matches(isDisplayed()));
     }
 }
