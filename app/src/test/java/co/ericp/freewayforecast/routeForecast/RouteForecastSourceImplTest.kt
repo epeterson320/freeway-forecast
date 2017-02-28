@@ -3,17 +3,30 @@ package co.ericp.freewayforecast.routeForecast
 import co.ericp.freewayforecast.routes.Leg
 import co.ericp.freewayforecast.routes.Route
 import co.ericp.freewayforecast.routes.Step
-import co.ericp.freewayforecast.weather.MockWeatherSource
 import co.ericp.freewayforecast.weather.WeatherPoint
+import co.ericp.freewayforecast.weather.WeatherSource
+import io.reactivex.Observable
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
+import org.mockito.BDDMockito.*
 
 class RouteForecastSourceImplTest {
     val minute = 1000L * 60L
     val anyLatLng = co.ericp.freewayforecast.routeForecast.Location(0, 0)
     val anyHtmlInstructions = "Head \u003cb\u003esoutheast\u003cb\u003e..."
     val delta = 1E-6
-    val mockWeatherSource = MockWeatherSource()
+    val mockWeatherSource = mock(WeatherSource::class.java)
+
+    init {
+        given(mockWeatherSource.getForecast(any(), anyLong(), anyLong())).will { invocation ->
+            val location = invocation.getArgument<Location>(0)
+            val time = invocation.getArgument<Long>(1)
+            Observable.fromArray(
+                    WeatherPoint(location, time + 0 * minute, 20.0),
+                    WeatherPoint(location, time + 60 * minute, 20.0),
+                    WeatherPoint(location, time + 120 * minute, 20.0))
+        }
+    }
 
     @Test fun weatherPointLocations1() {
         // Given two routes and a forecast source

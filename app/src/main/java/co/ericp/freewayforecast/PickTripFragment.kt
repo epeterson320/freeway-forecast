@@ -73,8 +73,9 @@ class PickTripFragment : Fragment() {
         super.onAttach(context)
         if (context is MainActivity) {
             mListener = context as OnForecastListener?
-            mRouteSource = context.routeSource
-            mRouteForecastSource = context.routeForecastSource
+            val app = context.applicationContext as Application
+            mRouteSource = app.getRouteSource()
+            mRouteForecastSource = app.getRouteForecastSource()
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
