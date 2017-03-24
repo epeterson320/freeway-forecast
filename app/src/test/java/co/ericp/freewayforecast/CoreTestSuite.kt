@@ -9,8 +9,7 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
         GeoCalculatorTest::class,
-        RouteForecastSourceImplTest::class,
-        GoogleMapsRouteSourceTest::class
+        RouteForecastSourceImplTest::class
 )
 class CoreTestSuite
 
